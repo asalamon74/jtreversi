@@ -236,7 +236,7 @@ public class jtReversi extends MIDlet implements CommandListener {
         canvas.serviceRepaints();
         ReversiMove move=(ReversiMove)Minimax.precalculatedBestMove(prevMove);
         if( move == null ) {
-            //            System.out.println("no precalculated move");
+            Minimax.cancel(false);
             move = (ReversiMove)Minimax.minimax(getActSkill(), table, actPlayer, rgame, true, 0, true, true, null, true);
         } else {
             //            System.out.println("Precalculated move");
@@ -254,7 +254,7 @@ public class jtReversi extends MIDlet implements CommandListener {
         ReversiTable newTable = new ReversiTable();
         boolean goodMove = rgame.turn( table, actPlayer, move, newTable );
         if( !goodMove ) {
-            //            System.out.println("invalid move:"+move);
+            // System.out.println("actPlayer:"+actPlayer+" invalid move:"+move);
             canvas.setMessage("Invalid Move",2000);
         } else {
             boolean nonPass = false;
@@ -300,8 +300,9 @@ public class jtReversi extends MIDlet implements CommandListener {
                             message = "Computer";
                         }
                         canvas.setMessage(message + " Pass", 2000);
-                        table.setPassNum(table.getPassNum()+1);
-                        
+                        table.setPassNum(table.getPassNum()+1);                        
+                        // just to be sure
+                        Minimax.clearPrecalculatedMoves();
                     } else {
                         nonPass = true;
                     }
@@ -338,8 +339,13 @@ public class jtReversi extends MIDlet implements CommandListener {
             processMove(computerMove);
             canvas.repaint();
             canvas.serviceRepaints();        
-            mtt = new MinimaxTimerTask();
-            timer.schedule(mtt, 0);            
+            if( isHuman[actPlayer] ) {
+                mtt = new MinimaxTimerTask();
+                timer.schedule(mtt, 0);            
+            } else {
+                // just to be sure
+                Minimax.clearPrecalculatedMoves();
+            }
         }
     }
 
