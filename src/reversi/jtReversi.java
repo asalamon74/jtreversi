@@ -67,6 +67,7 @@ public class jtReversi extends MIDlet implements CommandListener {
     }
 
     public void initMidlet() {
+        System.out.println("platform:"+System.getProperty("microedition.platform"));
         display = Display.getDisplay(this);
         exitCommand = new Command("Exit", Command.EXIT, 99);
         optionsCommand = new Command("Options", Command.SCREEN, 5);

@@ -135,7 +135,7 @@ public class ReversiCanvas extends Canvas {
             col = moves[i].col;
             x = row * sizex + sizex/2;
             y = col * sizey + sizey/2;
-            g.fillArc(x,y,2,2,0,360);
+            g.fillRect(x,y,2,2);
         }
     }
 
