@@ -37,6 +37,7 @@ public class ReversiCanvas extends Canvas {
         height = getHeight();
         sizex = width / J2MEReversi.SIZE;
         sizey = height / J2MEReversi.SIZE;
+        small = sizex < SIZE_LIMIT || sizey < SIZE_LIMIT;
         selx = 0;
         sely = 0;
     }
@@ -59,13 +60,15 @@ public class ReversiCanvas extends Canvas {
 
     protected void drawBoard(Graphics g) {
         g.setColor(0x000000);
-        if( sizex < SIZE_LIMIT || sizey < SIZE_LIMIT ) {
+        if( small ) {
             int x,y;
             for( int i=0; i<J2MEReversi.SIZE; ++i ) {
                 for( int j=0; j<J2MEReversi.SIZE; ++j ) {
-                    x = i * sizex + sizex/2;
-                    y = j * sizey + sizey/2;
-                    g.drawLine(x,y,x,y);
+                    if( boss.table.getItem(i,j)  == 0 ) {
+                        x = i * sizex + sizex/2;
+                        y = j * sizey + sizey/2;
+                        g.drawLine(x,y,x,y);
+                    }
                 }
             }
         } else {
@@ -96,17 +99,33 @@ public class ReversiCanvas extends Canvas {
         if( player == 1 ) {
             if( colored ) {
                 g.setColor(P1_COLOR );
-                g.fillArc(x,y,w,h,sa,aa);
+                if( small ) {
+                    g.fillRect(x,y,w,h);
+                } else {
+                    g.fillArc(x,y,w,h,sa,aa);
+                }
             } else {
-                g.drawArc(x,y,w,h,sa,aa);
+                if( small ) {
+                    g.drawRect(x,y,w,h);
+                } else {
+                    g.drawArc(x,y,w,h,sa,aa);
+                }
             }
         } else {
             if( colored ) {
                 g.setColor(P2_COLOR );
-                g.fillArc(x,y,w,h,sa,aa);
+                if( small ) {
+                    g.fillRect(x,y,w,h);
+                } else {
+                    g.fillArc(x,y,w,h,sa,aa);
+                }
             } else {
                 g.setColor(0x000000);
-                g.fillArc(x,y,w,h,sa,aa);
+                if( small ) {
+                    g.fillRect(x,y,w,h);
+                } else {
+                    g.fillArc(x,y,w,h,sa,aa);
+                }
             }
         }
     }
@@ -263,6 +282,7 @@ public class ReversiCanvas extends Canvas {
     protected Display display;
     protected String message;
     protected boolean colored;
+    protected boolean small;
     public static final int P1_COLOR = 0xff0000;
     public static final int P2_COLOR = 0x0000ff;
     public static final int LIGHT_BOX_COLOR = 0x008f00;
