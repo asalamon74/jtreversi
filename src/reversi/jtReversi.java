@@ -9,7 +9,7 @@ import java.util.TimerTask;
 
 public class jtReversi extends MIDlet implements CommandListener {
 
-    private static final String aboutImageName = "/icons/jataka_logo_c_small.png";
+    private static final String aboutImageName = "/icons/jataka.png";
 
     private Command exitCommand; // The exit command
     private Command optionsCommand;
@@ -333,16 +333,9 @@ public class jtReversi extends MIDlet implements CommandListener {
             Font largeFont = Font.getFont(Font.FACE_SYSTEM, Font.STYLE_BOLD, Font.SIZE_LARGE);
             g.setFont(largeFont);
             g.setColor(0x000000);
-            int top=0;
-            if( logoImage.getHeight() + f.getHeight() + largeFont.getHeight() < getHeight() ) {
-                g.drawImage( logoImage, getWidth()/2 , 0, g.TOP|g.HCENTER );
-                top = logoImage.getHeight();
-            } else {
-                g.drawString( "Jataka", getWidth()/2, 0, g.TOP|g.HCENTER );
-                top = g.getFont().getHeight();
-            }
+            g.drawImage( logoImage, getWidth()/2 , 0, g.TOP|g.HCENTER );
             String str = "jtReversi";
-            g.drawString(str, getWidth()/2, top, g.TOP|g.HCENTER);
+            g.drawString(str, getWidth()/2, logoImage.getHeight(), g.TOP|g.HCENTER);
             g.setFont(f);
             str = "(c) 2002";
             g.drawString(str, getWidth(), getHeight(), g.RIGHT|g.BOTTOM);
