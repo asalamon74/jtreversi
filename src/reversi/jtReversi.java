@@ -15,6 +15,7 @@ public class jtReversi extends MIDlet implements CommandListener, ItemStateListe
     private Command exitCommand; // The exit command
     private Command optionsCommand;
     private Form skillForm;
+    private Displayable nextDisplay;
     private ChoiceGroup skillChoiceGroup;
     private List mainMenu;
     private List optionsMenu;
@@ -94,6 +95,7 @@ public class jtReversi extends MIDlet implements CommandListener, ItemStateListe
         skillForm.setCommandListener(this);
         skillForm.setItemStateListener(this);
 	skill = 1; // default skill is 1
+        loadRecordStore();
 
         canvas = new ReversiCanvas(this, display);
         canvas.addCommand(exitCommand);
@@ -113,7 +115,6 @@ public class jtReversi extends MIDlet implements CommandListener, ItemStateListe
 	aboutForm.append("Contact: mail@jataka.hu\n");
         aboutForm.addCommand(exitCommand);
         aboutForm.setCommandListener(this);
-        loadRecordStore();
         new SplashScreen( display, mainMenu );        
     }
 
@@ -161,7 +162,7 @@ public class jtReversi extends MIDlet implements CommandListener, ItemStateListe
             alert.setString("Level not changed\n Level: "+skill);
             // setting next
             // after timeout this will be the next screen
-            display.setCurrent(alert, mainMenu);
+            display.setCurrent(alert, nextDisplay);
             alert.setTimeout(1000);
         } else if( d.equals(mainMenu) ) {
             if( c == List.SELECT_COMMAND ) {
@@ -181,6 +182,7 @@ public class jtReversi extends MIDlet implements CommandListener, ItemStateListe
                     break;
                 case 2:
                     skillChoiceGroup.setSelectedIndex(skill-1, true);
+                    nextDisplay = mainMenu;
                     display.setCurrent(skillForm);
                     break;                    
                 case 3:
@@ -201,6 +203,7 @@ public class jtReversi extends MIDlet implements CommandListener, ItemStateListe
                     break;
                 case 1:
                     skillChoiceGroup.setSelectedIndex(skill-1, true);
+                    nextDisplay = canvas;
                     display.setCurrent(skillForm);
                     break;                    
                 case 2:
@@ -219,8 +222,9 @@ public class jtReversi extends MIDlet implements CommandListener, ItemStateListe
     public void itemStateChanged(Item item) {
 	Alert alert = new Alert("Skill");
         skill = ((ChoiceGroup)item).getSelectedIndex()+1;
+        canvas.updateSkillInfo();
         alert.setString("Level changed\n New level:"+skill);
-	display.setCurrent(alert, mainMenu);
+	display.setCurrent(alert, nextDisplay);
 	alert.setTimeout(1000);
     }
 
