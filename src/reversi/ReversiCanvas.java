@@ -211,18 +211,22 @@ public class ReversiCanvas extends Canvas {
     public void keyPressed(int keyCode) {
         switch( getGameAction(keyCode) ) {
         case Canvas.UP: 
+            message = null;
             sely = (sely + J2MEReversi.SIZE -1) % J2MEReversi.SIZE;
             repaint();
             break;
         case Canvas.DOWN: 
+            message = null;
             sely = (sely + 1) % J2MEReversi.SIZE;
             repaint();
             break;
         case Canvas.LEFT: 
+            message = null;
             selx = (selx + J2MEReversi.SIZE -1) % J2MEReversi.SIZE;
             repaint();
             break;
         case Canvas.RIGHT: 
+            message = null;
             selx = (selx + 1) % J2MEReversi.SIZE;
             repaint();
             break;
