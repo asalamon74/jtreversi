@@ -9,6 +9,9 @@ public class J2MEReversi extends MIDlet implements CommandListener {
     public static final int SIZE = 8;
         
     private Command exitCommand; // The exit command
+    private Command aboutCommand;
+    private Command optionsCommand;
+    private List skillList;
     private Display display;    // The display for this MIDlet
     private ReversiCanvas canvas;
     private boolean []isHuman = {true, false};
@@ -18,12 +21,23 @@ public class J2MEReversi extends MIDlet implements CommandListener {
     private ReversiGame rgame = new ReversiGame();
     private Minimax minimax = new Minimax(100);
     private boolean gameEnded;
+    private int skill = 3;
 
     public J2MEReversi() {
         display = Display.getDisplay(this);
-        exitCommand = new Command("Exit", Command.SCREEN, 2);
+        exitCommand = new Command("Exit", Command.EXIT, 99);
+        aboutCommand =  new Command("About", Command.HELP, 10);
+        optionsCommand =  new Command("Options", Command.SCREEN, 5);
+        skillList = new List("Skill", List.IMPLICIT);
+        skillList.append("Level 1" , null);
+        skillList.append("Level 2" , null);
+        skillList.append("Level 3" , null);
+        skillList.addCommand(exitCommand);
+        skillList.setCommandListener(new SkillCommandListener());
         canvas = new ReversiCanvas(this, display);
         canvas.addCommand(exitCommand);
+        canvas.addCommand(aboutCommand);
+        canvas.addCommand(optionsCommand);
         canvas.setCommandListener(this);
     }
     
@@ -55,15 +69,27 @@ public class J2MEReversi extends MIDlet implements CommandListener {
      * On the exit command, cleanup and notify that the MIDlet has been destroyed.
      */
     public void commandAction(Command c, Displayable s) {
-        //        System.out.println("c:"+c);
+        System.out.println("c:"+c.getLabel());
         if (c == exitCommand) {
             destroyApp(false);
             notifyDestroyed();
+        } else if( c == aboutCommand ) {
+            showAbout();
+        } else if( c == optionsCommand ) {
+            display.setCurrent(skillList);
         }
     }
 
+    protected void showAbout() {
+        Alert alert = new Alert("About J2ME_Reversi");
+        alert.setTimeout(Alert.FOREVER);
+        alert.setString("Simple board game\nby\nAndras Salamon");
+        display.setCurrent(alert);
+    }
+
+
     protected ReversiMove computerTurn() {
-        ReversiMove move = (ReversiMove)minimax.minimax(3, table, actPlayer, rgame, false, 0, false, null);
+        ReversiMove move = (ReversiMove)minimax.minimax(skill, table, actPlayer, rgame, false, 0, false, null);
         //        System.out.println("computer point: "+move.getPoint());        
         //        System.out.println("computer move: "+move);        
         return move;
@@ -119,5 +145,18 @@ public class J2MEReversi extends MIDlet implements CommandListener {
             processMove(move);
         }
     }
-    
+
+    private class SkillCommandListener implements CommandListener {
+
+        public void commandAction(Command c, Displayable d) {
+            if( c == List.SELECT_COMMAND ) {
+                skill = skillList.getSelectedIndex()+1;
+                Alert alert = new Alert("Level");
+                alert.setTimeout(1000);
+                alert.setString("Level Changed\nNew Level:"+skill);
+                display.setCurrent(canvas);
+                display.setCurrent(alert);
+            }
+        }
+    }
 }

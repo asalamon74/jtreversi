@@ -80,7 +80,7 @@ public class ReversiCanvas extends Canvas {
 
     protected void drawMessage(Graphics g) {
         if( message != null ) {
-            int messageWidth = g.getFont().stringWidth(message);
+            int messageWidth = g.getFont().stringWidth(message)+10;
             int messageHeight = g.getFont().getHeight();
             g.setColor(0xeeeeee);
             int cornerX = (width - messageWidth)/2;
@@ -89,7 +89,7 @@ public class ReversiCanvas extends Canvas {
             g.fillRect(cornerX, cornerY, messageWidth, messageHeight);
             g.setColor(0x000000);
             g.drawRect(cornerX, cornerY, messageWidth, messageHeight);
-            g.drawString(message, cornerX, cornerY, g.TOP|g.LEFT);                
+            g.drawString(message, cornerX+5, cornerY, g.TOP|g.LEFT);                
         }
     }
     public void keyPressed(int keyCode) {
