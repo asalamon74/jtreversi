@@ -1,6 +1,8 @@
 0.72.00 2002-OCT-??
 
 -End game statistics
+-Supporting proguard-1.4 obfuscator
+-Ant: automatic jad file calculate
 
 0.71.00 2002-OCT-22
 

@@ -96,21 +96,21 @@ If you really want to compile, you'll need the followings:
 
 <ol>
 <li>Change the path of WTK_HOME in .ant.properties file.</li>
-<li><code>ant jar</code></li>
-<li>Change the jar file size in the jad file (j2me_reversi.jad) [This
-is not necessary for me, but the program may not work without this]</li>
+<li><code>ant</code></li>
 </ol>
 
 <h3>How to compile with obfuscator?</h3>
 
 If you use obfuscator, the size of the jar file will be smaller. Currently
-the build process can use only one obfuscator: RetroGuard-1.1
+the build process can use only two obfuscators: 
+<a href="proguard.sf.net">ProGuard</a> version 1.4 
+and <a href="www.retrologic.com">RetroGuard</a> version 1.1
 
 <ol>
-<li>Change the path of RETROGUARD_HOME in .ant.properties file.</li>
-<li><code>ant compactjar</code></li>
-<li>Change the jar file size in the jad file (j2me_reversi.jad) [This
-is not necessary for me, but the program may not work without this]</li>
+<li>Change the path of RETROGUARD_HOME or PROGUARD_JAR in .ant.properties file.</li>
+<li>Change the obfuscate_null to obfucate_proguard or obfuscate_retroguard in line 
+   <target name="unjar" depends="obfuscate_null"> in build.xml</li>
+<li><code>ant</code></li>
 </ol>
 
 NOTE: RetroGuard-1.1 is not working for me with J2SDK 1.4.1 for Linux
@@ -161,7 +161,7 @@ GPL
 
 <h2>Author</h2>
 
-Andras Salamon (<a href="mailto:asalamon@users.sourceforge.net">asalamon@users.sourceforge.net</a>)
+Andras Salamon / Jataka Ltd. (<a href="mailto:asalamon@users.sourceforge.net">asalamon@users.sourceforge.net</a>)
 <hr />
 <a href="http://sourceforge.net/"> <img src="index_files/sflogo.png" width="210" height="62" border="0" alt="SourceForge Logo"></a> 
 </body></html>
