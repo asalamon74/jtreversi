@@ -1,22 +1,9 @@
 package reversi;
 
-/*
- *
- * Created on July 25, 2002, 8:52 PM
- */
-
 import minimax.*;
 import javax.microedition.midlet.*;
 import javax.microedition.lcdui.*;
 
-/**
- * An example MIDlet with simple "Hello" text and an Exit command.
- * Refer to the startApp, pauseApp, and destroyApp
- * methods so see how each handles the requested transition.
- *
- * @author  salamon
- * @version
- */
 public class J2MEReversi extends MIDlet implements CommandListener {
 
     public static final int SIZE = 8;
@@ -33,7 +20,6 @@ public class J2MEReversi extends MIDlet implements CommandListener {
     private boolean gameEnded;
 
     public J2MEReversi() {
-        System.out.println("constructor");
         display = Display.getDisplay(this);
         exitCommand = new Command("Exit", Command.SCREEN, 2);
         canvas = new ReversiCanvas(this, display);
@@ -41,21 +27,12 @@ public class J2MEReversi extends MIDlet implements CommandListener {
         canvas.setCommandListener(this);
     }
     
-    /**
-     * Start up the Hello MIDlet by creating the TextBox and associating
-     * the exit command and listener.
-     */
     public void startApp() {
-        TextBox t = new TextBox("Hello MIDlet", "Test string", 256, 0);
-        
-        t.addCommand(exitCommand);
-        t.setCommandListener(this);
-        
-        //        display.setCurrent(t);
         display.setCurrent(canvas);
         canvas.setMessage("Good Luck");
         actPlayer = 0;
         turnNum = 1;
+        gameEnded = false;
         table = new ReversiTable(SIZE);
     }
     
@@ -78,7 +55,7 @@ public class J2MEReversi extends MIDlet implements CommandListener {
      * On the exit command, cleanup and notify that the MIDlet has been destroyed.
      */
     public void commandAction(Command c, Displayable s) {
-        System.out.println("c:"+c);
+        //        System.out.println("c:"+c);
         if (c == exitCommand) {
             destroyApp(false);
             notifyDestroyed();
@@ -87,8 +64,8 @@ public class J2MEReversi extends MIDlet implements CommandListener {
 
     protected ReversiMove computerTurn() {
         ReversiMove move = (ReversiMove)minimax.minimax(3, table, actPlayer, rgame, false, 0, false, null);
-        System.out.println("computer point: "+move.getPoint());        
-        System.out.println("computer move: "+move);        
+        //        System.out.println("computer point: "+move.getPoint());        
+        //        System.out.println("computer move: "+move);        
         return move;
     
     }
@@ -101,9 +78,17 @@ public class J2MEReversi extends MIDlet implements CommandListener {
             boolean nonPass = false;
             while( !nonPass ) {
                 int point = rgame.point(newTable, actPlayer);
-                System.out.println("point:"+point);
+                //                System.out.println("point:"+point);
                 if( point > 9000 || point < -9000 ) {                    
-                    canvas.setMessage("End Point:"+point);
+                    String endMessage="";
+                    if( (point < 0 && actPlayer == 0) || 
+                        (point > 0 && actPlayer == 1)) {
+                        endMessage = "You win";
+                    } else {
+                        endMessage = "Computer win";
+                    }
+                    canvas.setMessage(endMessage);
+                    //          canvas.setMessage("End Point:"+point);
                     gameEnded = true;
                 }
                 table = newTable;
@@ -121,6 +106,10 @@ public class J2MEReversi extends MIDlet implements CommandListener {
     }
 
     public void nextTurn(int row, int col) {
+        if( gameEnded ) {
+            startApp();
+            return;
+        }
         ReversiMove move = new ReversiMove(row, col);
         processMove(move);
         canvas.repaint();
