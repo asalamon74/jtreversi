@@ -12,94 +12,24 @@ import java.util.Vector;
  * @author Salamon Andras
  * @version
  */
-public class ReversiGame implements TwoPlayerGame {
+public class ReversiGame extends TwoPlayerGame {
     
     public ReversiGame() {
     }
 
-
-    int pointCalculatedNum;
-    
-    /**
-     * Get the value of pointCalculatedNum.
-     * @return Value of pointCalculatedNum.
-     */
-    public int getPointCalculatedNum() {
-         return pointCalculatedNum; 
-    }
-    
-    /**
-     * Set the value of pointCalculatedNum.
-     * @param v  Value to assign to pointCalculatedNum.
-     */
-    protected void setPointCalculatedNum(int  v) {
-        this.pointCalculatedNum = v;
-    }
-
-    protected static int evalNum = 0;
-
-    public static void clearEvalNum() {
-        evalNum = 0;
-    }
-
-    public static int getEvalNum() {
-        return evalNum;
-    }
-
-    public int point(Table t, byte player) {
-        ++evalNum;
-        if( !(t instanceof ReversiTable) ) {
-            return 0;
+    public void setEvaluationFunction(EvaluationFunction func) {
+        if( !(func instanceof ReversiEvaluationFunction) ) {
+            throw new IllegalArgumentException();
         }
-        ++pointCalculatedNum;
-        int point = simplePointCalculate((ReversiTable)t);
-        if( (numFirstPlayer + numSecondPlayer == 64) ||
-            numFirstPlayer == 0 ||
-            numSecondPlayer == 0 ||
-            ((ReversiTable)t).getPassNum() == 2) {
-            if( point < 0 ) {
-                point -= 10000;
-            } else {
-                point += 10000;
-            }
-        }
-        if( player == 1 ) {
-            point = -point;
-        }
-        return point;
+        this.evaluationFunction = func;
     }
 
-    public int firstPlayerPoint(ReversiTable table) {
-        simplePointCalculate(table);
-        return numFirstPlayer;
+    public int firstPlayerPoint() {
+        return ((ReversiEvaluationFunction)evaluationFunction).firstPlayerPoint();
     }
 
-    public int secondPlayerPoint(ReversiTable table) {
-        simplePointCalculate(table);
-        return numSecondPlayer;
-    }
-
-    protected int simplePointCalculate(ReversiTable table) {
-        numFirstPlayer = 0;
-        numSecondPlayer = 0;
-        pointFirstPlayer = 0;
-        pointSecondPlayer = 0;
-        for( int i=0; i<J2MEReversi.SIZE; ++i ) {
-            for( int j=0; j<J2MEReversi.SIZE; ++j ) {
-                int item = table.getItem(i,j);
-                switch( item ) {
-                case 1: 
-                    ++numFirstPlayer;
-                    pointFirstPlayer += heurMatrix[i][j];
-                    break;
-                case 2:
-                    ++numSecondPlayer;
-                    pointSecondPlayer += heurMatrix[i][j];
-                    break;                    
-                }
-            }
-        }
-        return pointFirstPlayer - pointSecondPlayer;
+    public int secondPlayerPoint() {
+        return ((ReversiEvaluationFunction)evaluationFunction).secondPlayerPoint();
     }
 
     public boolean turn(Table table, byte player, Move move, Table newt) {
@@ -194,20 +124,5 @@ public class ReversiGame implements TwoPlayerGame {
         return retMoves;
     }
 
-    protected int numFirstPlayer;
-    protected int numSecondPlayer;
-    
-    protected int pointFirstPlayer;
-    protected int pointSecondPlayer;
-
-    protected int[][] heurMatrix = { 
-                                  {15,1,8,8,8,8,1,15},
-				  {1,2,5,4,4,5,2,1},
-				  {8,5,6,6,6,6,5,8},
-				  {8,4,6,6,6,6,4,8},
-				  {8,4,6,6,6,6,4,8},
-				  {8,5,6,6,6,6,5,8},
-				  {1,2,5,4,4,5,2,1},
-				  {15,1,8,8,8,8,1,15} };
 } // ReversiGame
 

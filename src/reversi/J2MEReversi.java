@@ -19,7 +19,7 @@ public class J2MEReversi extends MIDlet implements CommandListener {
     private byte actPlayer;
     private int turnNum;
     public  ReversiTable table;
-    private ReversiGame rgame = new ReversiGame();
+    private ReversiGame rgame;
     private Minimax minimax = new Minimax(100);
     private boolean gameEnded = true;
     private int skill = 1;
@@ -57,6 +57,8 @@ public class J2MEReversi extends MIDlet implements CommandListener {
         canvas.addCommand(exitCommand);
         canvas.addCommand(optionsCommand);
         canvas.setCommandListener(this);
+        rgame = new ReversiGame();
+        rgame.setEvaluationFunction(new ReversiHeuristicEvaluation());            
     }
 
     protected void startGame() {
@@ -66,17 +68,17 @@ public class J2MEReversi extends MIDlet implements CommandListener {
         turnNum = 1;
         gameEnded = false;
         table = new ReversiTable(SIZE);
-        int flip = 3;
-        for( int i=0; i<SIZE; ++i) {
-            for( int j=0; j<SIZE-1; ++j ) {
-                byte value = (byte)(1 + i % 2);
-                if( value == 1 && flip > 0 ) {
-                    value = 2;
-                    --flip;
-                }
-                table.setItem(i,j,value );
-            }
-        }
+//         int flip = 3;
+//         for( int i=0; i<SIZE; ++i) {
+//             for( int j=0; j<SIZE-1; ++j ) {
+//                 byte value = (byte)(1 + i % 2);
+//                 if( value == 1 && flip > 0 ) {
+//                     value = 2;
+//                     --flip;
+//                 }
+//                 table.setItem(i,j,value );
+//             }
+//         }
     }
 
     public void startApp() {
@@ -122,7 +124,7 @@ public class J2MEReversi extends MIDlet implements CommandListener {
     protected ReversiMove computerTurn() {
         ReversiMove move = (ReversiMove)minimax.minimax(skill, table, actPlayer, rgame, true, 0, true, true, null);
         //        System.out.println("eval: "+ReversiGame.getEvalNum());
-        ReversiGame.clearEvalNum();
+        rgame.resetEvalNum();
         return move;
     
     }
@@ -137,17 +139,19 @@ public class J2MEReversi extends MIDlet implements CommandListener {
             table = newTable;
             while( !nonPass && !gameEnded) {
                 int point = rgame.point(newTable, actPlayer);
-                //                System.out.println("point:"+point);
-                if( point > 9000 || point < -9000 ) {                    
+                if( rgame.isGameEnded() ) {
+                    int result = rgame.getGameResult();
                     String endMessage="";
-                    if( (point < 0 && actPlayer == 0) || 
-                        (point > 0 && actPlayer == 1)) {
+                    if( (result == EvaluationFunction.LOSS && actPlayer == 0) || 
+                        (result == EvaluationFunction.WIN  && actPlayer == 1)) {
                         endMessage = "Computer won";
+                    } else if( result == EvaluationFunction.DRAW ) {
+                        endMessage = "Draw";
                     } else {
                         endMessage = "You won";
-                    }
-                    int firstNum = rgame.firstPlayerPoint(table);
-                    int secondNum = rgame.secondPlayerPoint(table);
+                    } 
+                    int firstNum = rgame.firstPlayerPoint();
+                    int secondNum = rgame.secondPlayerPoint();
                     endMessage += "\n"+canvas.playerNames[0]+": "+firstNum+"\n"+
                         canvas.playerNames[1]+": "+secondNum;
                     canvas.setMessage(endMessage);
