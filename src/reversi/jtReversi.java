@@ -8,13 +8,14 @@ import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class jtReversi extends MIDlet implements CommandListener {
+public class jtReversi extends MIDlet implements CommandListener, ItemStateListener {
 
     private static final String aboutImageName = "/icons/jataka.png";
 
     private Command exitCommand; // The exit command
     private Command optionsCommand;
-    //    private List skillList;
+    private Form skillForm;
+    private ChoiceGroup skillChoiceGroup;
     private List mainMenu;
     private List optionsMenu;
     private Display display;    // The display for this MIDlet
@@ -29,11 +30,6 @@ public class jtReversi extends MIDlet implements CommandListener {
     private boolean gameEnded = true;
     public  int skill = 1;
     private Image logoImage;
-    //    private Image selectedMutableImage = Image.createImage(16,16);
-    //    private Image selectedImage;
-    //    private Image unselectedMutableImage = Image.createImage(16,16);
-    //    private Image unselectedImage;
-    private Skill skillForm;
     private MinimaxTimerTask mtt;
     private Timer timer = new Timer();
     private boolean animation = true;
@@ -62,7 +58,7 @@ public class jtReversi extends MIDlet implements CommandListener {
         "Skill", 
         "About"};
 
-    //    private static final String[] skillItems = new String[4];
+    private static final String[] skillItems = new String[4];
 
     protected void startGame() {
         display.setCurrent(canvas);
@@ -82,19 +78,20 @@ public class jtReversi extends MIDlet implements CommandListener {
         mainMenu.setCommandListener(this);
         optionsMenu = new List( "Options", List.IMPLICIT, optionItems, null);
         optionsMenu.setCommandListener(this);
-//         selectedMutableImage.getGraphics().fillRect(4,4, 8,8);
-//         selectedImage = Image.createImage(selectedMutableImage);
-//         unselectedMutableImage.getGraphics().fillRect(7,7, 2,2);
-//         unselectedImage = Image.createImage(unselectedMutableImage);
-//         Image []unseletedImages = new Image[skillItems.length];
-//         for( int i=0; i<skillItems.length; ++i ) {
-//             skillItems[i] = "Level "+(i+1);
-//             unseletedImages[i] = unselectedImage;
-//         }
-//         skillList = new List("Skill", List.IMPLICIT, skillItems, unseletedImages);
-//         skillList.addCommand(exitCommand);
-//         skillList.setCommandListener(this);
-        skillForm = new Skill(4);
+        for( int i=0; i<skillItems.length; ++i ) {
+             skillItems[i] = "Level "+(i+1);
+        }
+        skillForm = new Form("Skill");
+        skillChoiceGroup = new ChoiceGroup("Skill", 
+					   ChoiceGroup.EXCLUSIVE, 
+					   skillItems, 
+					   null);
+        skillForm.append(skillChoiceGroup);
+        skillForm.addCommand(exitCommand);
+        skillForm.setCommandListener(this);
+        skillForm.setItemStateListener(this);
+	skill = 1; // default skill is 1
+
         canvas = new ReversiCanvas(this, display);
         canvas.addCommand(exitCommand);
         canvas.addCommand(optionsCommand);
@@ -155,30 +152,15 @@ public class jtReversi extends MIDlet implements CommandListener {
             } else if( c == optionsCommand ) {
                 display.setCurrent(optionsMenu);
             }       
-        } /*else if( d.equals(skillList) ) { 
-            if( c == exitCommand ) {
-                Alert alert = new Alert("Level");
-                alert.setTimeout(1000);
-                alert.setString("Level Not Changed\nLevel:"+skill);
-                if( !gameEnded ) {
-                    display.setCurrent(alert,canvas);
-                } else {
-                    display.setCurrent(alert,mainMenu);
-                }                
-            } else if( c == List.SELECT_COMMAND ) {
-                skillList.set(skill-1, skillList.getString(skill-1), unselectedImage);
-                skill = skillList.getSelectedIndex()+1;
-                Alert alert = new Alert("Level");
-                alert.setTimeout(1000);
-                alert.setString("Level Changed\nNew Level:"+skill);
-                canvas.updateSkillInfo();
-                if( !gameEnded ) {
-                    display.setCurrent(alert,canvas);
-                } else {
-                    display.setCurrent(alert,mainMenu);
-                }                
-            }
-            } */ else if( d.equals(mainMenu) ) {
+        } else if( d.equals(skillForm) ) {
+            // only one command
+            Alert alert = new Alert("Level");
+            alert.setString("Level not changed\n Level: "+skill);
+            // setting next
+            // after timeout this will be the next screen
+            display.setCurrent(alert, mainMenu);
+            alert.setTimeout(1000);
+        } else if( d.equals(mainMenu) ) {
             if( c == List.SELECT_COMMAND ) {
                 int pos = mainMenu.getSelectedIndex();
                 switch( pos ) {
@@ -195,9 +177,8 @@ public class jtReversi extends MIDlet implements CommandListener {
                     startGame();
                     break;
                 case 2:
-                    //                    skillList.set(skill-1, skillList.getString(skill-1), selectedImage);
-                    //                    display.setCurrent(skillList);
-                    skillForm.show(mainMenu);
+                    skillChoiceGroup.setSelectedIndex(skill-1, true);
+                    display.setCurrent(skillForm);
                     break;                    
                 case 3:
                     showAbout();
@@ -216,9 +197,8 @@ public class jtReversi extends MIDlet implements CommandListener {
                     display.setCurrent(canvas);
                     break;
                 case 1:
-                    //                    skillList.set(skill-1, skillList.getString(skill-1), selectedImage);
-                    //                    display.setCurrent(skillList);
-                    skillForm.show(mainMenu);
+                    skillChoiceGroup.setSelectedIndex(skill-1, true);
+                    display.setCurrent(skillForm);
                     break;                    
                 case 2:
                     showAbout();
@@ -230,6 +210,15 @@ public class jtReversi extends MIDlet implements CommandListener {
             display.setCurrent(mainMenu);
             //            }
         }
+    }
+
+
+    public void itemStateChanged(Item item) {
+	Alert alert = new Alert("Skill");
+        skill = ((ChoiceGroup)item).getSelectedIndex()+1;
+        alert.setString("Level changed\n New level:"+skill);
+	display.setCurrent(alert, mainMenu);
+	alert.setTimeout(1000);
     }
 
     protected void showAbout() {
@@ -404,6 +393,7 @@ public class jtReversi extends MIDlet implements CommandListener {
             record = rs.getRecord(1);
             if( record != null ) {
                 skill = record[0];
+                System.out.println("skillload:"+skill);
             }
         } catch( InvalidRecordIDException irsie ) {
             // no record yet, create one
@@ -425,6 +415,7 @@ public class jtReversi extends MIDlet implements CommandListener {
     public void saveRecordStore() {
         try {
             byte []record = new byte[1];
+            System.out.println("skillsave:"+skill);
             record[0] = (byte)skill;
             rs.setRecord(1, record, 0, 1);
             rs.closeRecordStore();
@@ -509,77 +500,5 @@ public class jtReversi extends MIDlet implements CommandListener {
             ended = true;
         }
     }
-
-    public class Skill extends Form implements CommandListener, ItemStateListener {
-    private ChoiceGroup skillChoiceGroup;
-    private Displayable next;
-    private Command exitCommand; // The exit command
-    /**
-     * The skill starting from 1.
-     */
-        //    public int skill;
-
-    /**
-     * Creates the skill.
-     *
-     * @param numberOfSkills Number of skill levels.
-     */
-    public Skill(int numberOfSkills) {
-        super("Skill");
-	String []skillItems = new String[numberOfSkills];
-
-        for( int i=0; i<skillItems.length; ++i ) {
-            skillItems[i] = "Level "+ (i+1);
-        }
-        
-        skillChoiceGroup = new ChoiceGroup("Skill", 
-					   ChoiceGroup.EXCLUSIVE, 
-					   skillItems, 
-					   null);
-        append(skillChoiceGroup);
-        exitCommand = new Command("Exit", 
-				  Command.EXIT, 
-				  99);
-        addCommand(exitCommand);
-        setCommandListener(this);
-        setItemStateListener(this);
-	skill = 1; // default skill is 1
-    }
-
-    /**
-     * Shows the skill list.  
-     *
-     * @param next Next window to display.
-     */
-    public void show(Displayable next) {
-	this.next = next;
-	skillChoiceGroup.setSelectedIndex(skill-1, true);
-	display.setCurrent(this);
-    }
-    
-    /**
-     * Handles events related to the skill list.  
-     *
-     * @param c A Command object identifying the command.
-     * @param d The Displayable on which this event has occurred. 
-     */
-    public void commandAction(Command c, Displayable d) {
-	Alert alert = new Alert("Level");
-	alert.setString("Level not changed\n Level: "+skill);
-	// setting next
-	// after timeout this will be the next screen
-	display.setCurrent(alert,next);
-	alert.setTimeout(1000);
-    }
-
-
-    public void itemStateChanged(Item item) {
-	Alert alert = new Alert("Skill");
-        skill = ((ChoiceGroup)item).getSelectedIndex()+1;
-        alert.setString("Level changed\n New level:"+skill);
-	display.setCurrent(alert,next);
-	alert.setTimeout(1000);
-    }
-}
 
 }
