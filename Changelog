@@ -1,7 +1,8 @@
-0.84.00 2002-FEB-27
+0.84.00 2002-FEB-28
 
 -merged minimax classes (smaller jar)
 -display fixes for Siemens phones
+-ant all target
 
 0.83.00 2002-FEB-04
 

@@ -71,8 +71,12 @@
                    author="true"
                    version="true"
                    use="true"
-                   classpath="${wtk_home}/lib/midpapi.zip"/>
+                   classpath="${wtk.home}/lib/midpapi.zip">
+            <link href="${wtk.home}/docs/api" />
+        </javadoc>
     </target>
+
+    <target name="all" depends="clean, package,doc" />
 
     <target name="run">
         <wtkrun jadfile="${jars}/${project}.jad" device="${device}"

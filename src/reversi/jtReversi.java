@@ -282,12 +282,12 @@ public class jtReversi extends MIDlet implements CommandListener {
                     int result = rgame.getGameResult();
                     String endMessage="";
                     boolean firstWin = 
-                        (result == EvaluationFunction.LOSS && actPlayer == 0) || 
-                        (result == EvaluationFunction.WIN  && actPlayer == 1);
+                        (result == TwoPlayerGame.LOSS && actPlayer == 0) || 
+                        (result == TwoPlayerGame.WIN  && actPlayer == 1);
                     int winner = firstWin ? 1 : 0;
                     if( !twoplayer && firstWin ) {
                         endMessage = "Computer won";
-                    } else if( result == EvaluationFunction.DRAW ) {
+                    } else if( result == TwoPlayerGame.DRAW ) {
                         endMessage = "Draw";
                     } else {
                         if( twoplayer ) {
