@@ -16,7 +16,7 @@ public class Minimax  {
     public Minimax() {
     }
 
-    public Move minimax(int depth, Table state, byte player, TwoPlayerGame tpg, boolean alphabeta, int alpha, boolean order, boolean kill, Move killerMove) {
+    public Move minimax(int depth, Table state, byte player, TwoPlayerGame tpg, boolean alphabeta, int alpha, boolean order, boolean kill, Move killerMove, boolean root) {
         Move bestMove;
 
         if( depth == 0 ) {            
@@ -30,14 +30,20 @@ public class Minimax  {
         Move kMove;
         boolean cut=false;
         int actPoint;
-        int maxPoint = -10000; /* -Integer.MIN_VALUE ?? */
+        int maxPoint = -1000000; /* -Integer.MIN_VALUE ?? */
         int bestNum=0;
  
         Move pMoves[] = tpg.possibleMoves(state, player);
+        if( pMoves == null ) {
+            // game ended
+            bestMove = state.getEmptyMove();
+            bestMove.setPoint(tpg.point(state, player));
+            return bestMove;
+        }
         int []bestMoves = new int[pMoves.length];
 
         Table newState = state.copyFrom(state);
-        if( depth > 2 && order ) {
+        if( depth > 2 && order && pMoves.length > 1) {
             int points[] = new int[pMoves.length];
 	    for (int oindex=0;oindex<pMoves.length;++oindex) {
                 tpg.turn(state, player, pMoves[oindex], newState);
@@ -86,7 +92,7 @@ public class Minimax  {
                 } else {
                     kMove = null;
                 }
-		actMove = minimax(depth-1, newState, (byte)(1-player), tpg,  alphabeta, -maxPoint, order , kill, kMove);
+		actMove = minimax(depth-1, newState, (byte)(1-player), tpg,  alphabeta, -maxPoint, order , kill, kMove, false);
                 actPoint = -actMove.getPoint();
             }
             if( i == 0 || actPoint > maxPoint ) {

@@ -24,12 +24,12 @@ public class ReversiGame extends TwoPlayerGame {
         this.evaluationFunction = func;
     }
 
-    public int firstPlayerPoint() {
-        return ((ReversiEvaluationFunction)evaluationFunction).firstPlayerPoint();
+    public int firstPlayerNum() {
+        return ((ReversiEvaluationFunction)evaluationFunction).firstPlayerNum();
     }
 
-    public int secondPlayerPoint() {
-        return ((ReversiEvaluationFunction)evaluationFunction).secondPlayerPoint();
+    public int secondPlayerNum() {
+        return ((ReversiEvaluationFunction)evaluationFunction).secondPlayerNum();
     }
 
     public boolean turn(Table table, byte player, Move move, Table newt) {
@@ -103,9 +103,13 @@ public class ReversiGame extends TwoPlayerGame {
 
         ReversiTable newTable = new ReversiTable();
         ReversiMove move = new ReversiMove(0,0); 
+        boolean hasMove = false;
         for( int row=0; row<8; ++row ) {
             for( int col=0; col<8; ++col ) {
                 move.setCoordinates(row, col);
+                if( !hasMove && ((ReversiTable)table).getItem(row,col) == 0 ) {
+                    hasMove = true;
+                }
                 boolean goodMove = turn(table, player, move, newTable);
                 if( goodMove ) {
                     moves.addElement(new ReversiMove(move));
@@ -113,6 +117,9 @@ public class ReversiGame extends TwoPlayerGame {
             }
         }
 
+        if( !hasMove ) {
+            return null;
+        }
         if( moves.size() == 0 ) {
             // need to pass
             moves.addElement(new ReversiMove(8, 8));

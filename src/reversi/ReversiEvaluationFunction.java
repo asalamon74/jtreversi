@@ -23,16 +23,16 @@ public class ReversiEvaluationFunction implements EvaluationFunction {
     protected int numSecondPlayer;
     protected int point;
     protected int evalNum = 0;
-    protected static final int HUGE = 10000;
+    protected static final int HUGE = 1000000;
 
-    public void setTable(Table table, byte player) {
+    public void setTable(Table table, byte player,boolean fullProcess) {
         if( !(table instanceof ReversiTable) ) {
             throw new IllegalArgumentException();
         }
         this.table = (ReversiTable)table;
         this.player = player;
         ++evalNum;
-        eval();
+        eval(fullProcess);
     }
 
     public int getEvalNum() {
@@ -43,7 +43,7 @@ public class ReversiEvaluationFunction implements EvaluationFunction {
         evalNum = 0;
     }
 
-    protected void eval() {
+    protected void eval(boolean fullProcess) {
         numFirstPlayer = 0;
         numSecondPlayer = 0;
         for( int i=0; i<8; ++i ) {
@@ -61,15 +61,9 @@ public class ReversiEvaluationFunction implements EvaluationFunction {
         }
         point = numFirstPlayer - numSecondPlayer;
         if( isGameEnded() ) {
-            int result = getGameResult();
-            switch( result ) {
-            case WIN:
+            if( point > 0 ) {
                 point += HUGE;
-                break;
-            case DRAW:
-                point = 0;
-                break;
-            case LOSS:
+            } else if( point < 0 ) {
                 point -= HUGE;
             }
         }
@@ -109,11 +103,11 @@ public class ReversiEvaluationFunction implements EvaluationFunction {
         }
     }
 
-    public int firstPlayerPoint() {
+    public int firstPlayerNum() {
         return numFirstPlayer;
     }
 
-    public int secondPlayerPoint() {
+    public int secondPlayerNum() {
         return numSecondPlayer;
     }
 

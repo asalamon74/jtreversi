@@ -116,4 +116,12 @@ public class ReversiTable implements Table  {
         return new ReversiMove(0,0);
     }
 
+    public void convertToIntArray(int [][]array) {
+        for( int i=0; i<8; ++i ) {
+            for( int j=0; j<8; ++j ) {
+                array[i][j] = getItem(i,j);
+            }
+        }
+    }
+
 } // ReversiTable

@@ -10,7 +10,24 @@ import java.util.TimerTask;
 public class J2MEReversi extends MIDlet implements CommandListener {
 
     private static final String aboutImageName = "/icons/jataka_logo_c_small.png";
-        
+
+    // BEGIN:XAITEST
+//     private static final int MAX_GAME_NUM=100;
+//     private static int gameNum;
+//     private static int win;
+//     private static int draw;
+//     private static int loss;    
+//     protected int[][] heurMatrix_old = { 
+//                                   {15,1,8,8,8,8,1,15},
+// 				  {1,2,5,4,4,5,2,1},
+// 				  {8,5,6,6,6,6,5,8},
+// 				  {8,4,6,6,6,6,4,8},
+// 				  {8,4,6,6,6,6,4,8},
+// 				  {8,5,6,6,6,6,5,8},
+// 				  {1,2,5,4,4,5,2,1},
+// 				  {15,1,8,8,8,8,1,15} };
+
+    // END:XAITEST
     private Command exitCommand; // The exit command
     private Command optionsCommand;
     private List skillList;
@@ -32,20 +49,33 @@ public class J2MEReversi extends MIDlet implements CommandListener {
     private Image selectedImage;
     private Image unselectedMutableImage = Image.createImage(16,16);
     private Image unselectedImage;
-
+    protected int[][] heurMatrix = { 
+                                  {500 ,-240, 85, 69, 69, 85,-240, 500},
+				  {-240,-130, 49, 23, 23, 49,-130,-240},
+				  {  85,  49,  1,  9,  9,  1,  49,  85},
+				  {  69,  23,  9, 32, 32,  9,  23,  69},
+				  {  69,  23,  9, 32, 32,  9,  23,  69},
+				  {  85,  49,  1,  9,  9,  1,  49,  85},
+				  {-240,-130, 49, 23, 23, 49,-130,-240},
+                                  {500 ,-240, 85, 69, 69, 85,-240, 500}};
     private static final String[] mainMenuItems = {
         "Start 1P", 
         "Start 2P", 
         "Skill", 
         "About",
-        "Exit game"};
+        "Exit game"
+        // BEGIN:XAITEST
+        //        , "Start 0P"
+        // END:XAITEST
+
+    };
 
     private static final String[] optionItems = {
         "Continue", 
         "Skill", 
         "About"};
 
-    private static final String[] skillItems = new String[5];
+    private static final String[] skillItems = new String[4];
 
     public J2MEReversi() {
     }
@@ -57,6 +87,9 @@ public class J2MEReversi extends MIDlet implements CommandListener {
         turnNum = 1;
         gameEnded = false;
         table = new ReversiTable();
+        // BEGIN:XAITEST
+        //        nextTurn(1,1);
+        // END:XAITEST
     }
 
     public void initMidlet() {
@@ -84,7 +117,13 @@ public class J2MEReversi extends MIDlet implements CommandListener {
         canvas.addCommand(optionsCommand);
         canvas.setCommandListener(this);
         rgame = new ReversiGame();
-        rgame.setEvaluationFunction(new ReversiHeuristicEvaluation());
+        rgame.setEvaluationFunction(
+            new ReversiHeuristicEvaluation(heurMatrix,10,18,true));
+        // BEGIN:XAITEST
+//         rgame.setEvaluationFunctions(
+//             new ReversiHeuristicEvaluation(heurMatrix2,10,18,true), 
+//             new ReversiHeuristicEvaluation(heurMatrix,0,0,true));
+        // END:XAITEST
         try {
             logoImage  = Image.createImage(aboutImageName);
         } catch (IOException e) {
@@ -142,7 +181,16 @@ public class J2MEReversi extends MIDlet implements CommandListener {
         canvas.setMessage("Thinking");
         canvas.repaint();
         canvas.serviceRepaints();
-        ReversiMove move = (ReversiMove)minimax.minimax(skill, table, actPlayer, rgame, true, 0, true, true, null);
+        int actSkill = skill;
+        if( turnNum > 50 ) {
+            ++actSkill;
+        }
+        if( turnNum > 55 ) {
+            ++actSkill;
+        }
+        ReversiMove move = (ReversiMove)minimax.minimax(actSkill, table, actPlayer, rgame, true, 0, true, true, null, true);
+        //        System.out.println(move.getPoint());
+        //        System.out.println("evalNum:"+rgame.getEvalNum());
         canvas.stopWait();
         rgame.resetEvalNum();
         return move;
@@ -158,7 +206,7 @@ public class J2MEReversi extends MIDlet implements CommandListener {
             boolean nonPass = false;
             table = newTable;
             while( !nonPass && !gameEnded) {
-                int point = rgame.point(newTable, actPlayer);
+                rgame.process(newTable, actPlayer);
                 if( rgame.isGameEnded() ) {
                     int result = rgame.getGameResult();
                     String endMessage="";
@@ -170,6 +218,9 @@ public class J2MEReversi extends MIDlet implements CommandListener {
                         endMessage = "Computer won";
                     } else if( result == EvaluationFunction.DRAW ) {
                         endMessage = "Draw";
+                        // BEGIN:XAITEST
+                        //                        ++draw;
+                        // END:XAITEST
                     } else {
                         if( twoplayer ) {
                             endMessage = canvas.playerNames[winner] + " won";
@@ -177,12 +228,25 @@ public class J2MEReversi extends MIDlet implements CommandListener {
                             endMessage = "You won";
                         }
                     } 
-                    int firstNum = rgame.firstPlayerPoint();
-                    int secondNum = rgame.secondPlayerPoint();
+                    int firstNum = rgame.firstPlayerNum();
+                    int secondNum = rgame.secondPlayerNum();
                     endMessage += "\n"+canvas.playerNames[0]+": "+firstNum+"\n"+
                         canvas.playerNames[1]+": "+secondNum;
                     canvas.setMessage(endMessage);
                     gameEnded = true;
+                    // BEGIN:XAITEST
+//                     System.out.println(endMessage);
+//                     if( result != EvaluationFunction.DRAW && firstWin ) {
+//                         ++win;
+//                     } else if( result != EvaluationFunction.DRAW ) {
+//                         ++loss;
+//                     }
+//                     System.out.println("R:D:B  "+loss+":"+draw+":"+win);
+//                     if( --gameNum > 0 ) {
+//                         startGame();
+//                     }       
+                    
+                    // END:XAITEST
                 } else {
                     actPlayer = (byte)(1 - actPlayer);
                     ++turnNum;
@@ -216,7 +280,7 @@ public class J2MEReversi extends MIDlet implements CommandListener {
         processMove(move);
         canvas.repaint();
         canvas.serviceRepaints();        
-        if( !gameEnded && !isHuman[actPlayer] ) {
+        while( !gameEnded && !isHuman[actPlayer] ) {
             move = computerTurn();
             processMove(move);
         }
@@ -285,6 +349,17 @@ public class J2MEReversi extends MIDlet implements CommandListener {
                     destroyApp(false);
                     notifyDestroyed();
                     break;
+                    // BEGIN:XAITEST                    
+//                 case 5:
+//                     gameNum = MAX_GAME_NUM;
+//                     win = 0;
+//                     draw = 0;
+//                     loss = 0;
+//                     isHuman[0] = false;
+//                     isHuman[1] = false;
+//                     twoplayer = false;
+//                     startGame();                    
+                    // END:XAITEST
                 }
             }
         }
