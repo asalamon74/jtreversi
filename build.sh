@@ -1,6 +1,7 @@
 #!/bin/sh
 
-export JAVA_HOME=/usr/local/java/j2sdk1.4.1
+#export JAVA_HOME=/usr/local/java/j2sdk1.4.1
+export JAVA_HOME=/opt/IBMJava2-13
 export WTK_HOME=/usr/local/java/WTK104
 
 echo Creating directories

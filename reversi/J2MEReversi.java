@@ -20,11 +20,15 @@ public class J2MEReversi extends MIDlet implements CommandListener {
     
     private Command exitCommand; // The exit command
     private Display display;    // The display for this MIDlet
+    private ReversiCanvas canvas;
     
     public J2MEReversi() {
         System.out.println("constructor");
         display = Display.getDisplay(this);
         exitCommand = new Command("Exit", Command.SCREEN, 2);
+        canvas = new ReversiCanvas(display);
+        canvas.addCommand(exitCommand);
+        canvas.setCommandListener(this);
     }
     
     /**
