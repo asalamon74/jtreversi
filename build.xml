@@ -72,7 +72,8 @@
 <delete dir="${classescompact}"/>
 <delete dir="${tmpclassescompact}"/>
 <delete dir="${apidir}"/>
-<delete file="${jars}/${project}.jar" verbose="yes"/>
+<delete file="${jars}/${project}.jar"/>
+<delete file="${jars}/${project}_new.jar"/>
 </target>
 
 <target name="doc">
