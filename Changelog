@@ -1,5 +1,6 @@
-0.74.00 2002-NOV-
+0.80.00 2002-NOV-26
 
+-Renaming project to jtReversi
 -Supporting non-doublebuffered devices
 -Background color for color display
 -Better display for non-square screens (e.g. Nokia 9210)
