@@ -13,8 +13,6 @@ import java.util.Random;
  */
 public class Minimax  {
 
-    public static final int MAX_TURN = 60;
-
     public Minimax(int maxsize) {
         this.maxsize = maxsize;
     }
@@ -35,9 +33,9 @@ public class Minimax  {
         int actPoint;
         int maxPoint = -10000; /* -Integer.MIN_VALUE ?? */
         int bestNum=0;
-        int []bestMoves = new int[MAX_TURN];
  
         Move pMoves[] = tpg.possibleMoves(state, player);
+        int []bestMoves = new int[pMoves.length];
 
         Table newState = state.copyFrom(state);
         if( depth > 2 && order ) {
