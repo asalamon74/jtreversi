@@ -41,6 +41,14 @@ public class ReversiTable implements Table  {
     }
 
 
+    public static int getPlayerItem(int player) {
+        return player+1;
+    }
+
+    public void flip(int row, int col) {
+        matrix[row][col] = 2 - matrix[row][col];
+    }
+
     protected int passNum;
     
     /**

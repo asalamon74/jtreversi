@@ -1,5 +1,7 @@
 package reversi;
 
+import java.util.Vector;
+
 /**
  * ReversiGame.java
  *
@@ -9,7 +11,6 @@ package reversi;
  * @author Salamon Andras
  * @version
  */
-
 public class ReversiGame implements TwoPlayerGame {
     
     public ReversiGame() {
@@ -43,7 +44,8 @@ public class ReversiGame implements TwoPlayerGame {
         int point = simplePointCalculate((ReversiTable)t);
         if( (numFirstPlayer + numSecondPlayer == 64) ||
             numFirstPlayer == 0 ||
-            numSecondPlayer == 0 ) {
+            numSecondPlayer == 0 ||
+            ((ReversiTable)t).getPassNum() == 2) {
             if( point < 0 ) {
                 point += 10000;
             } else {
@@ -92,19 +94,65 @@ public class ReversiGame implements TwoPlayerGame {
             return null;
         }
 
-        for( int dirx = -1; dirx <= 1; ++dirx ) {
-            for( int diry = -1; diry <= 1; ++diry ) {
-                if( dirx == 0 && diry == 0 ) {
+        boolean flipped = false;
+        for( int dirrow = -1; dirrow <= 1; ++dirrow ) {
+            for( int dircol = -1; dircol <= 1; ++dircol ) {
+                if( dirrow == 0 && dircol == 0 ) {
                     continue;
                 }
-                
+                int c = 1;
+                while( ReversiMove.valid(row+c*dirrow,col+c*dircol) && 
+                       newTable.getItem(row+c*dirrow,col+c*dircol) == ReversiTable.getPlayerItem(1-player)) {
+                    ++c;
+		    if (c > 1 && ReversiMove.valid(row+c*dirrow,col+c*dircol) 
+                        && newTable.getItem(row+c*dirrow,col+c*dircol) == ReversiTable.getPlayerItem(player)) {
+                        flipped = true;
+			for (int s1=1;s1 < c;++s1) {
+                            newTable.flip(row+s1*dirrow,col+s1*dircol);
+			}
+                    }
+                }
+
             }
         }
-        return null;
+
+        if( flipped ) {
+            newTable.setItem(row, col, player);
+        }
+        return newTable;
     }
 
-    public Move[] possibleMoves(Table t, int player) {
-        return null;
+    public Move[] possibleMoves(Table table, int player) {
+        if( !(table instanceof ReversiTable) ) {
+            return null;
+        }
+        Vector moves = new Vector();
+
+        if( ((ReversiTable)table).getPassNum() == 2 ) {
+            // two passes: end of the game
+            return null;
+        }
+
+        ReversiTable newTable;
+        for( int row=0; row<ReversiCanvas.SIZE; ++row ) {
+            for( int col=0; col<ReversiCanvas.SIZE; ++col ) {
+                ReversiMove move = new ReversiMove(row, col);
+                newTable = (ReversiTable)turn(table, player, move);
+                if( newTable != null ) {
+                    moves.addElement(move);
+                }
+            }
+        }
+
+        if( moves.size() == 0 ) {
+            // need to pass
+            moves.addElement(new ReversiMove(ReversiCanvas.SIZE, ReversiCanvas.SIZE));
+        }
+        Move[] retMoves = new ReversiMove[moves.size()];
+        for( int m=0; m<moves.size(); ++m ) {
+            retMoves[m] = (Move)moves.elementAt(m);
+        }
+        return retMoves;
     }
 
     protected int numFirstPlayer;

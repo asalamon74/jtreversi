@@ -21,5 +21,10 @@ public class ReversiMove implements Move {
         this.row = row;
         this.col = col;
     }
+
+    public static boolean valid(int row, int col) {
+        return row >=0 && row < ReversiCanvas.SIZE 
+            && col >=0 && col < ReversiCanvas.SIZE;
+    }
     
 } // ReversiMove
