@@ -26,23 +26,17 @@ public class ReversiGame extends TwoPlayerGame {
     }
 
     public Table[] animatedTurn(Table table, byte player, Move move, Table newt) {
-        return _turn(table, player, move, newt, true);
+        return _turn((ReversiTable)table, player, (ReversiMove)move, (ReversiTable)newt, true);
     }
 
     public boolean turn(Table table, byte player, Move move, Table newt) {
-        return _turn(table, player, move, newt, false) != null;
+        return _turn((ReversiTable)table, player, (ReversiMove)move, (ReversiTable)newt, false) != null;
     }
 
-    private Table[] _turn(Table table, byte player, Move move, Table newt, boolean animated) {
-        if( !(move instanceof ReversiMove ) ||
-            !(table instanceof ReversiTable) ||
-            !(newt instanceof ReversiTable)) {
-            return null;
-        }
-
-        int row = ((ReversiMove)move).row;
-        int col = ((ReversiMove)move).col;
-        if( row != 8 && ((ReversiTable)table).getItem(row, col) != 0 ) {
+    private Table[] _turn(ReversiTable table, byte player, ReversiMove move, ReversiTable newTable, boolean animated) {
+        int row = move.row;
+        int col = move.col;
+        if( row != 8 && table.getItem(row, col) != 0 ) {
             return null;
         }
 
@@ -52,8 +46,7 @@ public class ReversiGame extends TwoPlayerGame {
         if( animated ) {
             vTables = new Vector();
         }
-        ReversiTable newTable = (ReversiTable)newt;
-        newTable.copyDataFrom((ReversiTable)table);
+        newTable.copyDataFrom(table);
         if( row == 8 ) {
             // pass
             newTable.setPassNum(newTable.getPassNum()+1);
