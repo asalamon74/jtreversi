@@ -20,6 +20,7 @@ public class ReversiCanvas extends Canvas {
     public String []playerNames;
     private static final int SIZE_LIMIT = 8;
     private Image offscreen = null;
+    private static int ASPECT_LIMIT = 15; // 1.4
     
     public ReversiCanvas(J2MEReversi boss, Display display) {
         this.boss = boss;
@@ -38,6 +39,15 @@ public class ReversiCanvas extends Canvas {
         height = getHeight();
         sizex = width / 8;
         sizey = height / 8;
+        if( 10*sizex / sizey > ASPECT_LIMIT ) {
+            sizex = sizey * ASPECT_LIMIT / 10;
+            width = sizex * 8;
+        }
+        if( 10*sizey / sizex > ASPECT_LIMIT ) {
+            sizey = sizex * ASPECT_LIMIT / 10;
+            height = sizey * 8;
+        }
+
         small = sizex < SIZE_LIMIT || sizey < SIZE_LIMIT;
         selx = 0;
         sely = 0;
