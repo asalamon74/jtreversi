@@ -18,6 +18,7 @@ public class J2MEReversi extends MIDlet implements CommandListener {
     private Display display;    // The display for this MIDlet
     private ReversiCanvas canvas;
     private boolean []isHuman = {true, false};
+    private boolean twoplayer;
     private byte actPlayer;
     private int turnNum;
     public  ReversiTable table;
@@ -166,13 +167,20 @@ public class J2MEReversi extends MIDlet implements CommandListener {
                 if( rgame.isGameEnded() ) {
                     int result = rgame.getGameResult();
                     String endMessage="";
-                    if( (result == EvaluationFunction.LOSS && actPlayer == 0) || 
-                        (result == EvaluationFunction.WIN  && actPlayer == 1)) {
+                    boolean firstWin = 
+                        (result == EvaluationFunction.LOSS && actPlayer == 0) || 
+                        (result == EvaluationFunction.WIN  && actPlayer == 1);
+                    int winner = firstWin ? 1 : 0;
+                    if( !twoplayer && firstWin ) {
                         endMessage = "Computer won";
                     } else if( result == EvaluationFunction.DRAW ) {
                         endMessage = "Draw";
                     } else {
-                        endMessage = "You won";
+                        if( twoplayer ) {
+                            endMessage = canvas.playerNames[winner] + " won";
+                        } else {
+                            endMessage = "You won";
+                        }
                     } 
                     int firstNum = rgame.firstPlayerPoint();
                     int secondNum = rgame.secondPlayerPoint();
@@ -184,11 +192,17 @@ public class J2MEReversi extends MIDlet implements CommandListener {
                     actPlayer = (byte)(1 - actPlayer);
                     ++turnNum;
                     if( !rgame.hasPossibleMove(table, actPlayer) ) {
+                        String message = "";
                         if( isHuman[actPlayer] ) {
-                            canvas.setMessage("Human Pass", 2000);
+                            if( twoplayer ) {
+                                message = canvas.playerNames[actPlayer];
+                            } else {
+                                message = "Human";
+                            }
                         } else {
-                            canvas.setMessage("Computer Pass", 2000);
+                            message = "Computer";
                         }
+                        canvas.setMessage(message + " Pass", 2000);
                         table.setPassNum(table.getPassNum()+1);
                     } else {
                         nonPass = true;
@@ -256,11 +270,13 @@ public class J2MEReversi extends MIDlet implements CommandListener {
                 case 0:
                     isHuman[0] = true;
                     isHuman[1] = false;
+                    twoplayer = false;
                     startGame();
                     break;
                 case 1:
                     isHuman[0] = true;
                     isHuman[1] = true;
+                    twoplayer = true;
                     startGame();
                     break;
                 case 2:
