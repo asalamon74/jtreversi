@@ -32,29 +32,48 @@ public class ReversiGame extends TwoPlayerGame {
         return ((ReversiEvaluationFunction)evaluationFunction).secondPlayerNum();
     }
 
+    public Table[] animatedTurn(Table table, byte player, Move move, Table newt) {
+        return _turn(table, player, move, newt, true);
+    }
+
     public boolean turn(Table table, byte player, Move move, Table newt) {
+        return _turn(table, player, move, newt, false) != null;
+    }
+
+    private Table[] _turn(Table table, byte player, Move move, Table newt, boolean animated) {
         if( !(move instanceof ReversiMove ) ||
             !(table instanceof ReversiTable) ||
             !(newt instanceof ReversiTable)) {
-            return false;
+            return null;
         }
 
         int row = ((ReversiMove)move).row;
         int col = ((ReversiMove)move).col;
         if( row != 8 && ((ReversiTable)table).getItem(row, col) != 0 ) {
-            return false;
+            return null;
         }
 
+        Vector vTables=null;
+        Table tables[];
+
+        if( animated ) {
+            vTables = new Vector();
+        }
         ReversiTable newTable = (ReversiTable)newt;
         newTable.copyDataFrom((ReversiTable)table);
         if( row == 8 ) {
             // pass
             newTable.setPassNum(newTable.getPassNum()+1);
-            return true;
+            tables = new Table[1];
+            tables[0] = newTable;
+            return tables;
         }
 
         newTable.setPassNum(0);
-
+        newTable.setItem(row, col, ReversiTable.getPlayerItem(player));
+        if( animated ) {
+            vTables.addElement(new ReversiTable(newTable));
+        }
         boolean flipped = false;
         for( int dirrow = -1; dirrow <= 1; ++dirrow ) {
             for( int dircol = -1; dircol <= 1; ++dircol ) {
@@ -71,6 +90,9 @@ public class ReversiGame extends TwoPlayerGame {
                     flipped = true;
 		    for (int s1=1;s1 < c;++s1) {
                         newTable.flip(row+s1*dirrow,col+s1*dircol);
+                        if( animated ) {
+                            vTables.addElement(new ReversiTable(newTable));
+                        }
                     }
                 }
 
@@ -78,10 +100,20 @@ public class ReversiGame extends TwoPlayerGame {
         }
 
         if( flipped ) {
-            newTable.setItem(row, col, ReversiTable.getPlayerItem(player));
-            return true;
+            if( animated ) {
+                tables = new Table[vTables.size()];
+                for( int i=0; i<vTables.size(); ++i ) {
+                    tables[i] = (Table)vTables.elementAt(i);
+                }
+            } else {
+                tables = new Table[1];
+                tables[0] = newTable;
+            }
+            return tables;
+        } else {
+            newTable.setItem(row, col, (byte)0);
         }
-        return false;
+        return null;
     }
 
     public boolean hasPossibleMove(Table table, byte player) {

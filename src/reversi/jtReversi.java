@@ -33,6 +33,8 @@ public class jtReversi extends MIDlet implements CommandListener {
     private Image unselectedImage;
     private MinimaxTimerTask mtt;
     private Timer timer = new Timer();
+    private boolean animation = true;
+    private Table[] tables;
     protected int[][] heurMatrix = { 
                                   {500 ,-240, 85, 69, 69, 85,-240, 500},
 				  {-240,-130, 49, 23, 23, 49,-130,-240},
@@ -245,18 +247,33 @@ public class jtReversi extends MIDlet implements CommandListener {
         //        System.out.println("evalNum:"+rgame.getEvalNum());
         canvas.stopWait();
         rgame.resetEvalNum();
-        return move;
-    
+        return move;   
     }
 
     protected void processMove(ReversiMove move) {
         //        System.out.println("move:"+move);
         ReversiTable newTable = new ReversiTable();
-        boolean goodMove = rgame.turn( table, actPlayer, move, newTable );
+        //        boolean goodMove = rgame.turn( table, actPlayer, move, newTable );
+        tables = rgame.animatedTurn(table, actPlayer, move, newTable);
+        boolean goodMove = (tables != null);
         if( !goodMove ) {
             // System.out.println("actPlayer:"+actPlayer+" invalid move:"+move);
             canvas.setMessage("Invalid Move",2000);
         } else {
+            synchronized(this) {
+                for( int i=0; i<tables.length; ++i ) {
+                    table = (ReversiTable)tables[i];
+                    canvas.repaint();
+                    canvas.serviceRepaints();        
+                    if( i<tables.length-1 ) {
+                        try {
+                            wait(200);
+                        } catch( InterruptedException e ) {
+                            // do something
+                        }
+                    }
+                }
+            }
             boolean nonPass = false;
             table = newTable;
             while( !nonPass && !gameEnded) {
@@ -425,6 +442,7 @@ public class jtReversi extends MIDlet implements CommandListener {
             //            System.out.println("start");
             Minimax.foreMinimax(getActSkill(), table, (byte)(1-actPlayer), rgame, true, 0, true, true);
             //            System.out.println("end");
+            System.gc();
             ended = true;
         }
     }
