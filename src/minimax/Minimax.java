@@ -4,8 +4,6 @@ import java.util.Random;
 import java.util.Vector;
 import java.util.TimerTask;
 
-import reversi.ReversiMove;
-
 /**
  * Minimax.java
  *
@@ -154,7 +152,7 @@ public class Minimax  {
     
     public static Move precalculatedBestMove(Move move) {
         for( int i=0; i<precalculatedMoves.size(); i += 2) {
-            if( ((ReversiMove)move).equals(precalculatedMoves.elementAt(i)) ) {
+            if( move.equals(precalculatedMoves.elementAt(i)) ) {
                 return (Move)precalculatedMoves.elementAt(i+1);
             }
         }
