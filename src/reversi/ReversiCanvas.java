@@ -19,6 +19,7 @@ public class ReversiCanvas extends Canvas {
 
     public String []playerNames;
     private static final int SIZE_LIMIT = 8;
+    private Image offscreen = null;
     
     public ReversiCanvas(J2MEReversi boss, Display display) {
         this.boss = boss;
@@ -40,9 +41,17 @@ public class ReversiCanvas extends Canvas {
         small = sizex < SIZE_LIMIT || sizey < SIZE_LIMIT;
         selx = 0;
         sely = 0;
+        if( !isDoubleBuffered() ) {
+            offscreen = Image.createImage(width, height);
+        }
     }
 
     protected void paint(Graphics g) {
+        Graphics saved = g;
+
+        if( offscreen != null ) {
+            g = offscreen.getGraphics();
+        }
         int x = g.getClipX();
         int y = g.getClipY();
         int w = g.getClipWidth();
@@ -55,6 +64,9 @@ public class ReversiCanvas extends Canvas {
         drawTable(g, boss.table);
         drawSelectionBox(g);
         drawMessage(g);
+        if( g != saved ) {
+            saved.drawImage( offscreen, 0, 0, Graphics.LEFT | Graphics.TOP );
+        }
     }
 
     protected void drawBoard(Graphics g) {
