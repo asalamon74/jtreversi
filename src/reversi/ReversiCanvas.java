@@ -144,17 +144,20 @@ public class ReversiCanvas extends Canvas {
         int y = col*sizey+sizey/6;
         int w = 2*sizex/3;
         int h = 2*sizey/3;
+        System.out.println("x:"+x+" y:"+y);
+        System.out.println("sizex:"+sizex+" sizey:"+sizey);        
+        System.out.println("w:"+w+" h:"+h);
         if( player == 1 ) {
             if( colored ) {
                 g.setColor(P1_COLOR );
                 if( small ) {
-                    g.fillRect(x,y,w,h);
+                    g.fillRect(x,y,w+1,h+1);
                 } else {
                     g.fillArc(x,y,w,h,0,360);
                 }
             } else {
                 if( small ) {
-                    g.drawRect(x,y,w,h);
+                    g.drawRect(x,y,w+1,h+1);
                 } else {
                     g.drawArc(x,y,w,h,0,360);
                 }
@@ -163,14 +166,14 @@ public class ReversiCanvas extends Canvas {
             if( colored ) {
                 g.setColor(P2_COLOR );
                 if( small ) {
-                    g.fillRect(x,y,w,h);
+                    g.fillRect(x,y,w+1,h+1);
                 } else {
                     g.fillArc(x,y,w,h,0,360);
                 }
             } else {
                 g.setColor(0x000000);
                 if( small ) {
-                    g.fillRect(x,y,w,h);
+                    g.fillRect(x,y,w+1,h+1);
                 } else {
                     g.fillArc(x,y,w,h,0,360);
                 }
@@ -192,6 +195,7 @@ public class ReversiCanvas extends Canvas {
                 g.setColor(DARK_BOX_COLOR);
             }
         }
+        System.out.println("sbx:"+(sx*sizex)+" sby:"+(sy*sizey));      
         g.drawRect( sx*sizex, sy*sizey,sizex, sizey);
         g.drawRect( sx*sizex+1, sy*sizey+1,sizex-2, sizey-2);
     }
