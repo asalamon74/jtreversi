@@ -118,7 +118,7 @@ public class Minimax  {
         bestMove.setPoint(maxPoint);
         return bestMove;
     }
-
+    
     protected int random(int max) {
         int r = Math.abs(rand.nextInt());
         return r % max;
