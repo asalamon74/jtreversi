@@ -1,4 +1,4 @@
-MIDlet-1: Reversi, reversi.png, reversi.J2MEReversi
+MIDlet-1: Reversi, /reversi.png, reversi.J2MEReversi
 MIDlet-Description: Reversi game
 MIDlet-Jar-Size: 13888
 MIDlet-Jar-URL: j2me_reversi.jar

@@ -21,8 +21,8 @@ $WTK_HOME/bin/preverify -classpath $WTK_HOME/lib/midpapi.zip:../tmpclasses -d ..
 echo Jaring preverified class files
 jar cmf MANIFEST.MF j2me_reversi.jar -C ../classes .
 
-# echo Jaring resource files
-# jar umf MANIFEST.MF demos.jar -C ../res .
+echo Jaring resource files
+jar umf MANIFEST.MF j2me_reversi.jar -C ../res .
 
 echo Don\'t forget to update the JAR file size in the JAD file
 

@@ -18,5 +18,8 @@ rem echo Preverifying class files
 rem echo Jaring preverified class files
 %JAVA_HOME%\bin\jar cmf MANIFEST.MF j2me_reversi.jar -C ..\classes .
 
+echo Jaring resource files
+%JAVA_HOME%\bin\jar umf MANIFEST.MF j2me_reversi.jar -C ..\res .
+
 rem echo Don\'t forget to update the JAR file size in the JAD file
 
