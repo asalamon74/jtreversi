@@ -80,7 +80,8 @@ With Ant you are also able to test the program with microemulator
 1. Change the path of MICROEMULATOR_HOME in .ant.properties file.
 2. ant microrun
 
-Note: Please use at least version 0.3.1 of microemulator.
+Note: Please use at least version 0.3.1 of microemulator. Parts of the
+program may not work even with the current CVS version.
 
 Licensing
 ---------
