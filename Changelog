@@ -1,6 +1,7 @@
-0.61.00 2002-SEP-2x
+0.61.00 2002-SEP-21
 
 -Less memory usage (BitSet storage)
+-build and run scripts for Windows
 
 0.60.00 2002-SEP-16
 
