@@ -226,7 +226,6 @@ public class ReversiCanvas extends Canvas {
                     endIndex = message.length();
                 }
                 String submessage = message.substring(startIndex, endIndex);
-                int messageWidth = g.getFont().stringWidth(submessage)+10;
                 g.drawString(submessage, cornerX+5, cornerY, g.TOP|g.LEFT);
                 cornerY += messageHeight;
             }

@@ -15,8 +15,8 @@ public class BitSet  {
     private final static int BIT_INDEX_MASK = BITS_PER_BLOCK - 1;
 
     public BitSet(int bitNum) {
-	if (bitNum <= 0)
-	    throw new NegativeArraySizeException(""+bitNum);
+// 	if (bitNum <= 0)
+// 	    throw new NegativeArraySizeException(""+bitNum);
 
 	bits = new long[(blockIndex(bitNum-1) + 1)];
         this.bitNum = bitNum;
