@@ -75,9 +75,9 @@ public class jtReversi extends MIDlet implements CommandListener {
         exitCommand = new Command("Exit", Command.EXIT, 99);
         optionsCommand = new Command("Options", Command.SCREEN, 5);
         mainMenu = new List( "jtReversi", List.IMPLICIT, mainMenuItems, null);
-        mainMenu.setCommandListener(new MainCommandListener());
+        mainMenu.setCommandListener(this);
         optionsMenu = new List( "Options", List.IMPLICIT, optionItems, null);
-        optionsMenu.setCommandListener(new OptionsCommandListener());
+        optionsMenu.setCommandListener(this);
         selectedMutableImage.getGraphics().fillRect(4,4, 8,8);
         selectedImage = Image.createImage(selectedMutableImage);
         unselectedMutableImage.getGraphics().fillRect(7,7, 2,2);
@@ -89,7 +89,7 @@ public class jtReversi extends MIDlet implements CommandListener {
         }
         skillList = new List("Skill", List.IMPLICIT, skillItems, unseletedImages);
         skillList.addCommand(exitCommand);
-        skillList.setCommandListener(new SkillCommandListener());
+        skillList.setCommandListener(this);
         canvas = new ReversiCanvas(this, display);
         canvas.addCommand(exitCommand);
         canvas.addCommand(optionsCommand);
@@ -131,13 +131,84 @@ public class jtReversi extends MIDlet implements CommandListener {
      * Respond to commands, including exit
      * On the exit command, cleanup and notify that the MIDlet has been destroyed.
      */
-    public void commandAction(Command c, Displayable s) {
-        if (c == exitCommand) {
-            destroyApp(false);
-            notifyDestroyed();
-        } else if( c == optionsCommand ) {
-            display.setCurrent(optionsMenu);
-        }       
+    public void commandAction(Command c, Displayable d) {
+        if( d.equals(canvas) ) {
+            if (c == exitCommand) {
+                destroyApp(false);
+                notifyDestroyed();
+            } else if( c == optionsCommand ) {
+                display.setCurrent(optionsMenu);
+            }       
+        } else if( d.equals(skillList) ) { 
+            if( c == exitCommand ) {
+                Alert alert = new Alert("Level");
+                alert.setTimeout(1000);
+                alert.setString("Level Not Changed\nLevel:"+skill);
+                if( !gameEnded ) {
+                    display.setCurrent(canvas);
+                } else {
+                    display.setCurrent(mainMenu);
+                }                
+                display.setCurrent(alert);                
+            } else if( c == List.SELECT_COMMAND ) {
+                skillList.set(skill-1, skillList.getString(skill-1), unselectedImage);
+                skill = skillList.getSelectedIndex()+1;
+                Alert alert = new Alert("Level");
+                alert.setTimeout(1000);
+                alert.setString("Level Changed\nNew Level:"+skill);
+                if( !gameEnded ) {
+                    display.setCurrent(canvas);
+                } else {
+                    display.setCurrent(mainMenu);
+                }                
+                display.setCurrent(alert);
+            }
+        } else if( d.equals(mainMenu) ) {
+            if( c == List.SELECT_COMMAND ) {
+                int pos = mainMenu.getSelectedIndex();
+                switch( pos ) {
+                case 0:
+                    isHuman[0] = true;
+                    isHuman[1] = false;
+                    twoplayer = false;
+                    startGame();
+                    break;
+                case 1:
+                    isHuman[0] = true;
+                    isHuman[1] = true;
+                    twoplayer = true;
+                    startGame();
+                    break;
+                case 2:
+                    skillList.set(skill-1, skillList.getString(skill-1), selectedImage);
+                    display.setCurrent(skillList);
+                    break;                    
+                case 3:
+                    showAbout();
+                    break;
+                case 4:
+                    destroyApp(false);
+                    notifyDestroyed();
+                    break;
+                }
+            }
+        } else if( d.equals(optionsMenu) ) {
+            if( c == List.SELECT_COMMAND ) {
+                int pos = optionsMenu.getSelectedIndex();
+                switch( pos ) {
+                case 0:
+                    display.setCurrent(canvas);
+                    break;
+                case 1:
+                    skillList.set(skill-1, skillList.getString(skill-1), selectedImage);
+                    display.setCurrent(skillList);
+                    break;                    
+                case 2:
+                    showAbout();
+                    break;
+                }
+            }
+        }
     }
 
     protected void showAbout() {
@@ -263,69 +334,6 @@ public class jtReversi extends MIDlet implements CommandListener {
         return actPlayer;
     }
 
-    private class SkillCommandListener implements CommandListener {
-
-        public void commandAction(Command c, Displayable d) {
-
-            if( c == exitCommand ) {
-                Alert alert = new Alert("Level");
-                alert.setTimeout(1000);
-                alert.setString("Level Not Changed\nLevel:"+skill);
-                if( !gameEnded ) {
-                    display.setCurrent(canvas);
-                } else {
-                    display.setCurrent(mainMenu);
-                }                
-                display.setCurrent(alert);                
-            } else if( c == List.SELECT_COMMAND ) {
-                skillList.set(skill-1, skillList.getString(skill-1), unselectedImage);
-                skill = skillList.getSelectedIndex()+1;
-                Alert alert = new Alert("Level");
-                alert.setTimeout(1000);
-                alert.setString("Level Changed\nNew Level:"+skill);
-                if( !gameEnded ) {
-                    display.setCurrent(canvas);
-                } else {
-                    display.setCurrent(mainMenu);
-                }                
-                display.setCurrent(alert);
-            }
-        }
-    }
-
-    private class MainCommandListener implements CommandListener {
-
-        public void commandAction(Command c, Displayable d) {
-            if( c == List.SELECT_COMMAND ) {
-                int pos = mainMenu.getSelectedIndex();
-                switch( pos ) {
-                case 0:
-                    isHuman[0] = true;
-                    isHuman[1] = false;
-                    twoplayer = false;
-                    startGame();
-                    break;
-                case 1:
-                    isHuman[0] = true;
-                    isHuman[1] = true;
-                    twoplayer = true;
-                    startGame();
-                    break;
-                case 2:
-                    skillList.set(skill-1, skillList.getString(skill-1), selectedImage);
-                    display.setCurrent(skillList);
-                    break;                    
-                case 3:
-                    showAbout();
-                    break;
-                case 4:
-                    destroyApp(false);
-                    notifyDestroyed();
-                    break;
-                }
-            }
-        }
-    }
 
     public class SplashScreen extends Canvas {
         private Display     display;
@@ -375,27 +383,6 @@ public class jtReversi extends MIDlet implements CommandListener {
         private class CountDown extends TimerTask {
             public void run(){
                 dismiss();
-            }
-        }
-    }
-
-    private class OptionsCommandListener implements CommandListener {
-
-        public void commandAction(Command c, Displayable d) {
-            if( c == List.SELECT_COMMAND ) {
-                int pos = optionsMenu.getSelectedIndex();
-                switch( pos ) {
-                case 0:
-                    display.setCurrent(canvas);
-                    break;
-                case 1:
-                    skillList.set(skill-1, skillList.getString(skill-1), selectedImage);
-                    display.setCurrent(skillList);
-                    break;                    
-                case 2:
-                    showAbout();
-                    break;
-                }
             }
         }
     }
