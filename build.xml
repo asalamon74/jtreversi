@@ -23,8 +23,7 @@
         <mkdir dir="${classes}"/>
     </target>
 
-    <target name="build" depends="init">
-        
+    <target name="build" depends="init">        
         <!-- Compile everything, but don't preverify (yet). -->
         <wtkbuild srcdir="${src}"
                   destdir="${classes}"
@@ -34,7 +33,6 @@
              contained in the JAD file. Also preverify the result this
              time. To obfuscate everything, set the corresponding
              parameter to "true" (requires RetroGuard).  -->
-
         <wtkpackage jarfile="${jars}/${project}.jar"
                     jadfile="${jars}/${project}.jad"
                     obfuscate="true"
@@ -44,48 +42,64 @@
                  resources from the WTK's demo application. -->
             <fileset dir="${classes}"/>
             <fileset dir="${resources}"/>    			
-        </wtkpackage>
-    		
+        </wtkpackage>    		
     </target>
 
-<target name="doc">
-<mkdir dir="${apidir}"/>
-<javadoc   packagenames="${javadoc.packagenames}"
-           sourcepath="${src}"
-           destdir="${apidir}"
-           author="true"
-           version="true"
-           use="true"
-           classpath="${wtk_home}/lib/midpapi.zip"/>
-</target>
+    <target name="package" depends="build">
+        <tar destfile="${project}.tar.gz" compression="gzip" >
+	    <tarfileset dir=".">
+	        <include name="src/**/*.java"/>
+	        <include name="res/**"/>
+	        <include name="bin/**"/>
+	        <include name="COPYING"/>
+	        <include name="build.xml"/>
+	        <include name=".ant.properties"/>
+	        <include name="Changelog"/>
+	        <include name="TODO"/>
+	        <include name="README"/>
+	        <include name="DEVICES"/>
+	    </tarfileset>	        
+	</tar>
+    </target>
 
-<target name="run">
-    <wtkrun jadfile="${jars}/${project}.jad" device="${device}"
-    wait="true" />
-</target>
 
-<target name="i85run">
-    <wtkrun jadfile="${jars}/${project}.jad" device="Motorola_i85s"
-    wait="true" />
-</target>
+    <target name="doc">
+        <mkdir dir="${apidir}"/>
+        <javadoc   packagenames="${javadoc.packagenames}"
+                   sourcepath="${src}"
+                   destdir="${apidir}"
+                   author="true"
+                   version="true"
+                   use="true"
+                   classpath="${wtk_home}/lib/midpapi.zip"/>
+    </target>
 
-<target name="grayrun">
-    <wtkrun jadfile="${jars}/${project}.jad" device="DefaultGrayPhone"
-    wait="true"/>
-</target>
+    <target name="run">
+        <wtkrun jadfile="${jars}/${project}.jad" device="${device}"
+                wait="true" />
+    </target>
 
-<target name="minrun">
-    <wtkrun jadfile="${jars}/${project}.jad" device="MinimumPhone"
-    wait="true" />
-</target>
+    <target name="i85run">
+         <wtkrun jadfile="${jars}/${project}.jad" device="Motorola_i85s"
+                 wait="true" />
+    </target>
 
-<target name="microrun">
-<java
-    classname="com.barteo.emulator.app.Main" 
-    classpath="${microemulator_home}/target/me-app.jar:${jars}/${project}.jar"
-    fork="yes">
-    <arg value="${main}"/>
-</java>
-</target>
+    <target name="grayrun">
+        <wtkrun jadfile="${jars}/${project}.jad" device="DefaultGrayPhone"
+                wait="true"/>
+    </target>
+
+    <target name="minrun">
+        <wtkrun jadfile="${jars}/${project}.jad" device="MinimumPhone"
+                wait="true" />
+    </target>
+
+    <target name="microrun">
+        <java classname="com.barteo.emulator.app.Main" 
+          classpath="${microemulator_home}/target/me-app.jar:${jars}/${project}.jar"
+          fork="yes">
+            <arg value="${main}"/>
+        </java>
+    </target>
 
 </project>
