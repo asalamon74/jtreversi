@@ -17,10 +17,7 @@ import reversi.ReversiMove;
  */
 public class Minimax  {
 
-    public Minimax() {
-    }
-
-    public Move minimax(int depth, Table state, byte player, TwoPlayerGame tpg, boolean alphabeta, int alpha, boolean order, boolean kill, Move killerMove, boolean root) {
+    public static Move minimax(int depth, Table state, byte player, TwoPlayerGame tpg, boolean alphabeta, int alpha, boolean order, boolean kill, Move killerMove, boolean root) {
         Move bestMove;
 
         if( depth == 0 ) {            
@@ -123,7 +120,7 @@ public class Minimax  {
         return bestMove;
     }
 
-    public void foreMinimax(int depth, Table state, byte player, TwoPlayerGame tpg, boolean alphabeta, int alpha, boolean order, boolean kill) {
+    public static void foreMinimax(int depth, Table state, byte player, TwoPlayerGame tpg, boolean alphabeta, int alpha, boolean order, boolean kill) {
         precalculatedMoves.removeAllElements();
         Move pMoves[] = tpg.possibleMoves(state, (byte)(1-player));
         if( pMoves == null ) {
@@ -140,7 +137,7 @@ public class Minimax  {
         }
     }
     
-    public Move precalculatedBestMove(Move move) {
+    public static Move precalculatedBestMove(Move move) {
         System.out.println("size:"+precalculatedMoves.size());
         for( int i=0; i<precalculatedMoves.size(); i += 2) {
             if( ((ReversiMove)precalculatedMoves.elementAt(i)).equals(move) ) {
@@ -150,12 +147,12 @@ public class Minimax  {
         return null;
     }
 
-    protected int random(int max) {
+    protected static int random(int max) {
         int r = Math.abs(rand.nextInt());
         return r % max;
     }
 
-    protected Random rand = new Random();
-    protected Vector precalculatedMoves = new Vector();
+    protected static Random rand = new Random();
+    protected static Vector precalculatedMoves = new Vector();
     
 } // Minimax

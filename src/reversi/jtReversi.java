@@ -24,7 +24,7 @@ public class jtReversi extends MIDlet implements CommandListener {
     private int turnNum;
     public  ReversiTable table;
     private ReversiGame rgame;
-    private Minimax minimax = new Minimax();
+    //    private Minimax minimax = new Minimax();
     private boolean gameEnded = true;
     private int skill = 1;
     private Image logoImage;
@@ -159,10 +159,10 @@ public class jtReversi extends MIDlet implements CommandListener {
         if( turnNum > 55 ) {
             ++actSkill;
         }        
-        ReversiMove move=(ReversiMove)minimax.precalculatedBestMove(prevMove);
+        ReversiMove move=(ReversiMove)Minimax.precalculatedBestMove(prevMove);
         if( move == null ) {
             System.out.println("no precalculated move");
-            move = (ReversiMove)minimax.minimax(actSkill, table, actPlayer, rgame, true, 0, true, true, null, true);
+            move = (ReversiMove)Minimax.minimax(actSkill, table, actPlayer, rgame, true, 0, true, true, null, true);
         } else {
             System.out.println("Precalculated move");
         }
@@ -247,7 +247,7 @@ public class jtReversi extends MIDlet implements CommandListener {
             canvas.repaint();
             canvas.serviceRepaints();        
             System.out.println("--------------");
-            minimax.foreMinimax(skill, table, (byte)(1-actPlayer), rgame, true, 0, true, true);
+            Minimax.foreMinimax(skill, table, (byte)(1-actPlayer), rgame, true, 0, true, true);
         }
     }
 
