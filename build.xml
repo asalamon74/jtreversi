@@ -72,7 +72,7 @@
 <delete file="${jars}/${project}_new.jar"/>
 </target>
 
-<target name="compactpreverify" depends="unjar">
+<target name="preverify" depends="unjar">
 <!-- preverify the class files -->
 <delete dir="${classescompact}"/>
 <mkdir dir="${classescompact}"/>
@@ -86,7 +86,7 @@
 </exec>
 </target>
 
-<target name="compactjar" depends="compactpreverify">
+<target name="compactjar" depends="preverify">
 <delete file="${jars}/${project}.jar"/>
 <jar jarfile="${jars}/${project}.jar" basedir="${classescompact}" manifest="${jars}/MANIFEST.MF">
 <fileset dir="${resources}"/>
