@@ -109,6 +109,7 @@ public class ReversiTable implements Table  {
             }
             ret += "\n";
         }
+        ret += "pass: "+getPassNum()+ "\n";
         return ret;
     }
 

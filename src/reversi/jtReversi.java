@@ -235,16 +235,6 @@ public class jtReversi extends MIDlet implements CommandListener {
         ReversiMove move=(ReversiMove)Minimax.precalculatedBestMove(prevMove);
         if( move == null ) {
             System.out.println("no precalculated move");
-            while( mtt != null && mtt.ended == false ) {
-                System.out.println("wait");
-                synchronized(this) {
-                    try {
-                        wait(50);
-                    } catch(Exception e) {
-                        System.out.println("Synchronization problem"+e);
-                    }
-                }
-            }
             move = (ReversiMove)Minimax.minimax(actSkill, table, actPlayer, rgame, true, 0, true, true, null, true);
         } else {
             System.out.println("Precalculated move");
@@ -320,6 +310,16 @@ public class jtReversi extends MIDlet implements CommandListener {
     void nextTurn(int row, int col) {
         if( mtt != null ) {
             mtt.cancel();
+            while( mtt.ended == false ) {
+                System.out.println("wait nt");
+                synchronized(this) {
+                    try {
+                        wait(50);
+                    } catch(Exception e) {
+                        System.out.println("Synchronization problem"+e);
+                    }
+                }
+            }
         }
         if( gameEnded ) {
             startApp();
@@ -400,7 +400,7 @@ public class jtReversi extends MIDlet implements CommandListener {
 
     class MinimaxTimerTask extends TimerTask {
         
-        public boolean ended = false;
+        public boolean ended;
 
         public boolean cancel() {
             Minimax.cancel();
@@ -408,6 +408,7 @@ public class jtReversi extends MIDlet implements CommandListener {
         }
         
         public void run() {
+            ended = false;
             System.out.println("start");
             Minimax.foreMinimax(skill, table, (byte)(1-actPlayer), rgame, true, 0, true, true);
             System.out.println("end");
