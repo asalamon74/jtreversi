@@ -51,9 +51,11 @@ public class ReversiCanvas extends Canvas {
         small = sizex < SIZE_LIMIT || sizey < SIZE_LIMIT;
         selx = 0;
         sely = 0;
-        if( !isDoubleBuffered() ) {
+        //        if( !isDoubleBuffered() ) { 
+        // there are phones which claims to have a doubleBuffered Canvas
+        // although they don't have
             offscreen = Image.createImage(width, height);
-        }
+        //        }
     }
 
     protected void paint(Graphics g) {
@@ -73,8 +75,8 @@ public class ReversiCanvas extends Canvas {
         drawBoard(g);
         drawTable(g, boss.table);
         drawSelectionBox(g);
-        drawMessage(g);
         drawPossibleMoves(g, boss.table);
+        drawMessage(g);
         if( g != saved ) {
             saved.drawImage( offscreen, 0, 0, Graphics.LEFT | Graphics.TOP );
         }
@@ -234,9 +236,10 @@ public class ReversiCanvas extends Canvas {
             int cornerX = (width - maxWidth)/2;
             int cornerY = (height - (breaks+1) * messageHeight)/2;
             g.setColor(0xeeeeee);
-            g.fillRect(cornerX, cornerY, maxWidth, (breaks+1) * messageHeight);
+            g.fillRect(cornerX-1, cornerY-1, maxWidth, (breaks+1) * messageHeight+6);
             g.setColor(0x000000);
-            g.drawRect(cornerX, cornerY, maxWidth, (breaks+1) * messageHeight);
+            g.drawRect(cornerX-1, cornerY-1, maxWidth, (breaks+1) * messageHeight + 6);
+            g.drawRect(cornerX, cornerY, maxWidth-2, (breaks+1) * messageHeight + 4);
             while( endIndex < message.length() ) {
                 startIndex = endIndex+1;
                 endIndex = message.indexOf('\n', startIndex);
@@ -244,7 +247,7 @@ public class ReversiCanvas extends Canvas {
                     endIndex = message.length();
                 }
                 String submessage = message.substring(startIndex, endIndex);
-                g.drawString(submessage, cornerX+5, cornerY, g.TOP|g.LEFT);
+                g.drawString(submessage, cornerX+5, cornerY+2, g.TOP|g.LEFT);
                 cornerY += messageHeight;
             }
         }
@@ -254,24 +257,28 @@ public class ReversiCanvas extends Canvas {
         int oldsely = sely;
         switch( getGameAction(keyCode) ) {
         case Canvas.UP: 
-            message = null;
             sely = (sely + 8 -1) % 8;
-            repaint(selx*sizex-1, oldsely*sizey-1,sizex+2, sizey+2);
-            repaint(selx*sizex, sely*sizey,sizex, sizey);
+            if( message != null ) {
+                message = null;
+                repaint();
+            } else {
+                repaint(selx*sizex-1, oldsely*sizey-1,sizex+2, sizey+2);
+                repaint(selx*sizex, sely*sizey,sizex, sizey);
+            }
             break;
         case Canvas.DOWN: 
-            message = null;
             sely = (sely + 1) % 8;
+            message = null;
             repaint();
             break;
         case Canvas.LEFT: 
-            message = null;
             selx = (selx + 8 -1) % 8;
+            message = null;
             repaint();
             break;
         case Canvas.RIGHT: 
-            message = null;
             selx = (selx + 1) % 8;
+            message = null;
             repaint();
             break;
         case Canvas.FIRE: 
