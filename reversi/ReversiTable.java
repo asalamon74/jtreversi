@@ -1,11 +1,12 @@
 package reversi;
 
 import minimax.*;
+import util.*;
 
 /**
  * ReversiTable.java
  *
- * Stores a table. Would be better with BitSet, but no BitSet in J2ME
+ * Stores a table. 
  *
  * Created: Tue Jul 30 17:28:10 2002
  *
@@ -15,11 +16,18 @@ import minimax.*;
 public class ReversiTable implements Table  {
 
     protected int size;
-    protected byte[] matrix;
+    /** 
+     * Two bits for every place:
+     * 00: nothing
+     * 01: 1
+     * 10: 2
+     * 11: oops
+     */
+    protected BitSet bitset; 
     
     public ReversiTable(int size) {
         this.size = size;
-        matrix = new byte[size*size];
+        bitset = new BitSet(2*size*size);
         passNum = 0;
         int middle = (size - 1)/2;
         setItem(middle,middle, (byte)2);
@@ -31,16 +39,27 @@ public class ReversiTable implements Table  {
     // no clone
     public ReversiTable(ReversiTable table) {
         this.size = table.size;
-        matrix = new byte[size*size];
-        System.arraycopy(table.matrix, 0, matrix, 0, size*size);
+        bitset = new BitSet(table.bitset);
         this.passNum = table.passNum;
     }
     public byte getItem(int row, int col) {
-        return matrix[row*size+col];
+        boolean bit1 = bitset.get(2*(row*size+col));
+        boolean bit2 = bitset.get(2*(row*size+col)+1);
+        byte b = 0;
+        if( bit1 ) {
+            b += 2;
+        }
+        if( bit2 ) {
+            b += 1;
+        }
+        return b;
     }
 
     public void setItem(int row, int col, byte value) {
-        matrix[row*size+col] = value;
+        boolean bit2 = ((value % 2) != 0);
+        boolean bit1 = (((value >> 1) % 2) != 0);
+        bitset.set(2*(row*size+col), bit1);
+        bitset.set(2*(row*size+col)+1, bit2);
     }
 
 

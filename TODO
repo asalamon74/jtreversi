@@ -1,5 +1,3 @@
-* Use bitset-like storage (no BitSet in J2ME) for table
-
 * Two-player mode
 
 * Change skill

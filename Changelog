@@ -1,3 +1,7 @@
+0.61.00 2002-SEP-2x
+
+-Less memory usage (BitSet storage)
+
 0.60.00 2002-SEP-16
 
 -First version

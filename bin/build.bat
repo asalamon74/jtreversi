@@ -9,7 +9,7 @@ mkdir ..\classes
 
 rem echo Compiling source files
 
-%JAVA_HOME%\bin\javac -bootclasspath %WTK_HOME%/lib/midpapi.zip -d ..\tmpclasses -classpath ..\tmpclasses ..\reversi\*.java ..\minimax\*.java
+%JAVA_HOME%\bin\javac -bootclasspath %WTK_HOME%/lib/midpapi.zip -d ..\tmpclasses -classpath ..\tmpclasses ..\reversi\*.java ..\minimax\*.java ..\util\*.java
 
 rem echo Preverifying class files
 
