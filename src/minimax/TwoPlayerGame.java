@@ -4,26 +4,9 @@ public abstract class TwoPlayerGame {
 
     protected EvaluationFunction evaluationFunction;
 
-    // BEGIN:XAITEST
-//     protected EvaluationFunction []evals;
-
-//     public void setEvaluationFunctions(EvaluationFunction e1, EvaluationFunction e2) {
-//         evals = new EvaluationFunction[2];
-//         evals[0] = e1;
-//         evals[1] = e2;
-//     }
-    // END:XAITEST
-
     public abstract void setEvaluationFunction(EvaluationFunction func);
 
     public int point(Table t, byte player) {
-        // BEGIN:XAITEST
-//         if( player == 0 ) {
-//             evaluationFunction = evals[0];
-//         } else {
-//             evaluationFunction = evals[1];
-//         }
-        // END:XAITEST
         evaluationFunction.setTable(t, player, true);
         return evaluationFunction.getPoint();
     }
