@@ -9,9 +9,10 @@ public class J2MEReversi extends MIDlet implements CommandListener {
     public static final int SIZE = 8;
         
     private Command exitCommand; // The exit command
-    private Command aboutCommand;
     private Command optionsCommand;
     private List skillList;
+    private List mainMenu;
+    private List optionsMenu;
     private Display display;    // The display for this MIDlet
     private ReversiCanvas canvas;
     private boolean []isHuman = {true, false};
@@ -20,14 +21,27 @@ public class J2MEReversi extends MIDlet implements CommandListener {
     public  ReversiTable table;
     private ReversiGame rgame = new ReversiGame();
     private Minimax minimax = new Minimax(100);
-    private boolean gameEnded;
+    private boolean gameEnded = true;
     private int skill = 1;
+    private static final String[] mainMenuItems = {
+        "Start 1P", 
+        "Start 2P", 
+        "Skill", 
+        "About"};
+
+    private static final String[] optionItems = {
+        "Continue", 
+        "Skill", 
+        "About"};
 
     public J2MEReversi() {
         display = Display.getDisplay(this);
         exitCommand = new Command("Exit", Command.EXIT, 99);
-        aboutCommand =  new Command("About", Command.HELP, 10);
-        optionsCommand =  new Command("Options", Command.SCREEN, 5);
+        optionsCommand = new Command("Options", Command.SCREEN, 5);
+        mainMenu = new List( "J2MEReversi", List.IMPLICIT, mainMenuItems, null);
+        mainMenu.setCommandListener(new MainCommandListener());
+        optionsMenu = new List( "Options", List.IMPLICIT, optionItems, null);
+        optionsMenu.setCommandListener(new OptionsCommandListener());
         skillList = new List("Skill", List.IMPLICIT);
         skillList.append("Level 1" , null);
         skillList.append("Level 2" , null);
@@ -36,18 +50,22 @@ public class J2MEReversi extends MIDlet implements CommandListener {
         skillList.setCommandListener(new SkillCommandListener());
         canvas = new ReversiCanvas(this, display);
         canvas.addCommand(exitCommand);
-        canvas.addCommand(aboutCommand);
         canvas.addCommand(optionsCommand);
         canvas.setCommandListener(this);
     }
-    
-    public void startApp() {
+
+    protected void startGame() {
         display.setCurrent(canvas);
         canvas.setMessage("Good Luck");
         actPlayer = 0;
         turnNum = 1;
         gameEnded = false;
         table = new ReversiTable(SIZE);
+    }
+
+    public void startApp() {
+        display.setCurrent(mainMenu);
+        //        startGame();
     }
     
     /**
@@ -69,15 +87,17 @@ public class J2MEReversi extends MIDlet implements CommandListener {
      * On the exit command, cleanup and notify that the MIDlet has been destroyed.
      */
     public void commandAction(Command c, Displayable s) {
-        //        System.out.println("c:"+c.getLabel());
         if (c == exitCommand) {
             destroyApp(false);
             notifyDestroyed();
-        } else if( c == aboutCommand ) {
-            showAbout();
         } else if( c == optionsCommand ) {
-            display.setCurrent(skillList);
-        }
+            display.setCurrent(optionsMenu);
+        }       
+//         else if( c == aboutCommand ) {
+//             showAbout();
+//         } else if( c == optionsCommand ) {
+//             display.setCurrent(skillList);
+//         }
     }
 
     protected void showAbout() {
@@ -154,9 +174,62 @@ public class J2MEReversi extends MIDlet implements CommandListener {
                 Alert alert = new Alert("Level");
                 alert.setTimeout(1000);
                 alert.setString("Level Changed\nNew Level:"+skill);
-                display.setCurrent(canvas);
+                if( !gameEnded ) {
+                    display.setCurrent(canvas);
+                } else {
+                    display.setCurrent(mainMenu);
+                }
+                
                 display.setCurrent(alert);
             }
         }
     }
+
+    private class MainCommandListener implements CommandListener {
+
+        public void commandAction(Command c, Displayable d) {
+            if( c == List.SELECT_COMMAND ) {
+                int pos = mainMenu.getSelectedIndex();
+                switch( pos ) {
+                case 0:
+                    isHuman[0] = true;
+                    isHuman[1] = false;
+                    startGame();
+                    break;
+                case 1:
+                    isHuman[0] = true;
+                    isHuman[1] = true;
+                    startGame();
+                    break;
+                case 2:
+                    display.setCurrent(skillList);
+                    break;                    
+                case 3:
+                    showAbout();
+                    break;
+                }
+            }
+        }
+    }
+
+    private class OptionsCommandListener implements CommandListener {
+
+        public void commandAction(Command c, Displayable d) {
+            if( c == List.SELECT_COMMAND ) {
+                int pos = optionsMenu.getSelectedIndex();
+                switch( pos ) {
+                case 0:
+                    display.setCurrent(canvas);
+                    break;
+                case 1:
+                    display.setCurrent(skillList);
+                    break;                    
+                case 2:
+                    showAbout();
+                    break;
+                }
+            }
+        }
+    }
+
 }
