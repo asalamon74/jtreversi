@@ -69,7 +69,7 @@ public class J2MEReversi extends MIDlet implements CommandListener {
      * On the exit command, cleanup and notify that the MIDlet has been destroyed.
      */
     public void commandAction(Command c, Displayable s) {
-        System.out.println("c:"+c.getLabel());
+        //        System.out.println("c:"+c.getLabel());
         if (c == exitCommand) {
             destroyApp(false);
             notifyDestroyed();
