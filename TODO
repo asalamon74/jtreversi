@@ -6,6 +6,6 @@
 
 ** Implement move order
 
-** Use heuristic instead of simple score
+** Use heuristic only in the middle game
 
 * Test it with real device
