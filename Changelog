@@ -1,3 +1,10 @@
+0.82.00 2002-DEC
+
+-Skill bug fixed
+-Information Panel next to the board
+-doublebuffering turned on by default
+-Display enhancements
+
 0.81.00 2002-DEC-06
 
 -Thinking during human turn

@@ -21,6 +21,7 @@ public class ReversiCanvas extends Canvas {
     private static final int SIZE_LIMIT = 8;
     private Image offscreen = null;
     private static int ASPECT_LIMIT = 15; // 1.5
+    private boolean vertInfo;
     
     public ReversiCanvas(jtReversi boss, Display display) {
         this.boss = boss;
@@ -35,10 +36,12 @@ public class ReversiCanvas extends Canvas {
             playerNames[1] = "Black";
         }            
 
-        width = getWidth();
+        vertInfo = true;
+        width = getWidth() * 8 / 10;
+        vertWidth = getWidth() - width;
         height = getHeight();
-        sizex = width / 8;
-        sizey = height / 8;
+        sizex = (width-1) / 8;
+        sizey = (height-1) / 8;
         if( 10*sizex / sizey > ASPECT_LIMIT ) {
             sizex = sizey * ASPECT_LIMIT / 10;
             width = sizex * 8;
@@ -54,7 +57,7 @@ public class ReversiCanvas extends Canvas {
         //        if( !isDoubleBuffered() ) { 
         // there are phones which claims to have a doubleBuffered Canvas
         // although they don't have
-            offscreen = Image.createImage(width, height);
+            offscreen = Image.createImage(width+vertWidth, height);
         //        }
     }
 
@@ -64,18 +67,15 @@ public class ReversiCanvas extends Canvas {
         if( offscreen != null ) {
             g = offscreen.getGraphics();
         }
-        int x = g.getClipX();
-        int y = g.getClipY();
-        int w = g.getClipWidth();
-        int h = g.getClipHeight();
-
-        // Draw the frame 
         g.setColor(0xffffff);
-        g.fillRect(x, y, w, h);    
+        g.fillRect(g.getClipX(), g.getClipY(), g.getClipWidth(), g.getClipHeight());
         drawBoard(g);
         drawTable(g, boss.table);
         drawSelectionBox(g);
         drawPossibleMoves(g, boss.table);
+        if( vertInfo ) {
+            drawVertInfo(g);
+        }
         drawMessage(g);
         if( g != saved ) {
             saved.drawImage( offscreen, 0, 0, Graphics.LEFT | Graphics.TOP );
@@ -108,10 +108,15 @@ public class ReversiCanvas extends Canvas {
     }
 
     protected void drawTable(Graphics g, ReversiTable t) {
+        pnums[0] = 0;
+        pnums[1] = 0;
+        int item;
         for( int i=0; i<8; ++i ) {
             for( int j=0; j<8; ++j ) {
-                if( t.getItem(i,j) != 0 ) {
-                    drawPiece(g, i, j, t.getItem(i,j));
+                item = t.getItem(i,j);
+                if( item != 0 ) {
+                    drawPiece(g, i, j, item);
+                    ++pnums[item-1];
                 }
             }
         }
@@ -175,7 +180,7 @@ public class ReversiCanvas extends Canvas {
         }
     }
 
-    protected void drawSelectionBox(Graphics g) {
+    protected void drawSelectionBox(Graphics g, int sx, int sy) {
         if( colored ) {
             if( boss.getActPlayer() == 0 ) {            
                 g.setColor(BOX_P1_COLOR);
@@ -189,8 +194,12 @@ public class ReversiCanvas extends Canvas {
                 g.setColor(DARK_BOX_COLOR);
             }
         }
-        g.drawRect( selx*sizex, sely*sizey,sizex, sizey);
-        g.drawRect( selx*sizex+1, sely*sizey+1,sizex-2, sizey-2);
+        g.drawRect( sx*sizex, sy*sizey,sizex, sizey);
+        g.drawRect( sx*sizex+1, sy*sizey+1,sizex-2, sizey-2);
+    }
+
+    protected void drawSelectionBox(Graphics g) {
+        drawSelectionBox(g, selx, sely);
     }
 
     protected int lineBreaks(String message) {
@@ -252,6 +261,27 @@ public class ReversiCanvas extends Canvas {
             }
         }
     }
+
+    public void drawVertInfo(Graphics g) {
+        // two pieces
+        drawPiece(g, 9, 0, 1);        
+        drawPiece(g, 9, 7, 0);
+        // numbers
+        g.setColor(0x000000);
+        g.drawString(""+pnums[0], width+vertWidth, sizey, g.TOP| g.RIGHT);
+        g.drawString(""+pnums[1], width+vertWidth, 7 * sizey, g.BOTTOM| g.RIGHT);
+        // active player
+        g.fillRect(width+sizex/2, sizey/2 + boss.getActPlayer()*7*sizey, 2, 2);
+//         // selection box
+//         if( boss.getActPlayer() == 0 ) {
+//             drawSelectionBox(g, 9, 0);
+//         } else {
+//             drawSelectionBox(g, 9, 7);
+//         }
+        // skill
+        g.drawString("S"+boss.skill, width+vertWidth, height/2, g.BASELINE| g.RIGHT);
+    }
+
     public void keyPressed(int keyCode) {
         int oldselx = selx;
         int oldsely = sely;
@@ -345,7 +375,9 @@ public class ReversiCanvas extends Canvas {
     public static final int BOX_P2_COLOR = P2_COLOR;;
     public static final int BG_COLOR = 0xffffd0;
     int width, height;
+    int vertWidth;
     int sizex, sizey;
     int selx, sely;
+    int pnums[] = new int[2];
     
 } // ReversiCanvas

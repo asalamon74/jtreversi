@@ -25,7 +25,7 @@ public class jtReversi extends MIDlet implements CommandListener {
     public  ReversiTable table;
     private ReversiGame rgame;
     private boolean gameEnded = true;
-    private int skill = 1;
+    public  int skill = 1;
     private Image logoImage;
     private Image selectedMutableImage = Image.createImage(16,16);
     private Image selectedImage;
