@@ -24,10 +24,15 @@
     </target>
 
     <target name="build" depends="init">        
-        <!-- Compile everything, but don't preverify (yet). -->
+        <!-- Compile everything -->
         <wtkbuild srcdir="${src}"
                   destdir="${classes}"
-                  preverify="false"/>
+                  preverify="true"/>
+
+        <!-- Make a copy of the ${classes} directory -->
+        <copy todir="classes_ktoolbar">
+            <fileset dir="${classes}"/>
+        </copy>             
 
         <!-- Package everything. Most of the necessary information is
              contained in the JAD file. Also preverify the result this
@@ -42,7 +47,12 @@
                  resources from the WTK's demo application. -->
             <fileset dir="${classes}"/>
             <fileset dir="${resources}"/>    			
-        </wtkpackage>    		
+        </wtkpackage> 
+
+        <!-- Copy back to classes (for ktoolbar) -->
+        <move todir="classes">
+            <fileset dir="classes_ktoolbar"/>
+        </move>
     </target>
 
     <target name="package" depends="build">
