@@ -144,21 +144,19 @@ public class ReversiCanvas extends Canvas {
         int y = col*sizey+sizey/6;
         int w = 2*sizex/3;
         int h = 2*sizey/3;
-        int sa = 0;
-        int aa = 360;
         if( player == 1 ) {
             if( colored ) {
                 g.setColor(P1_COLOR );
                 if( small ) {
                     g.fillRect(x,y,w,h);
                 } else {
-                    g.fillArc(x,y,w,h,sa,aa);
+                    g.fillArc(x,y,w,h,0,360);
                 }
             } else {
                 if( small ) {
                     g.drawRect(x,y,w,h);
                 } else {
-                    g.drawArc(x,y,w,h,sa,aa);
+                    g.drawArc(x,y,w,h,0,360);
                 }
             }
         } else {
@@ -167,14 +165,14 @@ public class ReversiCanvas extends Canvas {
                 if( small ) {
                     g.fillRect(x,y,w,h);
                 } else {
-                    g.fillArc(x,y,w,h,sa,aa);
+                    g.fillArc(x,y,w,h,0,360);
                 }
             } else {
                 g.setColor(0x000000);
                 if( small ) {
                     g.fillRect(x,y,w,h);
                 } else {
-                    g.fillArc(x,y,w,h,sa,aa);
+                    g.fillArc(x,y,w,h,0,360);
                 }
             }
         }
