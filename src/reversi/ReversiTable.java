@@ -43,7 +43,7 @@ public class ReversiTable implements Table  {
         bitset = new BitSet(2*8*8, byteArray, offset);
         //        System.out.println("getItem(3,3):"+getItem(3,3));
         passNum = byteArray[offset+16];
-        System.out.println("passNum:"+passNum);
+        //        System.out.println("passNum:"+passNum);
     }
 
     public void copyDataFrom(Table table) {
