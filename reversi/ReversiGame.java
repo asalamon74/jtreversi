@@ -37,7 +37,7 @@ public class ReversiGame implements TwoPlayerGame {
         this.pointCalculatedNum = v;
     }
 
-    public int point(Table t, int player) {
+    public int point(Table t, short player) {
         if( !(t instanceof ReversiTable) ) {
             return 0;
         }
@@ -79,7 +79,7 @@ public class ReversiGame implements TwoPlayerGame {
         return numFirstPlayer - numSecondPlayer;
     }
 
-    public Table turn(Table table, int player, Move move) {
+    public Table turn(Table table, short player, Move move) {
         if( !(move instanceof ReversiMove ) ||
             !(table instanceof ReversiTable) ) {
             return null;
@@ -106,7 +106,7 @@ public class ReversiGame implements TwoPlayerGame {
                 }
                 int c = 1;
                 while( ReversiMove.valid(row+c*dirrow,col+c*dircol) && 
-                       newTable.getItem(row+c*dirrow,col+c*dircol) == ReversiTable.getPlayerItem(1-player)) {
+                       newTable.getItem(row+c*dirrow,col+c*dircol) == ReversiTable.getPlayerItem((short)(1-player))) {
                     ++c;
                 }
 		if (c > 1 && ReversiMove.valid(row+c*dirrow,col+c*dircol) 
@@ -127,7 +127,7 @@ public class ReversiGame implements TwoPlayerGame {
         return null;
     }
 
-    public Move[] possibleMoves(Table table, int player) {
+    public Move[] possibleMoves(Table table, short player) {
         if( !(table instanceof ReversiTable) ) {
             return null;
         }

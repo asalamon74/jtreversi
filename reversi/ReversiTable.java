@@ -15,11 +15,11 @@ import minimax.*;
 public class ReversiTable implements Table  {
 
     protected int size;
-    protected int[][] matrix;
+    protected short[][] matrix;
     
     public ReversiTable(int size) {
         this.size = size;
-        matrix = new int[size][size];
+        matrix = new short[size][size];
         passNum = 0;
         int middle = (size - 1)/2;
         matrix[middle][middle] = 2;
@@ -31,7 +31,7 @@ public class ReversiTable implements Table  {
     // no clone
     public ReversiTable(ReversiTable table) {
         this.size = table.size;
-        matrix = new int[size][size];
+        matrix = new short[size][size];
         for( int i=0; i<size; ++i ) {
             for( int j=0; j<size; ++j ) {
                 matrix[i][j] = table.getItem(i,j);
@@ -39,21 +39,21 @@ public class ReversiTable implements Table  {
         }
         this.passNum = table.passNum;
     }
-    public int getItem(int row, int col) {
+    public short getItem(int row, int col) {
         return matrix[row][col];
     }
 
-    public void setItem(int row, int col, int value) {
+    public void setItem(int row, int col, short value) {
         matrix[row][col] = value;
     }
 
 
-    public static int getPlayerItem(int player) {
-        return player+1;
+    public static short getPlayerItem(short player) {
+        return (short)(player+1);
     }
 
     public void flip(int row, int col) {
-        matrix[row][col] = 3 - matrix[row][col];
+        matrix[row][col] = (short)(3 - matrix[row][col]);
     }
 
     protected int passNum;

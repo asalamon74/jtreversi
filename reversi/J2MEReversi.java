@@ -25,7 +25,7 @@ public class J2MEReversi extends MIDlet implements CommandListener {
     private Display display;    // The display for this MIDlet
     private ReversiCanvas canvas;
     private boolean []isHuman = {true, false};
-    private int actPlayer;
+    private short actPlayer;
     private int turnNum;
     public  ReversiTable table;
     private ReversiGame rgame = new ReversiGame();
@@ -106,13 +106,13 @@ public class J2MEReversi extends MIDlet implements CommandListener {
                     gameEnded = true;
                 }
                 table = newTable;
-                actPlayer = 1 - actPlayer;
+                actPlayer = (short)(1 - actPlayer);
                 ++turnNum;
                 ReversiMove[] nextMoves = (ReversiMove[])rgame.possibleMoves(table, actPlayer);
                 if( nextMoves.length == 0 ) {
                     table.setPassNum(table.getPassNum()+1);
                     ++turnNum;
-                    actPlayer = 1 - actPlayer;
+                    actPlayer = (short)(1 - actPlayer);
                 } else {
                     nonPass = true;
                 }
