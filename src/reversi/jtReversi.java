@@ -368,11 +368,6 @@ public class jtReversi extends MIDlet implements CommandListener {
         }
     }
 
-
-    public void showSplashScreen(Display d, Displayable next) {
-        new SplashScreen( display, next);
-    }
-
     private class OptionsCommandListener implements CommandListener {
 
         public void commandAction(Command c, Displayable d) {
