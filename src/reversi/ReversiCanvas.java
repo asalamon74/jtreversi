@@ -70,6 +70,10 @@ public class ReversiCanvas extends Canvas {
     }
 
     protected void drawBoard(Graphics g) {
+        if( colored ) {
+            g.setColor(BG_COLOR);
+            g.fillRect(0,0, 8*sizex, 8*sizey);
+        }
         g.setColor(0x000000);
         if( small ) {
             int x,y;
@@ -302,6 +306,7 @@ public class ReversiCanvas extends Canvas {
     public static final int DARK_BOX_COLOR = 0x000000;
     public static final int BOX_P1_COLOR = P1_COLOR;
     public static final int BOX_P2_COLOR = P2_COLOR;;
+    public static final int BG_COLOR = 0xffffd0;
     int width, height;
     int sizex, sizey;
     int selx, sely;
