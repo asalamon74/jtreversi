@@ -113,8 +113,8 @@ public class ReversiCanvas extends Canvas {
     protected void drawTable(Graphics g, ReversiTable t) {
         int old0 = pnums[0];
         int old1 = pnums[1];
-        pnums[0] = -1;
-        pnums[1] = -1;
+        pnums[0] = 0;
+        pnums[1] = 0;
         int item;
         for( int i=0; i<8; ++i ) {
             for( int j=0; j<8; ++j ) {
