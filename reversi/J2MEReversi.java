@@ -131,9 +131,9 @@ public class J2MEReversi extends MIDlet implements CommandListener {
                     String endMessage="";
                     if( (point < 0 && actPlayer == 0) || 
                         (point > 0 && actPlayer == 1)) {
-                        endMessage = "Computer win";
+                        endMessage = "Computer won";
                     } else {
-                        endMessage = "You win";
+                        endMessage = "You won";
                     }
                     int firstNum = rgame.firstPlayerPoint(table);
                     int secondNum = rgame.secondPlayerPoint(table);
