@@ -32,7 +32,6 @@
     destdir="${tmpclasses}" 
     bootclasspath="${wtk_home}/lib/midpapi.zip"
     classpath="${tmpclasses}"/>
-<!-- <exclude name="build/tools/*.java"/> -->
 </target>
 
 <target name="preverify" depends="compile">
