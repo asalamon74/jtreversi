@@ -400,7 +400,6 @@ public class jtReversi extends MIDlet implements CommandListener {
             record = rs.getRecord(1);
             if( record != null ) {
                 skill = record[0];
-                System.out.println("skill:"+skill);
             }
         } catch( InvalidRecordIDException irsie ) {
             // no record yet, create one
@@ -427,8 +426,6 @@ public class jtReversi extends MIDlet implements CommandListener {
             rs.closeRecordStore();
         } catch( Exception e ) {
             //            System.out.println("e:"+e);
-            // do not separate different exceptions
-            // not a serious issue
         }
     }
 
