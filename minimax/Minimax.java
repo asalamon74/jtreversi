@@ -1,5 +1,7 @@
 package minimax;
 
+import java.util.Random;
+
 /**
  * Minimax.java
  *
@@ -9,7 +11,6 @@ package minimax;
  * @author Salamon Andras
  * @version
  */
-
 public class Minimax  {
 
     public static final int MAX_TURN = 60;
@@ -45,11 +46,8 @@ public class Minimax  {
             // TODO: find the killer move
         }
         actMove = null;
-        //        System.out.println("table:"+state);
         for( int i=0; !cut && i<pMoves.length; ++i ) {
-            //            System.out.println("pmove:"+pMoves[i]);
             Table newState = tpg.turn(state, player, pMoves[i]);
-            //            System.out.println("newTable:\n"+newState);
             if( depth == 1 ) {
                 actPoint = tpg.point(newState, player);
             } else {
@@ -62,10 +60,8 @@ public class Minimax  {
 		actMove = minimax(depth-1, newState, (short)(1-player), tpg,  alphabeta, -maxPoint, order , kMove);
                 actPoint = -actMove.getPoint();
             }
-            //            System.out.println("actPoint:"+actPoint);
             if( i == 0 || actPoint > maxPoint ) {
                 // better move
-                //                System.out.println("better move");
                 maxPoint = actPoint;
 		if (alphabeta && alpha < maxPoint) {
                     cut = true;
@@ -79,17 +75,21 @@ public class Minimax  {
         }
         int bestIndex=0;
         if( bestNum > 1 ) {
-            // TODO: random selection
-            bestIndex = bestMoves[0];
+            bestIndex = bestMoves[random(bestNum)];
         } else {
             bestIndex = bestMoves[0];
         }
         bestMove = pMoves[bestIndex];
         bestMove.setPoint(maxPoint);
-        //        System.out.println("bestMove:"+bestMove);
         return bestMove;
     }
 
+    protected int random(int max) {
+        int r = Math.abs(rand.nextInt());
+        return r % max;
+    }
+
     protected int maxsize;
+    protected Random rand = new Random();
     
 } // Minimax
