@@ -7,7 +7,6 @@ import java.io.IOException;
 
 public class J2MEReversi extends MIDlet implements CommandListener {
 
-    public static final int SIZE = 8;
     private static final String aboutImageName = "/icons/jataka_logo_c_small.png";
         
     private Command exitCommand; // The exit command
@@ -79,7 +78,7 @@ public class J2MEReversi extends MIDlet implements CommandListener {
         actPlayer = 0;
         turnNum = 1;
         gameEnded = false;
-        table = new ReversiTable(SIZE);
+        table = new ReversiTable(8);
     }
 
     public void startApp() {
@@ -141,7 +140,7 @@ public class J2MEReversi extends MIDlet implements CommandListener {
     }
 
     protected void processMove(ReversiMove move) {
-        ReversiTable newTable = new ReversiTable(J2MEReversi.SIZE);
+        ReversiTable newTable = new ReversiTable(8);
         boolean goodMove = rgame.turn( table, actPlayer, move, newTable );
         if( !goodMove ) {
             canvas.setMessage("Invalid Move",2000);

@@ -35,8 +35,8 @@ public class ReversiCanvas extends Canvas {
 
         width = getWidth();
         height = getHeight();
-        sizex = width / J2MEReversi.SIZE;
-        sizey = height / J2MEReversi.SIZE;
+        sizex = width / 8;
+        sizey = height / 8;
         small = sizex < SIZE_LIMIT || sizey < SIZE_LIMIT;
         selx = 0;
         sely = 0;
@@ -61,8 +61,8 @@ public class ReversiCanvas extends Canvas {
         g.setColor(0x000000);
         if( small ) {
             int x,y;
-            for( int i=0; i<J2MEReversi.SIZE; ++i ) {
-                for( int j=0; j<J2MEReversi.SIZE; ++j ) {
+            for( int i=0; i<8; ++i ) {
+                for( int j=0; j<8; ++j ) {
                     if( boss.table.getItem(i,j)  == 0 ) {
                         x = i * sizex + sizex/2;
                         y = j * sizey + sizey/2;
@@ -71,16 +71,16 @@ public class ReversiCanvas extends Canvas {
                 }
             }
         } else {
-            for( int i=0; i<=J2MEReversi.SIZE; ++i ) {
-                g.drawLine(0, i*sizey, J2MEReversi.SIZE*sizex, i*sizey);
-                g.drawLine(i*sizex, 0, i*sizex, J2MEReversi.SIZE*sizey);
+            for( int i=0; i<=8; ++i ) {
+                g.drawLine(0, i*sizey, 8*sizex, i*sizey);
+                g.drawLine(i*sizex, 0, i*sizex, 8*sizey);
             }
         }
     }
 
     protected void drawTable(Graphics g, ReversiTable t) {
-        for( int i=0; i<J2MEReversi.SIZE; ++i ) {
-            for( int j=0; j<J2MEReversi.SIZE; ++j ) {
+        for( int i=0; i<8; ++i ) {
+            for( int j=0; j<8; ++j ) {
                 if( t.getItem(i,j) != 0 ) {
                     drawPiece(g, i, j, t.getItem(i,j));
                 }
@@ -210,22 +210,22 @@ public class ReversiCanvas extends Canvas {
         switch( getGameAction(keyCode) ) {
         case Canvas.UP: 
             message = null;
-            sely = (sely + J2MEReversi.SIZE -1) % J2MEReversi.SIZE;
+            sely = (sely + 8 -1) % 8;
             repaint();
             break;
         case Canvas.DOWN: 
             message = null;
-            sely = (sely + 1) % J2MEReversi.SIZE;
+            sely = (sely + 1) % 8;
             repaint();
             break;
         case Canvas.LEFT: 
             message = null;
-            selx = (selx + J2MEReversi.SIZE -1) % J2MEReversi.SIZE;
+            selx = (selx + 8 -1) % 8;
             repaint();
             break;
         case Canvas.RIGHT: 
             message = null;
-            selx = (selx + 1) % J2MEReversi.SIZE;
+            selx = (selx + 1) % 8;
             repaint();
             break;
         case Canvas.FIRE: 

@@ -41,13 +41,13 @@ public class ReversiGame extends TwoPlayerGame {
 
         int row = ((ReversiMove)move).row;
         int col = ((ReversiMove)move).col;
-        if( row != J2MEReversi.SIZE && ((ReversiTable)table).getItem(row, col) != 0 ) {
+        if( row != 8 && ((ReversiTable)table).getItem(row, col) != 0 ) {
             return false;
         }
 
         ReversiTable newTable = (ReversiTable)newt;
         newTable.copyDataFrom((ReversiTable)table);
-        if( row == J2MEReversi.SIZE ) {
+        if( row == 8 ) {
             // pass
             newTable.setPassNum(newTable.getPassNum()+1);
             return true;
@@ -87,7 +87,7 @@ public class ReversiGame extends TwoPlayerGame {
     public boolean hasPossibleMove(Table table, byte player) {
         //TODO: enhance
         ReversiMove[] moves = (ReversiMove[])possibleMoves(table, player);
-        return moves != null && (moves.length > 1 || moves[0].row != J2MEReversi.SIZE);
+        return moves != null && (moves.length > 1 || moves[0].row != 8);
     }
 
     public Move[] possibleMoves(Table table, byte player) {
@@ -101,10 +101,10 @@ public class ReversiGame extends TwoPlayerGame {
             return null;
         }
 
-        ReversiTable newTable = new ReversiTable(J2MEReversi.SIZE);
+        ReversiTable newTable = new ReversiTable(8);
         ReversiMove move = new ReversiMove(0,0); 
-        for( int row=0; row<J2MEReversi.SIZE; ++row ) {
-            for( int col=0; col<J2MEReversi.SIZE; ++col ) {
+        for( int row=0; row<8; ++row ) {
+            for( int col=0; col<8; ++col ) {
                 move.setCoordinates(row, col);
                 boolean goodMove = turn(table, player, move, newTable);
                 if( goodMove ) {
@@ -115,7 +115,7 @@ public class ReversiGame extends TwoPlayerGame {
 
         if( moves.size() == 0 ) {
             // need to pass
-            moves.addElement(new ReversiMove(J2MEReversi.SIZE, J2MEReversi.SIZE));
+            moves.addElement(new ReversiMove(8, 8));
         }
         Move[] retMoves = new ReversiMove[moves.size()];
         for( int m=0; m<moves.size(); ++m ) {

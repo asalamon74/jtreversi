@@ -33,8 +33,8 @@ public class ReversiMove implements Move {
     }
 
     public static boolean valid(int row, int col) {
-        return row >=0 && row < J2MEReversi.SIZE 
-            && col >=0 && col < J2MEReversi.SIZE;
+        return row >=0 && row < 8 
+            && col >=0 && col < 8;
     }
 
     public String toString() {

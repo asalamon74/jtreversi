@@ -46,8 +46,8 @@ public class ReversiEvaluationFunction implements EvaluationFunction {
     protected void eval() {
         numFirstPlayer = 0;
         numSecondPlayer = 0;
-        for( int i=0; i<J2MEReversi.SIZE; ++i ) {
-            for( int j=0; j<J2MEReversi.SIZE; ++j ) {
+        for( int i=0; i<8; ++i ) {
+            for( int j=0; j<8; ++j ) {
                 int item = table.getItem(i,j);
                 switch( item ) {
                 case 1: 
