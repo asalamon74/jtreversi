@@ -3,6 +3,7 @@ package reversi;
 import minimax.*;
 import javax.microedition.midlet.*;
 import javax.microedition.lcdui.*;
+import javax.microedition.rms.*;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -36,6 +37,8 @@ public class jtReversi extends MIDlet implements CommandListener {
     private Timer timer = new Timer();
     private boolean animation = true;
     private Table[] tables;
+    private RecordStore rs;
+    private byte []record;
     protected int[][] heurMatrix = { 
                                   {500 ,-240, 85, 69, 69, 85,-240, 500},
 				  {-240,-130, 49, 23, 23, 49,-130,-240},
@@ -108,6 +111,7 @@ public class jtReversi extends MIDlet implements CommandListener {
 	aboutForm.append("Contact: mail@jataka.hu\n");
         aboutForm.addCommand(exitCommand);
         aboutForm.setCommandListener(this);
+        loadRecordStore();
         new SplashScreen( display, mainMenu );        
     }
 
@@ -134,6 +138,7 @@ public class jtReversi extends MIDlet implements CommandListener {
      * In this case there is nothing to cleanup.
      */
     public void destroyApp(boolean unconditional) {
+        saveRecordStore();
     }
     
     /*
@@ -382,6 +387,49 @@ public class jtReversi extends MIDlet implements CommandListener {
 
     public Move[] possibleMoves() {
         return rgame.possibleMoves(table, actPlayer);
+    }
+
+
+    /**
+     * Loads data from recordstore.
+     *
+     */
+    public void loadRecordStore() {
+        try {
+            rs = RecordStore.openRecordStore("R", true);
+            record = rs.getRecord(1);
+            if( record != null ) {
+                skill = record[0];
+                System.out.println("skill:"+skill);
+            }
+        } catch( InvalidRecordIDException irsie ) {
+            // no record yet, create one
+            record = new byte[1];
+            record[0] = 1;
+            try {
+                rs.addRecord(record, 0, 1);
+            } catch (Exception e) {
+            }
+        } catch( Exception e) {
+            //            System.out.println("e:"+e);
+        }
+    }
+
+    /**
+     * Saves data into recordstore
+     *
+     */
+    public void saveRecordStore() {
+        try {
+            byte []record = new byte[1];
+            record[0] = (byte)skill;
+            rs.setRecord(1, record, 0, 1);
+            rs.closeRecordStore();
+        } catch( Exception e ) {
+            //            System.out.println("e:"+e);
+            // do not separate different exceptions
+            // not a serious issue
+        }
     }
 
     public class SplashScreen extends Canvas {
