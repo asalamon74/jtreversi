@@ -117,7 +117,7 @@ public class jtReversi extends MIDlet implements CommandListener, ItemStateListe
         } catch (IOException e) {
             System.out.println("Invalid logo"+e);
         }
-        aboutForm = new Form("About jtReversi 0.86");
+        aboutForm = new Form("About jtReversi 0.87");
 	aboutForm.append(logoImage);
 	aboutForm.append("\n");
 	aboutForm.append("www.jataka.hu\n");
