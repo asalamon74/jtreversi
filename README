@@ -37,18 +37,22 @@ If you really want to compile, you'll need the followings:
 
 1. Go to the bin directory
 2. Change the path of JAVA_HOME and WTK_HOME.
-3. ./build.sh
+3. ./build.sh (Windows users have to use build.bat instead of build.sh)
 4. Change the jar file size in the jad file (j2me_reversi.jad) [This
 is not necessary for me, but the program may not work without this]
 
 How to run?
 -----------
 
+If you want to try the program, you'll need:
+
+J2ME wireless toolkit (tested with version 1.0.4)
+
 1. Go to the bin directory
 2. Change the path of WTK_HOME.
-3. ./run.sh
+3. ./run.sh (Windows users have to use run.bat instead of run.sh)
 
-Since I have no MIDP device, I don't know how to use the program on
+Since I have no MIDP/CLDC device, I don't know how to use the program on
 such a device. If you have one, please test it, and inform me.
 
 Licensing
