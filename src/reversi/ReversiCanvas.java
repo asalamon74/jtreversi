@@ -273,22 +273,17 @@ public class ReversiCanvas extends Canvas {
     }
 
     public void drawVertInfo(Graphics g) {
-        System.out.println("1");
         // two pieces
         drawPiece(g, 9, 0, 1);        
         drawPiece(g, 9, 7, 0);
-        System.out.println("2");
         // numbers
         g.setColor(0x000000);
         g.drawString(infoLines[0], width+vertWidth, sizey+2, g.TOP| g.RIGHT);
         g.drawString(infoLines[1], width+vertWidth, 7 * sizey, g.BOTTOM| g.RIGHT);
-        System.out.println("3");
         // active player
         g.fillRect(9*sizex-sizex/2, sizey/2 + boss.getActPlayer()*7*sizey, 2, 2);
-        System.out.println("4");
         // skill
         g.drawString(infoLines[2], width+vertWidth, height/2, g.BASELINE| g.RIGHT);
-        System.out.println("5");
     }
 
     public void keyPressed(int keyCode) {

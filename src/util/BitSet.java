@@ -30,19 +30,11 @@ public class BitSet  {
         System.arraycopy(old.bits, 0, bits, 0, bitNum >> LONG_SIZE);
     }
 
-    public BitSet(int bitNum, byte []byteArray) {
+    public BitSet(int bitNum, byte []byteArray, int offset) {
         this( bitNum );
-        int retIndex = 0;
+        int retIndex = offset;
         int i = 0;
-        while( i<bits.length-1 ) {
-            System.out.println("ba[0]:"+byteArray[0]);
-            System.out.println("ba[1]:"+byteArray[1]);
-            System.out.println("ba[2]:"+byteArray[2]);
-            System.out.println("ba[3]:"+byteArray[3]);
-            System.out.println("ba[4]:"+byteArray[4]);
-            System.out.println("ba[5]:"+byteArray[5]);
-            System.out.println("ba[6]:"+byteArray[6]);
-            System.out.println("ba[7]:"+byteArray[7]);
+        while( i<bits.length ) {
             bits[i] = 0;
             for( int j = 56; j>=0; j -=8 ) {
                 long octet = byteArray[retIndex++];
@@ -51,17 +43,17 @@ public class BitSet  {
                 }
                 bits[i] |= octet << j;
             }
-            System.out.println("bits["+i+"]="+bits[i]);
+            System.out.println("bits["+i+"]:"+bits[i]);
             ++i;
         }
-        long lastLong = 0;
-        while( retIndex < byteArray.length ) {
-            lastLong <<= 8;
-            lastLong += byteArray[retIndex++];
-        } 
-        lastLong <<= 8 *  (8 - byteArray.length % 8);
-        bits[i] = lastLong;
-        System.out.println("bits["+i+"]="+bits[i]);
+//         long lastLong = 0;
+//         while( retIndex < byteArray.length ) {
+//             lastLong <<= 8;
+//             lastLong += byteArray[retIndex++];
+//         } 
+//         lastLong <<= 8 *  (8 - byteArray.length % 8);
+//         bits[i] = lastLong;
+//         System.out.println("bits["+i+"]:"+bits[i]);
     }
 
     /**
@@ -151,29 +143,23 @@ public class BitSet  {
 	return buffer.toString();
     }
 
+    public void toByteArray(byte []byteArray, int offset) {
+        int arrayIndex = offset;
+        for( int i=0; i<bits.length; ++i ) {
+            byteArray[arrayIndex++] = (byte)(bits[i] >> 56);
+            byteArray[arrayIndex++] = (byte)(bits[i] >> 48);
+            byteArray[arrayIndex++] = (byte)(bits[i] >> 40);
+            byteArray[arrayIndex++] = (byte)(bits[i] >> 32);
+            byteArray[arrayIndex++] = (byte)(bits[i] >> 24);
+            byteArray[arrayIndex++] = (byte)(bits[i] >> 16);
+            byteArray[arrayIndex++] = (byte)(bits[i] >> 8 );
+            byteArray[arrayIndex++] = (byte)(bits[i]      );
+        }        
+    }
+
     public byte []toByteArray() {
         byte []ret = new byte[8 * bits.length];
-        int retIndex = 0;
-        for( int i=0; i<bits.length; ++i ) {
-            System.out.println("tobits["+i+"]:"+bits[i]);
-            ret[retIndex++] = (byte)(bits[i] >> 56);
-            System.out.println("ret["+(retIndex-1)+"]:"+ret[retIndex-1]);
-            ret[retIndex++] = (byte)(bits[i] >> 48);
-            System.out.println("ret["+(retIndex-1)+"]:"+ret[retIndex-1]);
-            ret[retIndex++] = (byte)(bits[i] >> 40);
-            System.out.println("ret["+(retIndex-1)+"]:"+ret[retIndex-1]);
-            ret[retIndex++] = (byte)(bits[i] >> 32);
-            System.out.println("ret["+(retIndex-1)+"]:"+ret[retIndex-1]);
-            ret[retIndex++] = (byte)(bits[i] >> 24);
-            System.out.println("ret["+(retIndex-1)+"]:"+ret[retIndex-1]);
-            ret[retIndex++] = (byte)(bits[i] >> 16);
-            System.out.println("ret["+(retIndex-1)+"]:"+ret[retIndex-1]);
-            ret[retIndex++] = (byte)(bits[i] >> 8 );
-            System.out.println(">>8:"+(bits[i] >> 8));
-            System.out.println("ret["+(retIndex-1)+"]:"+ret[retIndex-1]);
-            ret[retIndex++] = (byte)(bits[i]      );
-            System.out.println("ret["+(retIndex-1)+"]:"+ret[retIndex-1]);
-        }
+        toByteArray(ret, 0);
         return ret;
     }
 }

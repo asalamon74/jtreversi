@@ -39,10 +39,11 @@ public class ReversiTable implements Table  {
         this.passNum = table.passNum;
     }
 
-    public ReversiTable(byte []byteArray) {
-        bitset = new BitSet(2*8*8, byteArray);
-        System.out.println("getItem(3,3):"+getItem(3,3));
-        passNum = 0;
+    public ReversiTable(byte []byteArray, int offset) {
+        bitset = new BitSet(2*8*8, byteArray, offset);
+        //        System.out.println("getItem(3,3):"+getItem(3,3));
+        passNum = byteArray[offset+16];
+        System.out.println("passNum:"+passNum);
     }
 
     public void copyDataFrom(Table table) {
@@ -119,8 +120,15 @@ public class ReversiTable implements Table  {
         return ret;
     }
 
+    public void toByteArray(byte []byteArray, int offset) {
+        bitset.toByteArray(byteArray, offset);
+        byteArray[offset+16] = (byte)passNum;
+    }
+
     public byte []toByteArray() {
-        return bitset.toByteArray();
+        byte []byteArray = new byte[17];
+        toByteArray(byteArray, 0);
+        return byteArray;
     }
 
     public Move getEmptyMove() {

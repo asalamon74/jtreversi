@@ -418,7 +418,8 @@ public class jtReversi extends MIDlet implements CommandListener, ItemStateListe
                     System.out.println("load["+i+"]:"+tableArray[i]);
                 }           
                 System.out.println("saved game");
-                table = new ReversiTable(tableArray);
+                actPlayer = tableArray[0];
+                table = new ReversiTable(tableArray,1);
                 gameLoaded = true;
                 System.out.println("table:"+table);
             } else {
@@ -447,7 +448,9 @@ public class jtReversi extends MIDlet implements CommandListener, ItemStateListe
             rs.setRecord(1, record, 0, 1);
            
             System.out.println("save table:\n"+table);
-            byte []tableByteArray = table.toByteArray();
+            byte []tableByteArray = new byte[18];
+            table.toByteArray(tableByteArray,1);
+            tableByteArray[0] = actPlayer;
             for( int i=0; i<tableByteArray.length; ++i ) {
                 System.out.println("save["+i+"]:"+tableByteArray[i]);
             }
