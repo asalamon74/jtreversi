@@ -103,7 +103,7 @@ public class J2MEReversi extends MIDlet implements CommandListener {
     protected void showAbout() {
         Alert alert = new Alert("About J2ME_Reversi");
         alert.setTimeout(Alert.FOREVER);
-        alert.setString("Simple board game\nby\nAndras Salamon");
+        alert.setString("Simple board game\nby\nAndras Salamon\n(Jataka Ltd.)");
         display.setCurrent(alert);
     }
 
