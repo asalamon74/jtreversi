@@ -1,4 +1,4 @@
-package reversi;
+package minimax;
 
 /**
  * Minimax.java

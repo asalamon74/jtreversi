@@ -5,6 +5,7 @@ package reversi;
  * Created on July 25, 2002, 8:52 PM
  */
 
+import minimax.*;
 import javax.microedition.midlet.*;
 import javax.microedition.lcdui.*;
 

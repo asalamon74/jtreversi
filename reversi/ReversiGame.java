@@ -1,5 +1,6 @@
 package reversi;
 
+import minimax.*;
 import java.util.Vector;
 
 /**

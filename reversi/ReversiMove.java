@@ -1,6 +1,6 @@
 package reversi;
 
-
+import minimax.*;
 
 /**
  * ReversiMove.java

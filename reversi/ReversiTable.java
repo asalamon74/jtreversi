@@ -1,5 +1,7 @@
 package reversi;
 
+import minimax.*;
+
 /**
  * ReversiTable.java
  *
