@@ -4,6 +4,8 @@ import minimax.*;
 import javax.microedition.midlet.*;
 import javax.microedition.lcdui.*;
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class J2MEReversi extends MIDlet implements CommandListener {
 
@@ -25,6 +27,7 @@ public class J2MEReversi extends MIDlet implements CommandListener {
     private Minimax minimax = new Minimax(100);
     private boolean gameEnded = true;
     private int skill = 1;
+    private Image logoImage;
     private Image selectedMutableImage = Image.createImage(16,16);
     private Image selectedImage;
     private Image unselectedMutableImage = Image.createImage(16,16);
@@ -45,6 +48,18 @@ public class J2MEReversi extends MIDlet implements CommandListener {
     private static final String[] skillItems = new String[5];
 
     public J2MEReversi() {
+    }
+
+    protected void startGame() {
+        display.setCurrent(canvas);
+        canvas.setMessage("Good Luck");
+        actPlayer = 0;
+        turnNum = 1;
+        gameEnded = false;
+        table = new ReversiTable();
+    }
+
+    public void initMidlet() {
         display = Display.getDisplay(this);
         exitCommand = new Command("Exit", Command.EXIT, 99);
         optionsCommand = new Command("Options", Command.SCREEN, 5);
@@ -70,20 +85,18 @@ public class J2MEReversi extends MIDlet implements CommandListener {
         canvas.setCommandListener(this);
         rgame = new ReversiGame();
         rgame.setEvaluationFunction(new ReversiHeuristicEvaluation());
-    }
-
-    protected void startGame() {
-        display.setCurrent(canvas);
-        canvas.setMessage("Good Luck");
-        actPlayer = 0;
-        turnNum = 1;
-        gameEnded = false;
-        table = new ReversiTable();
+        try {
+            logoImage  = Image.createImage(aboutImageName);
+        } catch (IOException e) {
+            System.out.println("Invalid logo"+e);
+        }
+        new SplashScreen( display, mainMenu );
     }
 
     public void startApp() {
-        display.setCurrent(mainMenu);
-        //        startGame();
+        if( display == null ) {
+            initMidlet();
+        }
     }
     
     /**
@@ -118,12 +131,7 @@ public class J2MEReversi extends MIDlet implements CommandListener {
         alert.setTimeout(Alert.FOREVER);
         alert.setString("Simple board game\nby\nJataka Ltd.");
         alert.setType(AlertType.INFO);
-        try {
-            Image image = Image.createImage(aboutImageName);
-            alert.setImage(image);
-        } catch (IOException e) {
-            System.out.println("Invalid about logo"+e);
-        }
+        alert.setImage(logoImage);
         display.setCurrent(alert);
     }
 
@@ -278,6 +286,70 @@ public class J2MEReversi extends MIDlet implements CommandListener {
                 }
             }
         }
+    }
+
+    public class SplashScreen extends Canvas {
+        private Display     display;
+        private Displayable next;
+        private Timer       timer = new Timer();
+
+        public SplashScreen( Display display, Displayable next ){
+            this.display = display;
+            this.next    = next;
+
+            display.setCurrent( this );
+        }
+
+        protected void keyPressed( int keyCode ){
+            dismiss();
+        }
+
+        protected void paint( Graphics g ){
+            // do your drawing here
+            g.setColor(0xffffff);
+            g.fillRect(0,0, getWidth(), getHeight());
+            Font f = g.getFont();            
+            Font largeFont = Font.getFont(Font.FACE_SYSTEM, Font.STYLE_BOLD, Font.SIZE_LARGE);
+            g.setFont(largeFont);
+            g.setColor(0x000000);
+            int top=0;
+            if( logoImage.getHeight() + f.getHeight() + largeFont.getHeight() < getHeight() ) {
+                g.drawImage( logoImage, getWidth()/2 , 0, g.TOP|g.HCENTER );
+                top = logoImage.getHeight();
+            } else {
+                g.drawString( "Jataka", getWidth()/2, 0, g.TOP|g.HCENTER );
+                top = g.getFont().getHeight();
+            }
+            String str = "jtkReversi";
+            g.drawString(str, getWidth()/2, top, g.TOP|g.HCENTER);
+            g.setFont(f);
+            str = "(c) 2002";
+            g.drawString(str, getWidth(), getHeight(), g.RIGHT|g.BOTTOM);
+        }
+
+        protected void pointerPressed( int x, int y ){
+            dismiss();
+        }
+
+        protected void showNotify(){
+            timer.schedule( new CountDown(), 5000 );
+        }
+
+        private void dismiss(){
+            timer.cancel();
+            display.setCurrent( next );
+        }
+
+        private class CountDown extends TimerTask {
+            public void run(){
+                dismiss();
+            }
+        }
+    }
+
+
+    public void showSplashScreen(Display d, Displayable next) {
+        new SplashScreen( display, next);
     }
 
     private class OptionsCommandListener implements CommandListener {
