@@ -42,6 +42,7 @@ public class ReversiCanvas extends Canvas {
     }
 
     protected void paint(Graphics g) {
+        System.out.println("paint");
         int x = g.getClipX();
         int y = g.getClipY();
         int w = g.getClipWidth();
@@ -160,6 +161,7 @@ public class ReversiCanvas extends Canvas {
     }
 
     protected void drawMessage(Graphics g) {
+        System.out.println("drawMessage");
         // TODO: automagically break line if too long
         int startIndex;
         int endIndex = -1;
@@ -227,9 +229,32 @@ public class ReversiCanvas extends Canvas {
         new Timer().schedule(new DiscardMessageTimerTask(), delay);
     }
 
+    public void startWait(String message) {
+        this.message = message;
+        repaint();
+        System.out.println("start");
+        new Timer().schedule(new PleaseWaitTimerTask(), 500, 500);
+    }
+
+    public void stopWait() {
+        this.message = null;
+    }
+
     public class DiscardMessageTimerTask extends TimerTask {
         public void run() {
             message = null;
+            repaint();
+        }
+    }
+
+    public class PleaseWaitTimerTask extends TimerTask {
+        int state = 0;
+        char []flag = {'|', '/', '-', '\\'};
+
+        public void run() {
+            state = (state + 1) % 4;
+            message = message.substring(0, message.length() - 1) + flag[state];
+            System.out.println("mess:"+message);
             repaint();
         }
     }
