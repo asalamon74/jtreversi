@@ -146,7 +146,8 @@ public class ReversiGame implements TwoPlayerGame {
 
     public boolean hasPossibleMove(Table table, byte player) {
         //TODO: enhance
-        return possibleMoves(table, player) != null;
+        ReversiMove[] moves = (ReversiMove[])possibleMoves(table, player);
+        return moves != null && (moves.length > 1 || moves[0].row != J2MEReversi.SIZE);
     }
 
     public Move[] possibleMoves(Table table, byte player) {

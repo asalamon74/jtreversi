@@ -1,6 +1,9 @@
 package reversi;
 
 import javax.microedition.lcdui.*;
+import java.util.Timer;
+import java.util.TimerTask;
+
 
 /**
  * ReversiCanvas.java
@@ -136,6 +139,19 @@ public class ReversiCanvas extends Canvas {
     public void setMessage(String message) {
         this.message = message;
         repaint();
+    }
+
+    public void setMessage(String message, int delay) {
+        this.message = message;
+        repaint();
+        new Timer().schedule(new DiscardMessageTimerTask(), delay);
+    }
+
+    public class DiscardMessageTimerTask extends TimerTask {
+        public void run() {
+            message = null;
+            repaint();
+        }
     }
 
     protected J2MEReversi boss;
