@@ -113,8 +113,8 @@ public class ReversiCanvas extends Canvas {
     protected void drawTable(Graphics g, ReversiTable t) {
         int old0 = pnums[0];
         int old1 = pnums[1];
-        pnums[0] = 0;
-        pnums[1] = 0;
+        pnums[0] = -1;
+        pnums[1] = -1;
         int item;
         for( int i=0; i<8; ++i ) {
             for( int j=0; j<8; ++j ) {
@@ -124,7 +124,7 @@ public class ReversiCanvas extends Canvas {
                     ++pnums[item-1];
                 }
             }
-        }
+        }        
         if( old0 != pnums[0] ) {
             infoLines[0] = ""+pnums[0];
         }
@@ -273,17 +273,22 @@ public class ReversiCanvas extends Canvas {
     }
 
     public void drawVertInfo(Graphics g) {
+        System.out.println("1");
         // two pieces
         drawPiece(g, 9, 0, 1);        
         drawPiece(g, 9, 7, 0);
+        System.out.println("2");
         // numbers
         g.setColor(0x000000);
         g.drawString(infoLines[0], width+vertWidth, sizey+2, g.TOP| g.RIGHT);
         g.drawString(infoLines[1], width+vertWidth, 7 * sizey, g.BOTTOM| g.RIGHT);
+        System.out.println("3");
         // active player
         g.fillRect(9*sizex-sizex/2, sizey/2 + boss.getActPlayer()*7*sizey, 2, 2);
+        System.out.println("4");
         // skill
         g.drawString(infoLines[2], width+vertWidth, height/2, g.BASELINE| g.RIGHT);
+        System.out.println("5");
     }
 
     public void keyPressed(int keyCode) {

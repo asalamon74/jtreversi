@@ -40,7 +40,7 @@
              parameter to "true" (requires RetroGuard or Proguard).  -->
         <wtkpackage jarfile="${jars}/${project}.jar"
                     jadfile="${jars}/${project}.jad"
-                    obfuscate="true"
+                    obfuscate="false"
                     preverify="true">
 
             <!-- Package our newly compiled classes and the

@@ -30,6 +30,40 @@ public class BitSet  {
         System.arraycopy(old.bits, 0, bits, 0, bitNum >> LONG_SIZE);
     }
 
+    public BitSet(int bitNum, byte []byteArray) {
+        this( bitNum );
+        int retIndex = 0;
+        int i = 0;
+        while( i<bits.length-1 ) {
+            System.out.println("ba[0]:"+byteArray[0]);
+            System.out.println("ba[1]:"+byteArray[1]);
+            System.out.println("ba[2]:"+byteArray[2]);
+            System.out.println("ba[3]:"+byteArray[3]);
+            System.out.println("ba[4]:"+byteArray[4]);
+            System.out.println("ba[5]:"+byteArray[5]);
+            System.out.println("ba[6]:"+byteArray[6]);
+            System.out.println("ba[7]:"+byteArray[7]);
+            bits[i] = 0;
+            for( int j = 56; j>=0; j -=8 ) {
+                long octet = byteArray[retIndex++];
+                if( octet < 0 ) {
+                    octet += 256;
+                }
+                bits[i] |= octet << j;
+            }
+            System.out.println("bits["+i+"]="+bits[i]);
+            ++i;
+        }
+        long lastLong = 0;
+        while( retIndex < byteArray.length ) {
+            lastLong <<= 8;
+            lastLong += byteArray[retIndex++];
+        } 
+        lastLong <<= 8 *  (8 - byteArray.length % 8);
+        bits[i] = lastLong;
+        System.out.println("bits["+i+"]="+bits[i]);
+    }
+
     /**
      * Copy data from 'src' BitSet to 'dst' BitSet.
      * We assume, that there is enough room for this.
@@ -115,5 +149,31 @@ public class BitSet  {
 
 	buffer.append('}');
 	return buffer.toString();
+    }
+
+    public byte []toByteArray() {
+        byte []ret = new byte[8 * bits.length];
+        int retIndex = 0;
+        for( int i=0; i<bits.length; ++i ) {
+            System.out.println("tobits["+i+"]:"+bits[i]);
+            ret[retIndex++] = (byte)(bits[i] >> 56);
+            System.out.println("ret["+(retIndex-1)+"]:"+ret[retIndex-1]);
+            ret[retIndex++] = (byte)(bits[i] >> 48);
+            System.out.println("ret["+(retIndex-1)+"]:"+ret[retIndex-1]);
+            ret[retIndex++] = (byte)(bits[i] >> 40);
+            System.out.println("ret["+(retIndex-1)+"]:"+ret[retIndex-1]);
+            ret[retIndex++] = (byte)(bits[i] >> 32);
+            System.out.println("ret["+(retIndex-1)+"]:"+ret[retIndex-1]);
+            ret[retIndex++] = (byte)(bits[i] >> 24);
+            System.out.println("ret["+(retIndex-1)+"]:"+ret[retIndex-1]);
+            ret[retIndex++] = (byte)(bits[i] >> 16);
+            System.out.println("ret["+(retIndex-1)+"]:"+ret[retIndex-1]);
+            ret[retIndex++] = (byte)(bits[i] >> 8 );
+            System.out.println(">>8:"+(bits[i] >> 8));
+            System.out.println("ret["+(retIndex-1)+"]:"+ret[retIndex-1]);
+            ret[retIndex++] = (byte)(bits[i]      );
+            System.out.println("ret["+(retIndex-1)+"]:"+ret[retIndex-1]);
+        }
+        return ret;
     }
 }

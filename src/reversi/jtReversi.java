@@ -25,6 +25,7 @@ public class jtReversi extends MIDlet implements CommandListener, ItemStateListe
     private boolean twoplayer;
     private byte actPlayer;
     private int turnNum;
+    private boolean gameLoaded = false;
     public  ReversiTable table;
     private ReversiGame rgame;
     private boolean gameEnded = true;
@@ -66,7 +67,9 @@ public class jtReversi extends MIDlet implements CommandListener, ItemStateListe
         actPlayer = 0;
         turnNum = 1;
         gameEnded = false;
-        table = new ReversiTable();
+        if( !gameLoaded ) {
+            table = new ReversiTable();
+        }
         canvas.updatePossibleMoves();
     }
 
@@ -388,20 +391,45 @@ public class jtReversi extends MIDlet implements CommandListener, ItemStateListe
      *
      */
     public void loadRecordStore() {
+        int recordNum;
         try {
             rs = RecordStore.openRecordStore("R", true);
-            record = rs.getRecord(1);
-            if( record != null ) {
-                skill = record[0];
-                System.out.println("skillload:"+skill);
+            recordNum = rs.getNumRecords();
+            if( recordNum > 0 ) {
+                record = rs.getRecord(1);
+                if( record != null ) {
+                    skill = record[0];
+                    System.out.println("loaded skill:"+skill);
+                }            
+            } else {
+                System.out.println("create record 1");
+                record = new byte[1];
+                record[0] = 1;
+                try {
+                    rs.addRecord(record, 0, 1);
+                } catch (Exception e) {
+                    // what to do?
+                }
             }
-        } catch( InvalidRecordIDException irsie ) {
-            // no record yet, create one
-            record = new byte[1];
-            record[0] = 1;
-            try {
-                rs.addRecord(record, 0, 1);
-            } catch (Exception e) {
+            if( recordNum > 1 ) {
+                byte []tableArray = rs.getRecord(2);
+                System.out.println(tableArray.length+" bytes loaded");
+                for( int i=0; i<tableArray.length; ++i ) {
+                    System.out.println("load["+i+"]:"+tableArray[i]);
+                }           
+                System.out.println("saved game");
+                table = new ReversiTable(tableArray);
+                gameLoaded = true;
+                System.out.println("table:"+table);
+            } else {
+                // create the board record
+                System.out.println("create record 2");
+                record = new byte[16];
+                try {
+                    rs.addRecord(record, 0, 16);
+                } catch (Exception e) {
+                    // what to do?
+                }
             }
         } catch( Exception e) {
             //            System.out.println("e:"+e);
@@ -415,10 +443,18 @@ public class jtReversi extends MIDlet implements CommandListener, ItemStateListe
     public void saveRecordStore() {
         try {
             byte []record = new byte[1];
-            System.out.println("skillsave:"+skill);
             record[0] = (byte)skill;
             rs.setRecord(1, record, 0, 1);
+           
+            System.out.println("save table:\n"+table);
+            byte []tableByteArray = table.toByteArray();
+            for( int i=0; i<tableByteArray.length; ++i ) {
+                System.out.println("save["+i+"]:"+tableByteArray[i]);
+            }
+            //            tableByteArray[0] = (byte)188;
+            rs.setRecord(2, tableByteArray, 0, tableByteArray.length );
             rs.closeRecordStore();
+
         } catch( Exception e ) {
             //            System.out.println("e:"+e);
         }
