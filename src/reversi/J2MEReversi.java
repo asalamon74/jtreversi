@@ -129,7 +129,7 @@ public class J2MEReversi extends MIDlet implements CommandListener {
     }
 
     protected void showAbout() {
-        Alert alert = new Alert("About J2ME_Reversi");
+        Alert alert = new Alert("About jtReversi");
         alert.setTimeout(Alert.FOREVER);
         alert.setString("Simple board game\nby\nJataka Ltd.");
         alert.setType(AlertType.INFO);
@@ -322,7 +322,7 @@ public class J2MEReversi extends MIDlet implements CommandListener {
                 g.drawString( "Jataka", getWidth()/2, 0, g.TOP|g.HCENTER );
                 top = g.getFont().getHeight();
             }
-            String str = "jtkReversi";
+            String str = "jtReversi";
             g.drawString(str, getWidth()/2, top, g.TOP|g.HCENTER);
             g.setFont(f);
             str = "(c) 2002";

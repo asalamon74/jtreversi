@@ -60,6 +60,7 @@
       <arg line="-libraryjars ${wtk_home}/lib/midpapi.zip"/>
       <arg line="-injars ${jars}/${project}.jar"/>
       <arg line="-outjar ${jars}/${project}_new.jar"/>
+      <arg line="-defaultpackage ${mainpackage}"/>
       <arg line="-keep 'public class * extends javax.microedition.midlet.MIDlet'"/>
     </java>
   </target>
