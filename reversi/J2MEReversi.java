@@ -34,6 +34,12 @@ public class J2MEReversi extends MIDlet implements CommandListener {
         "Skill", 
         "About"};
 
+    private static final String[] skillItems = {
+        "Level 1", 
+        "Level 2", 
+        "Level 3"};
+
+
     public J2MEReversi() {
         display = Display.getDisplay(this);
         exitCommand = new Command("Exit", Command.EXIT, 99);
@@ -42,10 +48,7 @@ public class J2MEReversi extends MIDlet implements CommandListener {
         mainMenu.setCommandListener(new MainCommandListener());
         optionsMenu = new List( "Options", List.IMPLICIT, optionItems, null);
         optionsMenu.setCommandListener(new OptionsCommandListener());
-        skillList = new List("Skill", List.IMPLICIT);
-        skillList.append("Level 1" , null);
-        skillList.append("Level 2" , null);
-        skillList.append("Level 3" , null);
+        skillList = new List("Skill", List.IMPLICIT, skillItems, null);
         skillList.addCommand(exitCommand);
         skillList.setCommandListener(new SkillCommandListener());
         canvas = new ReversiCanvas(this, display);
