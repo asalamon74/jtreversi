@@ -144,9 +144,6 @@ public class ReversiCanvas extends Canvas {
         int y = col*sizey+sizey/6;
         int w = 2*sizex/3;
         int h = 2*sizey/3;
-        System.out.println("x:"+x+" y:"+y);
-        System.out.println("sizex:"+sizex+" sizey:"+sizey);        
-        System.out.println("w:"+w+" h:"+h);
         if( player == 1 ) {
             if( colored ) {
                 g.setColor(P1_COLOR );
@@ -195,7 +192,6 @@ public class ReversiCanvas extends Canvas {
                 g.setColor(DARK_BOX_COLOR);
             }
         }
-        System.out.println("sbx:"+(sx*sizex)+" sby:"+(sy*sizey));      
         g.drawRect( sx*sizex, sy*sizey,sizex, sizey);
         g.drawRect( sx*sizex+1, sy*sizey+1,sizex-2, sizey-2);
     }
@@ -245,7 +241,10 @@ public class ReversiCanvas extends Canvas {
             int messageHeight = g.getFont().getHeight();
             int maxWidth = maxSubWidth(g, message)+10;
             int cornerX = (width - maxWidth)/2;
-            int cornerY = (height - (breaks+1) * messageHeight)/2;
+            if( cornerX < 0 ) {
+                cornerX = (width + vertWidth - maxWidth)/2;
+            }
+            int cornerY = (height - (breaks+1) * messageHeight - 6)/2;
             g.setColor(0xeeeeee);
             g.fillRect(cornerX-1, cornerY-1, maxWidth, (breaks+1) * messageHeight+6);
             g.setColor(0x000000);
