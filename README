@@ -1,0 +1,62 @@
+J2ME_Reversi
+
+What is it?
+-----------
+
+This is a simple board game. It is also known as othello. If you don't
+know the rules, just browse the web, you can find hundrends of reversi
+games. 
+
+This version of the game runs on devices compliant with the Mobile
+Information Device Profile (MIDP), for instance cellular phones.
+
+Note: Since I don't have a MIDP device, it's tested only with an
+emulator. 
+
+Why?
+----
+
+I wanted to learn J2ME, so I implemented this small game. First time
+(years ago) I've implemented reversi using Turbo Pascal, later I
+converted it to C (it was an artificial intelligence project for my
+University). Now I converted it to Java (J2ME).
+
+The artificial intelligence is quite dumb in this version. It was much
+better in the C version, maybe I'll enhance it later.
+
+How to compile?
+---------------
+
+The game is precompiled, so if you want only to play with the game,
+you don't need to compile it. 
+
+If you really want to compile, you'll need the followings:
+
+-Java 2 JDK (tested with IBM's Java 2 JDK 1.3 for Linux)
+-J2ME wireless toolkit (tested with version 1.0.4)
+
+1. Go to the bin directory
+2. Change the path of JAVA_HOME and WTK_HOME.
+3. ./build.sh
+4. Change the jar file size in the jad file (j2me_reversi.jad) [This
+is not necessary for me, but the program may not work without this]
+
+How to run?
+-----------
+
+1. Go to the bin directory
+2. Change the path of WTK_HOME.
+3. ./run.sh
+
+Since I have no MIDP device, I don't know how to use the program on
+such a device. If you have one, please test it, and inform me.
+
+Licensing
+---------
+
+GPL (See COPYING)
+
+Author
+------
+
+Andras Salamon (asalamon@elender.hu)

@@ -1,0 +1,15 @@
+* Use bitset-like storage (no BitSet in J2ME) for table
+
+* Two-player mode
+
+* Change skill
+
+* AI
+
+** Implement killer move
+
+** Implement move order
+
+** Use heuristic instead of simple score
+
+* Test it with real device
