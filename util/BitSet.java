@@ -30,6 +30,15 @@ public class BitSet  {
         System.arraycopy(old.bits, 0, bits, 0, bitNum >> LONG_SIZE);
     }
 
+    /**
+     * Copy data from 'src' BitSet to 'dst' BitSet.
+     * We assume, that there is enough room for this.
+     */
+    public static void copy(BitSet src, BitSet dst) {
+        dst.bitNum = src.bitNum;
+        System.arraycopy(src.bits, 0, dst.bits, 0, src.length() >> LONG_SIZE);
+    }
+
     public int length() {
         return bitNum;
     }

@@ -22,6 +22,16 @@ public class ReversiMove implements Move {
         this.col = col;
     }
 
+    public ReversiMove(ReversiMove move) {
+        this.row = move.row;
+        this.col = move.col;
+    }
+
+    public void setCoordinates(int row, int col) {
+        this.row = row;
+        this.col = col;
+    }
+
     public static boolean valid(int row, int col) {
         return row >=0 && row < J2MEReversi.SIZE 
             && col >=0 && col < J2MEReversi.SIZE;

@@ -120,8 +120,9 @@ public class J2MEReversi extends MIDlet implements CommandListener {
     }
 
     protected void processMove(ReversiMove move) {
-        ReversiTable newTable = (ReversiTable)rgame.turn( table, actPlayer, move );
-        if( newTable == null ) {
+        ReversiTable newTable = new ReversiTable(J2MEReversi.SIZE);
+        boolean goodMove = rgame.turn( table, actPlayer, move, newTable );
+        if( !goodMove ) {
             canvas.setMessage("Invalid Move");
         } else {
             boolean nonPass = false;

@@ -47,9 +47,9 @@ public class Minimax  {
             // TODO: find the killer move
         }
         actMove = null;
-        Table newState;
+        Table newState = state.copyFrom(state);
         for( int i=0; !cut && i<pMoves.length; ++i ) {
-            newState = tpg.turn(state, player, pMoves[i]);
+            boolean success = tpg.turn(state, player, pMoves[i], newState);
             if( depth == 1 ) {
                 actPoint = tpg.point(newState, player);
             } else {

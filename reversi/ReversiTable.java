@@ -42,6 +42,21 @@ public class ReversiTable implements Table  {
         bitset = new BitSet(table.bitset);
         this.passNum = table.passNum;
     }
+
+    public void copyDataFrom(Table table) {
+        ReversiTable rtable = (ReversiTable)table;
+        this.size = rtable.size;
+        BitSet.copy(rtable.bitset, bitset);
+        //bitset = new BitSet(rtable.bitset);
+        //        bitset = rtable.bitset;
+        this.passNum = rtable.passNum;
+    }
+
+    public Table copyFrom(Table table) {
+        ReversiTable rtable = new ReversiTable((ReversiTable)table);
+        return rtable;
+    }
+
     public byte getItem(int row, int col) {
         boolean bit1 = bitset.get(2*(row*size+col));
         boolean bit2 = bitset.get(2*(row*size+col)+1);

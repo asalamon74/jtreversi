@@ -81,24 +81,28 @@ public class ReversiGame implements TwoPlayerGame {
         return pointFirstPlayer - pointSecondPlayer;
     }
 
-    public Table turn(Table table, byte player, Move move) {
+    public boolean turn(Table table, byte player, Move move, Table newt) {
         if( !(move instanceof ReversiMove ) ||
-            !(table instanceof ReversiTable) ) {
-            return null;
+            !(table instanceof ReversiTable) ||
+            !(newt instanceof ReversiTable)) {
+            return false;
         }
-        ReversiTable newTable = new ReversiTable((ReversiTable)table);
+
         int row = ((ReversiMove)move).row;
         int col = ((ReversiMove)move).col;
-        if( row == 8 ) {
+        if( row != J2MEReversi.SIZE && ((ReversiTable)table).getItem(row, col) != 0 ) {
+            return false;
+        }
+
+        ReversiTable newTable = (ReversiTable)newt;
+        newTable.copyDataFrom((ReversiTable)table);
+        if( row == J2MEReversi.SIZE ) {
             // pass
             newTable.setPassNum(newTable.getPassNum()+1);
-            return newTable;
+            return true;
         }
 
         newTable.setPassNum(0);
-        if( newTable.getItem(row, col) != 0 ) {
-            return null;
-        }
 
         boolean flipped = false;
         for( int dirrow = -1; dirrow <= 1; ++dirrow ) {
@@ -124,9 +128,9 @@ public class ReversiGame implements TwoPlayerGame {
 
         if( flipped ) {
             newTable.setItem(row, col, ReversiTable.getPlayerItem(player));
-            return newTable;
+            return true;
         }
-        return null;
+        return false;
     }
 
     public boolean hasPossibleMove(Table table, byte player) {
@@ -145,13 +149,14 @@ public class ReversiGame implements TwoPlayerGame {
             return null;
         }
 
-        ReversiTable newTable;
+        ReversiTable newTable = new ReversiTable(J2MEReversi.SIZE);
+        ReversiMove move = new ReversiMove(0,0); 
         for( int row=0; row<J2MEReversi.SIZE; ++row ) {
             for( int col=0; col<J2MEReversi.SIZE; ++col ) {
-                ReversiMove move = new ReversiMove(row, col);
-                newTable = (ReversiTable)turn(table, player, move);
-                if( newTable != null ) {
-                    moves.addElement(move);
+                move.setCoordinates(row, col);
+                boolean goodMove = turn(table, player, move, newTable);
+                if( goodMove ) {
+                    moves.addElement(new ReversiMove(move));
                 }
             }
         }
