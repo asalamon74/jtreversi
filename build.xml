@@ -55,7 +55,7 @@
 <!-- preverify the class files -->
 <delete dir="${classescompact}"/>
 <exec
-    executable="${wtk_home}/bin/preverify">
+    executable="${wtk_home}/bin/preverify"  os="Linux">
     <arg line="-classpath ${wtk_home}/lib/midpapi.zip:${tmpclasses} -d ${classescompact} ${tmpclassescompact}"/>
 </exec>
 </target>
