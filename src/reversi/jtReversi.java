@@ -233,24 +233,20 @@ public class jtReversi extends MIDlet implements CommandListener {
     }
 
     protected ReversiMove computerTurn(ReversiMove prevMove) {
-        canvas.setMessage("Thinking");
-        canvas.repaint();
-        canvas.serviceRepaints();
         ReversiMove move=(ReversiMove)Minimax.precalculatedBestMove(prevMove);
         if( move == null ) {
+            canvas.setMessage("Thinking");
+            canvas.repaint();
+            canvas.serviceRepaints();
             Minimax.cancel(false);
             move = (ReversiMove)Minimax.minimax(getActSkill(), table, actPlayer, rgame, true, 0, true, true, null, true);
-        } else {
-            //            System.out.println("Precalculated move");
         }
-        //        System.out.println(move.getPoint());
-        //        System.out.println("evalNum:"+rgame.getEvalNum());
         canvas.stopWait();
         rgame.resetEvalNum();
         return move;   
     }
 
-    protected void processMove(ReversiMove move) {
+    protected void processMove(ReversiMove move, boolean startForeThinking) {
         //        System.out.println("move:"+move);
         ReversiTable newTable = new ReversiTable();
         //        boolean goodMove = rgame.turn( table, actPlayer, move, newTable );
@@ -260,6 +256,10 @@ public class jtReversi extends MIDlet implements CommandListener {
             // System.out.println("actPlayer:"+actPlayer+" invalid move:"+move);
             canvas.setMessage("Invalid Move",2000);
         } else {
+            if( startForeThinking ) {
+                mtt.setStartTable(tables[tables.length-1]);
+                timer.schedule(mtt, 0);            
+            }
             synchronized(this) {
                 for( int i=0; i<tables.length; ++i ) {
                     table = (ReversiTable)tables[i];
@@ -267,7 +267,7 @@ public class jtReversi extends MIDlet implements CommandListener {
                     canvas.serviceRepaints();        
                     if( i<tables.length-1 ) {
                         try {
-                            wait(200);
+                            wait(300);
                         } catch( InterruptedException e ) {
                             // do something
                         }
@@ -348,19 +348,21 @@ public class jtReversi extends MIDlet implements CommandListener {
             return;
         }
         ReversiMove move = new ReversiMove(row, col);
-        processMove(move);
+        processMove(move, false);
         canvas.updatePossibleMoves();
         canvas.repaint();
         canvas.serviceRepaints();        
         while( !gameEnded && !isHuman[actPlayer] ) {
+            mtt = new MinimaxTimerTask();
             ReversiMove computerMove = computerTurn(move);
-            processMove(computerMove);
+            canvas.selx = computerMove.row;
+            canvas.sely = computerMove.col;
+            processMove(computerMove, true);
             canvas.updatePossibleMoves();
             canvas.repaint();
             canvas.serviceRepaints();        
             if( isHuman[actPlayer] ) {
-                mtt = new MinimaxTimerTask();
-                timer.schedule(mtt, 0);            
+                //                timer.schedule(mtt, 0);            
             } else {
                 // just to be sure
                 Minimax.clearPrecalculatedMoves();
@@ -429,6 +431,12 @@ public class jtReversi extends MIDlet implements CommandListener {
     }
 
     class MinimaxTimerTask extends TimerTask {
+
+        Table startTable;
+
+        public void setStartTable(Table startTable) {
+            this.startTable = startTable;
+        }
         
         public boolean ended;
 
@@ -440,8 +448,8 @@ public class jtReversi extends MIDlet implements CommandListener {
         public void run() {
             ended = false;
             //            System.out.println("start");
-            Minimax.foreMinimax(getActSkill(), table, (byte)(1-actPlayer), rgame, true, 0, true, true);
-            //            System.out.println("end");
+            Minimax.foreMinimax(getActSkill(), startTable, (byte)(1-actPlayer), rgame, true, 0, true, true);
+            //             System.out.println("end");
             System.gc();
             ended = true;
         }
