@@ -418,8 +418,9 @@ public class jtReversi extends MIDlet implements CommandListener, ItemStateListe
                     System.out.println("load["+i+"]:"+tableArray[i]);
                 }           
                 System.out.println("saved game");
-                actPlayer = tableArray[0];
-                table = new ReversiTable(tableArray,1);
+                //                actPlayer = tableArray[0];
+                loadGameParameters(tableArray, 0);
+                table = new ReversiTable(tableArray,3);
                 gameLoaded = true;
                 System.out.println("table:"+table);
             } else {
@@ -448,9 +449,10 @@ public class jtReversi extends MIDlet implements CommandListener, ItemStateListe
             rs.setRecord(1, record, 0, 1);
            
             System.out.println("save table:\n"+table);
-            byte []tableByteArray = new byte[18];
-            table.toByteArray(tableByteArray,1);
-            tableByteArray[0] = actPlayer;
+            byte []tableByteArray = new byte[20];
+            saveGameParameters(tableByteArray, 0);
+            table.toByteArray(tableByteArray,3);
+            //            tableByteArray[0] = actPlayer;
             for( int i=0; i<tableByteArray.length; ++i ) {
                 System.out.println("save["+i+"]:"+tableByteArray[i]);
             }
@@ -461,6 +463,38 @@ public class jtReversi extends MIDlet implements CommandListener, ItemStateListe
         } catch( Exception e ) {
             //            System.out.println("e:"+e);
         }
+    }
+
+    public void saveGameParameters(byte []byteArray, int offset) {
+        int index = offset;
+        //isHuman
+        byteArray[index] = 0;
+        if( isHuman[0] ) {
+            byteArray[index] |= 1;
+        } 
+        if( isHuman[1] ) {
+            byteArray[index] |= 2;
+        }
+        ++index;
+        //actPlayer
+        byteArray[index++] = actPlayer;
+        //turnNum
+        byteArray[index++] = (byte)turnNum;
+    }
+
+    public void loadGameParameters(byte []byteArray, int offset) {
+        int index = offset;
+        isHuman[0] = isHuman[1] = false;
+        if( (byteArray[index] & 1) > 0 ) {
+            isHuman[0] = true;
+        } 
+        if( (byteArray[index] & 2) > 0 ) {
+            isHuman[1] = true;
+        } 
+        twoplayer = isHuman[0] && isHuman[1];
+        ++index;
+        actPlayer = byteArray[index++];
+        turnNum = byteArray[index++];
     }
 
     public class SplashScreen extends Canvas {
