@@ -2,7 +2,6 @@ package minimax;
 
 import java.util.Random;
 import java.util.Vector;
-import java.util.Enumeration;
 
 import reversi.ReversiMove;
 
@@ -83,8 +82,9 @@ public class Minimax  {
             }
         }
         actMove = null;
+        boolean success;
         for( int i=0; !cut && i<pMoves.length; ++i ) {
-            boolean success = tpg.turn(state, player, pMoves[i], newState);
+            success = tpg.turn(state, player, pMoves[i], newState);
             if( depth == 1 ) {
                 actPoint = tpg.point(newState, player);
             } else {
@@ -109,7 +109,7 @@ public class Minimax  {
 		bestMoves[bestNum++] = i;
 	    }
         }
-        int bestIndex=0;
+        int bestIndex;
         if( bestNum > 1 ) {
             bestIndex = bestMoves[random(bestNum)];
         } else {

@@ -224,6 +224,7 @@ public class jtReversi extends MIDlet implements CommandListener {
                         }
                         canvas.setMessage(message + " Pass", 2000);
                         table.setPassNum(table.getPassNum()+1);
+                        
                     } else {
                         nonPass = true;
                     }
