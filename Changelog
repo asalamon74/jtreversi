@@ -4,6 +4,7 @@
 -Level Change during game
 -Icon
 -Using Ant build tool
+-Optional use of obfuscator (retroguard-1.1)
 
 0.62.00 2002-SEP-28
 

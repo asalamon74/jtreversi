@@ -154,7 +154,7 @@ public class J2MEReversi extends MIDlet implements CommandListener {
         }
     }
 
-    public void nextTurn(int row, int col) {
+    void nextTurn(int row, int col) {
         if( gameEnded ) {
             startApp();
             return;
