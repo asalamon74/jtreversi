@@ -23,7 +23,7 @@ public class jtReversi extends MIDlet implements CommandListener, ItemStateListe
     private ReversiCanvas canvas;
     private Form aboutForm;
     private boolean []isHuman = {true, false};
-    private boolean twoplayer;
+    public  boolean twoplayer;
     private byte actPlayer;
     private int turnNum;
     private boolean gameLoaded = false;
@@ -63,6 +63,7 @@ public class jtReversi extends MIDlet implements CommandListener, ItemStateListe
     private static final String[] skillItems = new String[4];
 
     protected void startGame() {
+        canvas.updateSkillInfo();
         display.setCurrent(canvas);
         canvas.setMessage("Good Luck");
         gameEnded = false;

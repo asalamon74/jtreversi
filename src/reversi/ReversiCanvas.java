@@ -343,7 +343,11 @@ public class ReversiCanvas extends Canvas {
     }
 
     public void updateSkillInfo() {
-        infoLines[2] = "L"+boss.skill;
+        if( !boss.twoplayer ) {
+            infoLines[2] = "L"+boss.skill;
+        } else {
+            infoLines[2] = "";
+        }
     }
 
     public void updatePossibleMoves() {
