@@ -198,6 +198,10 @@ public class J2MEReversi extends MIDlet implements CommandListener {
         }
     }
 
+    public byte getActPlayer() {
+        return actPlayer;
+    }
+
     private class SkillCommandListener implements CommandListener {
 
         public void commandAction(Command c, Displayable d) {

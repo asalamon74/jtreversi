@@ -124,6 +124,12 @@
 </exec>
 </target>
 
+<target name="grayrun">
+<exec executable="${wtk_home}/bin/emulator">
+    <arg line="-Xdescriptor:${jars}/${project}.jad -Xdevice:DefaultGrayPhone"/>
+</exec>
+</target>
+
 <target name="microrun">
 <java
     classname="com.barteo.emulator.app.Main" 

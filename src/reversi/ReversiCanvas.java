@@ -111,7 +111,19 @@ public class ReversiCanvas extends Canvas {
     }
 
     protected void drawSelectionBox(Graphics g) {
-        g.setColor(BOX_COLOR);
+        if( colored ) {
+            if( boss.getActPlayer() == 0 ) {            
+                g.setColor(BOX_P1_COLOR);
+            } else {
+                g.setColor(BOX_P2_COLOR);
+            }
+        } else {
+            if( boss.getActPlayer() == 0 ) {
+                g.setColor(LIGHT_BOX_COLOR);
+            } else {
+                g.setColor(DARK_BOX_COLOR);
+            }
+        }
         g.drawRect( selx*sizex, sely*sizey,sizex, sizey);
         g.drawRect( selx*sizex+1, sely*sizey+1,sizex-2, sizey-2);
     }
@@ -228,7 +240,10 @@ public class ReversiCanvas extends Canvas {
     protected boolean colored;
     public static final int P1_COLOR = 0xff0000;
     public static final int P2_COLOR = 0x0000ff;
-    public static final int BOX_COLOR = 0x008f00;
+    public static final int LIGHT_BOX_COLOR = 0x008f00;
+    public static final int DARK_BOX_COLOR = 0x000000;
+    public static final int BOX_P1_COLOR = P1_COLOR;
+    public static final int BOX_P2_COLOR = P2_COLOR;;
     int width, height;
     int sizex, sizey;
     int selx, sely;
