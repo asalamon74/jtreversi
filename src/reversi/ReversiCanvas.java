@@ -122,8 +122,8 @@ public class ReversiCanvas extends Canvas {
         for( int i=0; i<moves.length; ++i ) {
             row = moves[i].row;
             col = moves[i].col;
-            x = row * sizey + sizey/2;
-            y = col * sizex + sizex/2;
+            x = row * sizex + sizex/2;
+            y = col * sizey + sizey/2;
             g.fillArc(x,y,2,2,0,360);
         }
     }
