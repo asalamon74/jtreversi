@@ -5,7 +5,7 @@ What is it?
 
 This is a simple board game. It is also known as othello. If you don't
 know the rules, just browse the web, you can find hundreds of reversi
-games. 
+games. Later I'll include here a small description.
 
 This version of the game runs on devices compliant with the Mobile
 Information Device Profile (MIDP), for instance cellular phones.
@@ -79,7 +79,7 @@ With Ant you are also able to test the program with microemulator
 1. Change the path of MICROEMULATOR_HOME in .ant.properties file.
 2. ant microrun
 
-Note: Please use at least version 0.3.1.
+Note: Please use at least version 0.3.1 of microemulator.
 
 Licensing
 ---------

@@ -211,7 +211,7 @@ public class jtReversi extends MIDlet implements CommandListener {
     }
 
     protected void showAbout() {
-        Alert alert = new Alert("About jtReversi");
+        Alert alert = new Alert("About jtReversi 0.81");
         alert.setTimeout(Alert.FOREVER);
         alert.setString("Simple board game\nby\nJataka Ltd.");
         alert.setType(AlertType.INFO);
@@ -219,11 +219,7 @@ public class jtReversi extends MIDlet implements CommandListener {
         display.setCurrent(alert);
     }
 
-
-    protected ReversiMove computerTurn(ReversiMove prevMove) {
-        canvas.setMessage("Thinking");
-        canvas.repaint();
-        canvas.serviceRepaints();
+    protected int getActSkill() {
         int actSkill = skill;
         if( turnNum > 50 ) {
             ++actSkill;
@@ -231,10 +227,17 @@ public class jtReversi extends MIDlet implements CommandListener {
         if( turnNum > 55 ) {
             ++actSkill;
         }        
+        return actSkill;
+    }
+
+    protected ReversiMove computerTurn(ReversiMove prevMove) {
+        canvas.setMessage("Thinking");
+        canvas.repaint();
+        canvas.serviceRepaints();
         ReversiMove move=(ReversiMove)Minimax.precalculatedBestMove(prevMove);
         if( move == null ) {
             //            System.out.println("no precalculated move");
-            move = (ReversiMove)Minimax.minimax(actSkill, table, actPlayer, rgame, true, 0, true, true, null, true);
+            move = (ReversiMove)Minimax.minimax(getActSkill(), table, actPlayer, rgame, true, 0, true, true, null, true);
         } else {
             //            System.out.println("Precalculated move");
         }
@@ -412,7 +415,7 @@ public class jtReversi extends MIDlet implements CommandListener {
         public void run() {
             ended = false;
             //            System.out.println("start");
-            Minimax.foreMinimax(skill, table, (byte)(1-actPlayer), rgame, true, 0, true, true);
+            Minimax.foreMinimax(getActSkill(), table, (byte)(1-actPlayer), rgame, true, 0, true, true);
             //            System.out.println("end");
             ended = true;
         }
