@@ -154,7 +154,7 @@ public class ReversiCanvas extends Canvas {
                 }
             } else {
                 if( small ) {
-                    g.drawRect(x,y,w+1,h+1);
+                    g.drawRect(x,y,w,h);
                 } else {
                     g.drawArc(x,y,w,h,0,360);
                 }
@@ -162,19 +162,15 @@ public class ReversiCanvas extends Canvas {
         } else {
             if( colored ) {
                 g.setColor(P2_COLOR );
-                if( small ) {
-                    g.fillRect(x,y,w+1,h+1);
-                } else {
-                    g.fillArc(x,y,w,h,0,360);
-                }
             } else {
                 g.setColor(0x000000);
-                if( small ) {
-                    g.fillRect(x,y,w+1,h+1);
-                } else {
-                    g.fillArc(x,y,w,h,0,360);
-                }
             }
+            if( small ) {
+                g.fillRect(x,y,w+1,h+1);
+            } else {
+                g.fillArc(x,y,w,h,0,360);
+            }
+
         }
     }
 
