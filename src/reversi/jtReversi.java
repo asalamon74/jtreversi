@@ -454,7 +454,7 @@ public class jtReversi extends MIDlet implements CommandListener {
         public void run() {
             ended = false;
             //            System.out.println("start");
-            Minimax.foreMinimax(getActSkill(), startTable, (byte)(1-actPlayer), rgame, true, 0, true, true);
+            Minimax.foreMinimax(getActSkill(), startTable, actPlayer, rgame, true, 0, true, true);
             //             System.out.println("end");
             System.gc();
             ended = true;
