@@ -17,6 +17,7 @@ public class ReversiCanvas extends Canvas {
     public ReversiCanvas(J2MEReversi boss, Display display) {
         this.boss = boss;
         this.display = display;
+        colored = display.isColor() && display.numColors() > 127;
         width = getWidth();
         height = getHeight();
         sizex = width / J2MEReversi.SIZE;
@@ -66,14 +67,25 @@ public class ReversiCanvas extends Canvas {
         int sa = 0;
         int aa = 360;
         if( player == 1 ) {
-            g.drawArc(x,y,w,h,sa,aa);
+            if( colored ) {
+                g.setColor(P1_COLOR );
+                g.fillArc(x,y,w,h,sa,aa);
+            } else {
+                g.drawArc(x,y,w,h,sa,aa);
+            }
         } else {
-            g.fillArc(x,y,w,h,sa,aa);
+            if( colored ) {
+                g.setColor(P2_COLOR );
+                g.fillArc(x,y,w,h,sa,aa);
+            } else {
+                g.setColor(0x000000);
+                g.fillArc(x,y,w,h,sa,aa);
+            }
         }
     }
 
     protected void drawSelectionBox(Graphics g) {
-        g.setColor(0x008f00);
+        g.setColor(BOX_COLOR);
         g.drawRect( selx*sizex, sely*sizey,sizex, sizey);
         g.drawRect( selx*sizex+1, sely*sizey+1,sizex-2, sizey-2);
     }
@@ -129,6 +141,10 @@ public class ReversiCanvas extends Canvas {
     protected J2MEReversi boss;
     protected Display display;
     protected String message;
+    protected boolean colored;
+    public static final int P1_COLOR = 0xff0000;
+    public static final int P2_COLOR = 0x0000ff;
+    public static final int BOX_COLOR = 0x008f00;
     int width, height;
     int sizex, sizey;
     int selx, sely;
