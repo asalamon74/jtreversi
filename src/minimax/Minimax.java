@@ -13,8 +13,7 @@ import java.util.Random;
  */
 public class Minimax  {
 
-    public Minimax(int maxsize) {
-        this.maxsize = maxsize;
+    public Minimax() {
     }
 
     public Move minimax(int depth, Table state, byte player, TwoPlayerGame tpg, boolean alphabeta, int alpha, boolean order, boolean kill, Move killerMove) {
@@ -119,7 +118,6 @@ public class Minimax  {
         return r % max;
     }
 
-    protected int maxsize;
     protected Random rand = new Random();
     
 } // Minimax
