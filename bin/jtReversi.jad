@@ -5,3 +5,4 @@ MIDlet-Jar-URL: jtReversi.jar
 MIDlet-Name: jtReversi
 MIDlet-Vendor: Jataka
 MIDlet-Version: 0.84.00
+Nokia-MIDlet-Category: Game
