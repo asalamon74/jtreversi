@@ -16,7 +16,8 @@ public class ReversiCanvas extends Canvas {
     
     public static final int SIZE = 8;
     
-    public ReversiCanvas(Display display) {
+    public ReversiCanvas(J2MEReversi boss, Display display) {
+        this.boss = boss;
         this.display = display;
         width = getWidth();
         height = getHeight();
@@ -35,19 +36,26 @@ public class ReversiCanvas extends Canvas {
         // Draw the frame 
         g.setColor(0xffffff);
         g.fillRect(x, y, w, h);    
-        drawTable(g);
-        drawPiece(g,3,3,0);
-        drawPiece(g,4,4,0);
-        drawPiece(g,3,4,1);
-        drawPiece(g,4,3,1);
+        drawBoard(g);
+        drawTable(g, boss.table);
         drawSelectionBox(g);
     }
 
-    protected void drawTable(Graphics g) {
+    protected void drawBoard(Graphics g) {
         g.setColor(0x000000);
         for( int i=0; i<SIZE; ++i ) {
             g.drawLine(0, i*sizey, width, i*sizey);
             g.drawLine(i*sizex, 0, i*sizex, height);
+        }
+    }
+
+    protected void drawTable(Graphics g, ReversiTable t) {
+        for( int i=0; i<SIZE; ++i ) {
+            for( int j=0; j<SIZE; ++j ) {
+                if( t.getItem(i,j) != 0 ) {
+                    drawPiece(g, i, j, t.getItem(i,j));
+                }
+            }
         }
     }
 
@@ -58,7 +66,7 @@ public class ReversiCanvas extends Canvas {
         int h = 2*sizey/3;
         int sa = 0;
         int aa = 360;
-        if( player == 0 ) {
+        if( player == 1 ) {
             g.drawArc(x,y,w,h,sa,aa);
         } else {
             g.fillArc(x,y,w,h,sa,aa);
@@ -89,10 +97,16 @@ public class ReversiCanvas extends Canvas {
             selx = (selx + 1) % SIZE;
             repaint();
             break;
+        case Canvas.FIRE: 
+            System.out.println("Fire");
+            boss.nextTurn(selx, sely);
+            repaint();
+            break;
         }
     }
 
-    Display display;
+    protected J2MEReversi boss;
+    protected Display display;
     int width, height;
     int sizex, sizey;
     int selx, sely;

@@ -21,12 +21,17 @@ public class J2MEReversi extends MIDlet implements CommandListener {
     private Command exitCommand; // The exit command
     private Display display;    // The display for this MIDlet
     private ReversiCanvas canvas;
+    private boolean []isHuman = {true, true};
+    private int actPlayer;
+    private int turnNum;
+    public  ReversiTable table;
+    private ReversiGame rgame = new ReversiGame();
     
     public J2MEReversi() {
         System.out.println("constructor");
         display = Display.getDisplay(this);
         exitCommand = new Command("Exit", Command.SCREEN, 2);
-        canvas = new ReversiCanvas(display);
+        canvas = new ReversiCanvas(this, display);
         canvas.addCommand(exitCommand);
         canvas.setCommandListener(this);
     }
@@ -43,6 +48,9 @@ public class J2MEReversi extends MIDlet implements CommandListener {
         
         //        display.setCurrent(t);
         display.setCurrent(canvas);
+        actPlayer = 0;
+        turnNum = 1;
+        table = new ReversiTable(ReversiCanvas.SIZE);
     }
     
     /**
@@ -68,6 +76,18 @@ public class J2MEReversi extends MIDlet implements CommandListener {
         if (c == exitCommand) {
             destroyApp(false);
             notifyDestroyed();
+        }
+    }
+
+    public void nextTurn(int row, int col) {
+        ReversiMove move = new ReversiMove(row, col);
+        ReversiTable newTable = (ReversiTable)rgame.turn( table, actPlayer, move );
+        if( newTable == null ) {
+            System.out.println("Invalid Move");
+        } else {
+            table = newTable;
+            actPlayer = 1 - actPlayer;
+            ++turnNum;
         }
     }
     

@@ -90,7 +90,7 @@ public class ReversiGame implements TwoPlayerGame {
             return newTable;
         }
 
-        if( newTable.getItem(row, col) == 0 ) {
+        if( newTable.getItem(row, col) != 0 ) {
             return null;
         }
 
@@ -104,12 +104,12 @@ public class ReversiGame implements TwoPlayerGame {
                 while( ReversiMove.valid(row+c*dirrow,col+c*dircol) && 
                        newTable.getItem(row+c*dirrow,col+c*dircol) == ReversiTable.getPlayerItem(1-player)) {
                     ++c;
-		    if (c > 1 && ReversiMove.valid(row+c*dirrow,col+c*dircol) 
+                }
+		if (c > 1 && ReversiMove.valid(row+c*dirrow,col+c*dircol) 
                         && newTable.getItem(row+c*dirrow,col+c*dircol) == ReversiTable.getPlayerItem(player)) {
-                        flipped = true;
-			for (int s1=1;s1 < c;++s1) {
-                            newTable.flip(row+s1*dirrow,col+s1*dircol);
-			}
+                    flipped = true;
+		    for (int s1=1;s1 < c;++s1) {
+                        newTable.flip(row+s1*dirrow,col+s1*dircol);
                     }
                 }
 
@@ -117,9 +117,10 @@ public class ReversiGame implements TwoPlayerGame {
         }
 
         if( flipped ) {
-            newTable.setItem(row, col, player);
+            newTable.setItem(row, col, ReversiTable.getPlayerItem(player));
+            return newTable;
         }
-        return newTable;
+        return null;
     }
 
     public Move[] possibleMoves(Table table, int player) {

@@ -19,6 +19,11 @@ public class ReversiTable implements Table  {
         this.size = size;
         matrix = new int[size][size];
         passNum = 0;
+        int middle = (size - 1)/2;
+        matrix[middle][middle] = 2;
+        matrix[middle+1][middle+1] = 2;
+        matrix[middle][middle+1] = 1;
+        matrix[middle+1][middle] = 1;
     }
 
     // no clone
@@ -46,7 +51,7 @@ public class ReversiTable implements Table  {
     }
 
     public void flip(int row, int col) {
-        matrix[row][col] = 2 - matrix[row][col];
+        matrix[row][col] = 3 - matrix[row][col];
     }
 
     protected int passNum;
