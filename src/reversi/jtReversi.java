@@ -144,11 +144,11 @@ public class jtReversi extends MIDlet implements CommandListener {
                 alert.setTimeout(1000);
                 alert.setString("Level Not Changed\nLevel:"+skill);
                 if( !gameEnded ) {
-                    display.setCurrent(canvas);
+                    display.setCurrent(alert,canvas);
                 } else {
-                    display.setCurrent(mainMenu);
+                    display.setCurrent(alert,mainMenu);
                 }                
-                display.setCurrent(alert);                
+                //                display.setCurrent(alert);                
             } else if( c == List.SELECT_COMMAND ) {
                 skillList.set(skill-1, skillList.getString(skill-1), unselectedImage);
                 skill = skillList.getSelectedIndex()+1;
@@ -156,11 +156,11 @@ public class jtReversi extends MIDlet implements CommandListener {
                 alert.setTimeout(1000);
                 alert.setString("Level Changed\nNew Level:"+skill);
                 if( !gameEnded ) {
-                    display.setCurrent(canvas);
+                    display.setCurrent(alert,canvas);
                 } else {
-                    display.setCurrent(mainMenu);
+                    display.setCurrent(alert,mainMenu);
                 }                
-                display.setCurrent(alert);
+                //                display.setCurrent(alert);
             }
         } else if( d.equals(mainMenu) ) {
             if( c == List.SELECT_COMMAND ) {
