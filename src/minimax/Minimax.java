@@ -1,6 +1,10 @@
 package minimax;
 
 import java.util.Random;
+import java.util.Hashtable;
+import java.util.Enumeration;
+
+import reversi.ReversiMove;
 
 /**
  * Minimax.java
@@ -118,12 +122,42 @@ public class Minimax  {
         bestMove.setPoint(maxPoint);
         return bestMove;
     }
+
+    public void foreMinimax(int depth, Table state, byte player, TwoPlayerGame tpg, boolean alphabeta, int alpha, boolean order, boolean kill) {
+        precalculatedMoves.clear();
+        Move pMoves[] = tpg.possibleMoves(state, (byte)(1-player));
+        if( pMoves == null ) {
+            return;
+        }
+        Table newState = state.copyFrom(state);
+        Move bestMove;
+        for( int i=0; i<pMoves.length; ++i ) {
+            tpg.turn(state, player, pMoves[i], newState);
+            bestMove = minimax(depth, newState, player, tpg, alphabeta, alpha, order, kill, null, true);
+            System.out.println("m:"+pMoves[i]+" bm:"+bestMove);
+            precalculatedMoves.put( pMoves[i], bestMove);
+            System.out.println(""+precalculatedMoves.get( pMoves[i] ));
+        }
+    }
     
+    public Move precalculatedBestMove(Move move) {
+        System.out.println("size:"+precalculatedMoves.size());
+        for (Enumeration e = precalculatedMoves.keys() ; e.hasMoreElements() ;) {
+            ReversiMove rm = (ReversiMove)e.nextElement();
+            System.out.println(""+rm+" "+rm.equals(move));
+            System.out.println(""+(move instanceof ReversiMove));
+        }
+ 
+        System.out.println("bestMove:"+move+"  "+precalculatedMoves.get(move));
+        return (Move)precalculatedMoves.get(move);
+    }
+
     protected int random(int max) {
         int r = Math.abs(rand.nextInt());
         return r % max;
     }
 
     protected Random rand = new Random();
+    protected Hashtable precalculatedMoves = new Hashtable();
     
 } // Minimax

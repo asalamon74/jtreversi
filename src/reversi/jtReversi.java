@@ -148,7 +148,7 @@ public class jtReversi extends MIDlet implements CommandListener {
     }
 
 
-    protected ReversiMove computerTurn() {
+    protected ReversiMove computerTurn(ReversiMove prevMove) {
         canvas.setMessage("Thinking");
         canvas.repaint();
         canvas.serviceRepaints();
@@ -158,8 +158,14 @@ public class jtReversi extends MIDlet implements CommandListener {
         }
         if( turnNum > 55 ) {
             ++actSkill;
+        }        
+        ReversiMove move = (ReversiMove)minimax.precalculatedBestMove(prevMove);
+        if( move == null ) {
+            System.out.println("no precalculated move");
+            move = (ReversiMove)minimax.minimax(actSkill, table, actPlayer, rgame, true, 0, true, true, null, true);
+        } else {
+            System.out.println("Precalculated move");
         }
-        ReversiMove move = (ReversiMove)minimax.minimax(actSkill, table, actPlayer, rgame, true, 0, true, true, null, true);
         //        System.out.println(move.getPoint());
         //        System.out.println("evalNum:"+rgame.getEvalNum());
         canvas.stopWait();
@@ -236,8 +242,12 @@ public class jtReversi extends MIDlet implements CommandListener {
         canvas.repaint();
         canvas.serviceRepaints();        
         while( !gameEnded && !isHuman[actPlayer] ) {
-            move = computerTurn();
-            processMove(move);
+            ReversiMove computerMove = computerTurn(move);
+            processMove(computerMove);
+            canvas.repaint();
+            canvas.serviceRepaints();        
+            System.out.println("--------------");
+            minimax.foreMinimax(skill, table, (byte)(1-actPlayer), rgame, true, 0, true, true);
         }
     }
 
