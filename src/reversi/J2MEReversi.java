@@ -42,13 +42,7 @@ public class J2MEReversi extends MIDlet implements CommandListener {
         "Skill", 
         "About"};
 
-    private static final String[] skillItems = {
-        "Level 1", 
-        "Level 2", 
-        "Level 3",
-        "Level 4",
-        "Level 5"};
-
+    private static final String[] skillItems = new String[5];
 
     public J2MEReversi() {
         display = Display.getDisplay(this);
@@ -64,6 +58,7 @@ public class J2MEReversi extends MIDlet implements CommandListener {
         unselectedImage = Image.createImage(unselectedMutableImage);
         Image []unseletedImages = new Image[skillItems.length];
         for( int i=0; i<skillItems.length; ++i ) {
+            skillItems[i] = "Level "+(i+1);
             unseletedImages[i] = unselectedImage;
         }
         skillList = new List("Skill", List.IMPLICIT, skillItems, unseletedImages);
