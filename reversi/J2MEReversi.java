@@ -53,6 +53,7 @@ public class J2MEReversi extends MIDlet implements CommandListener {
         
         //        display.setCurrent(t);
         display.setCurrent(canvas);
+        canvas.setMessage("Good Luck");
         actPlayer = 0;
         turnNum = 1;
         table = new ReversiTable(SIZE);
@@ -95,14 +96,14 @@ public class J2MEReversi extends MIDlet implements CommandListener {
     protected void processMove(ReversiMove move) {
         ReversiTable newTable = (ReversiTable)rgame.turn( table, actPlayer, move );
         if( newTable == null ) {
-            System.out.println("Invalid Move");
+            canvas.setMessage("Invalid Move");
         } else {
             boolean nonPass = false;
             while( !nonPass ) {
                 int point = rgame.point(newTable, actPlayer);
                 System.out.println("point:"+point);
-                if( point > 9000 || point < -9000 ) {
-                    System.out.println("end");
+                if( point > 9000 || point < -9000 ) {                    
+                    canvas.setMessage("End Point:"+point);
                     gameEnded = true;
                 }
                 table = newTable;
@@ -122,7 +123,8 @@ public class J2MEReversi extends MIDlet implements CommandListener {
     public void nextTurn(int row, int col) {
         ReversiMove move = new ReversiMove(row, col);
         processMove(move);
-        canvas.repaint();        
+        canvas.repaint();
+        canvas.serviceRepaints();        
         if( !gameEnded && !isHuman[actPlayer] ) {
             move = computerTurn();
             processMove(move);

@@ -37,6 +37,7 @@ public class ReversiCanvas extends Canvas {
         drawBoard(g);
         drawTable(g, boss.table);
         drawSelectionBox(g);
+        drawMessage(g);
     }
 
     protected void drawBoard(Graphics g) {
@@ -77,6 +78,20 @@ public class ReversiCanvas extends Canvas {
         g.drawRect( selx*sizex+1, sely*sizey+1,sizex-2, sizey-2);
     }
 
+    protected void drawMessage(Graphics g) {
+        if( message != null ) {
+            int messageWidth = g.getFont().stringWidth(message);
+            int messageHeight = g.getFont().getHeight();
+            g.setColor(0xeeeeee);
+            int cornerX = (width - messageWidth)/2;
+            int cornerY = (height - messageHeight)/2;
+            // TODO: break line if too long
+            g.fillRect(cornerX, cornerY, messageWidth, messageHeight);
+            g.setColor(0x000000);
+            g.drawRect(cornerX, cornerY, messageWidth, messageHeight);
+            g.drawString(message, cornerX, cornerY, g.TOP|g.LEFT);                
+        }
+    }
     public void keyPressed(int keyCode) {
         switch( getGameAction(keyCode) ) {
         case Canvas.UP: 
@@ -96,15 +111,24 @@ public class ReversiCanvas extends Canvas {
             repaint();
             break;
         case Canvas.FIRE: 
-            System.out.println("Fire");
-            boss.nextTurn(selx, sely);
+            if( message != null ) {
+                message = null;
+            } else {
+                boss.nextTurn(selx, sely);
+            }
             repaint();
             break;
         }
     }
 
+    public void setMessage(String message) {
+        this.message = message;
+        repaint();
+    }
+
     protected J2MEReversi boss;
     protected Display display;
+    protected String message;
     int width, height;
     int sizex, sizey;
     int selx, sely;
