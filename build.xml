@@ -130,6 +130,12 @@
 </exec>
 </target>
 
+<target name="minrun">
+<exec executable="${wtk_home}/bin/emulator">
+    <arg line="-Xdescriptor:${jars}/${project}.jad -Xdevice:MinimumPhone"/>
+</exec>
+</target>
+
 <target name="microrun">
 <java
     classname="com.barteo.emulator.app.Main" 
