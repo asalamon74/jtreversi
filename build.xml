@@ -1,4 +1,4 @@
-<project name="j2me_reversi" default="jar" basedir=".">
+<project name="j2me_reversi" default="jad" basedir=".">
 
 <!-- set global properties for this build -->
 <property file=".ant.properties"/>
