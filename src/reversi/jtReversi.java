@@ -32,6 +32,8 @@ public class jtReversi extends MIDlet implements CommandListener {
     private Image selectedImage;
     private Image unselectedMutableImage = Image.createImage(16,16);
     private Image unselectedImage;
+    private MinimaxTimerTask mtt;
+    private Timer timer = new Timer();
     protected int[][] heurMatrix = { 
                                   {500 ,-240, 85, 69, 69, 85,-240, 500},
 				  {-240,-130, 49, 23, 23, 49,-130,-240},
@@ -234,6 +236,9 @@ public class jtReversi extends MIDlet implements CommandListener {
     }
 
     void nextTurn(int row, int col) {
+        if( mtt != null ) {
+            mtt.cancel();
+        }
         if( gameEnded ) {
             startApp();
             return;
@@ -247,8 +252,10 @@ public class jtReversi extends MIDlet implements CommandListener {
             processMove(computerMove);
             canvas.repaint();
             canvas.serviceRepaints();        
-            System.out.println("--------------");
-            Minimax.foreMinimax(skill, table, (byte)(1-actPlayer), rgame, true, 0, true, true);
+            //            System.out.println("--------------");
+            //            Minimax.foreMinimax(skill, table, (byte)(1-actPlayer), rgame, true, 0, true, true);
+            mtt = new MinimaxTimerTask();
+            timer.schedule(mtt, 0);            
         }
     }
 
@@ -392,5 +399,15 @@ public class jtReversi extends MIDlet implements CommandListener {
             }
         }
     }
+
+    class MinimaxTimerTask extends TimerTask {
+        
+        public void run() {
+            System.out.println("start");
+            Minimax.foreMinimax(skill, table, (byte)(1-actPlayer), rgame, true, 0, true, true);
+            System.out.println("end");
+        }
+    }
+
 
 }

@@ -2,6 +2,7 @@ package minimax;
 
 import java.util.Random;
 import java.util.Vector;
+import java.util.TimerTask;
 
 import reversi.ReversiMove;
 
@@ -138,14 +139,17 @@ public class Minimax  {
     }
     
     public static Move precalculatedBestMove(Move move) {
-        System.out.println("size:"+precalculatedMoves.size());
+        //        System.out.println("move:"+move);
+        //        System.out.println("size:"+precalculatedMoves.size());
         for( int i=0; i<precalculatedMoves.size(); i += 2) {
-            if( ((ReversiMove)precalculatedMoves.elementAt(i)).equals(move) ) {
+            //            System.out.println("pmove:"+(ReversiMove)precalculatedMoves.elementAt(i));
+            if( ((ReversiMove)move).equals(precalculatedMoves.elementAt(i)) ) {
+                //                System.out.println("found");
                 return (Move)precalculatedMoves.elementAt(i+1);
             }
         }
         return null;
-    }
+    }    
 
     protected static int random(int max) {
         return Math.abs(rand.nextInt()) % max;

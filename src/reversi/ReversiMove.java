@@ -62,7 +62,7 @@ public class ReversiMove implements Move {
     public boolean equals(Object o) {
         return (o instanceof ReversiMove &&
                 row == ((ReversiMove)o).row &&
-                row == ((ReversiMove)o).col);
+                col == ((ReversiMove)o).col);
     }
     
 } // ReversiMove
