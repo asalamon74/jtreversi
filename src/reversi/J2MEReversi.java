@@ -25,6 +25,11 @@ public class J2MEReversi extends MIDlet implements CommandListener {
     private Minimax minimax = new Minimax(100);
     private boolean gameEnded = true;
     private int skill = 1;
+    private Image selectedMutableImage = Image.createImage(16,16);
+    private Image selectedImage;
+    private Image unselectedMutableImage = Image.createImage(16,16);
+    private Image unselectedImage;
+
     private static final String[] mainMenuItems = {
         "Start 1P", 
         "Start 2P", 
@@ -52,7 +57,15 @@ public class J2MEReversi extends MIDlet implements CommandListener {
         mainMenu.setCommandListener(new MainCommandListener());
         optionsMenu = new List( "Options", List.IMPLICIT, optionItems, null);
         optionsMenu.setCommandListener(new OptionsCommandListener());
-        skillList = new List("Skill", List.IMPLICIT, skillItems, null);
+        selectedMutableImage.getGraphics().fillRect(4,4, 8,8);
+        selectedImage = Image.createImage(selectedMutableImage);
+        unselectedMutableImage.getGraphics().fillRect(7,7, 2,2);
+        unselectedImage = Image.createImage(unselectedMutableImage);
+        Image []unseletedImages = new Image[skillItems.length];
+        for( int i=0; i<skillItems.length; ++i ) {
+            unseletedImages[i] = unselectedImage;
+        }
+        skillList = new List("Skill", List.IMPLICIT, skillItems, unseletedImages);
         skillList.addCommand(exitCommand);
         skillList.setCommandListener(new SkillCommandListener());
         canvas = new ReversiCanvas(this, display);
@@ -60,7 +73,7 @@ public class J2MEReversi extends MIDlet implements CommandListener {
         canvas.addCommand(optionsCommand);
         canvas.setCommandListener(this);
         rgame = new ReversiGame();
-        rgame.setEvaluationFunction(new ReversiHeuristicEvaluation());            
+        rgame.setEvaluationFunction(new ReversiHeuristicEvaluation());
     }
 
     protected void startGame() {
@@ -223,6 +236,7 @@ public class J2MEReversi extends MIDlet implements CommandListener {
                 }                
                 display.setCurrent(alert);                
             } else if( c == List.SELECT_COMMAND ) {
+                skillList.set(skill-1, skillList.getString(skill-1), unselectedImage);
                 skill = skillList.getSelectedIndex()+1;
                 Alert alert = new Alert("Level");
                 alert.setTimeout(1000);
@@ -254,6 +268,7 @@ public class J2MEReversi extends MIDlet implements CommandListener {
                     startGame();
                     break;
                 case 2:
+                    skillList.set(skill-1, skillList.getString(skill-1), selectedImage);
                     display.setCurrent(skillList);
                     break;                    
                 case 3:
@@ -274,6 +289,7 @@ public class J2MEReversi extends MIDlet implements CommandListener {
                     display.setCurrent(canvas);
                     break;
                 case 1:
+                    skillList.set(skill-1, skillList.getString(skill-1), selectedImage);
                     display.setCurrent(skillList);
                     break;                    
                 case 2:
