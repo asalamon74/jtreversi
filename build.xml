@@ -3,12 +3,26 @@
 <!-- set global properties for this build -->
 <property file=".ant.properties"/>
 
+<!-- Builds the JarSizeFix Ant task and installs it
+       in the Ant lib directory. -->
+<target name="tools">
+  <mkdir dir="build/tools_classes"/>
+    <javac destdir="build/tools_classes" 
+        srcdir="build/tools"
+        target="1.1"/>
+    <jar jarfile="${ant_home}/lib/wd-tools.jar">
+      <fileset dir="build/tools_classes"/>
+    </jar>
+    <delete dir="build/tools_classes"/>
+</target>
+
 <target name="init">
 <!-- Create the time stamp -->
 <tstamp/>
 <!-- Create the build directory structure used by compile -->
 <mkdir dir="${tmpclasses}"/>
 <mkdir dir="${classes}"/>
+<mkdir dir="${tmpclassescompact}"/>
 </target>
 
 <target name="compile" depends="init">
@@ -18,14 +32,22 @@
     destdir="${tmpclasses}" 
     bootclasspath="${wtk_home}/lib/midpapi.zip"
     classpath="${tmpclasses}"/>
+<!-- <exclude name="build/tools/*.java"/> -->
 </target>
 
 <target name="preverify" depends="compile">
 <!-- preverify the class files -->
 <exec
+    os="Linux"
     executable="${wtk_home}/bin/preverify">
     <arg line="-classpath ${wtk_home}/lib/midpapi.zip:${tmpclasses} -d ${classes} ${tmpclasses}"/>
 </exec>
+<exec
+    os="Windows NT"
+    executable="${wtk_home}/bin/preverify">
+    <arg line="-classpath ${wtk_home}/lib/midpapi.zip;${tmpclasses} -d ${classes} ${tmpclasses}"/>
+</exec>
+
 </target>
 
 <target name="jar" depends="preverify">
@@ -34,7 +56,7 @@
 </jar>
 </target>
 
-<target name="obfuscator" depends="jar">
+<target name="obfuscate_retroguard" depends="jar">
 <java 
     classname="RetroGuard" 
     classpath="${wtk_home}/lib/midpapi.zip:${retroguard_home}/retroguard.jar"
@@ -43,8 +65,20 @@
 </java>
 </target>
 
+<target name="obfuscate_proguard" depends="jar">
+    <java 
+         classpath="${proguard_jar}"
+	 classname="proguard.ProGuard"
+         fork="yes">
+      <arg line="-libraryjars ${wtk_home}/lib/midpapi.zip"/>
+      <arg line="-injars ${jars}/${project}.jar"/>
+      <arg line="-outjar ${jars}/${project}_new.jar"/>
+      <arg line="-keep 'public class * extends javax.microedition.midlet.MIDlet'"/>
+    </java>
+  </target>
+
 <!-- decompress jar to preverify again -->
-<target name="unjar" depends="obfuscator">
+<target name="unjar" depends="obfuscate_proguard">
 <delete dir="${tmpclassescompact}"/>
 <unjar src="${jars}/${project}_new.jar" dest="${tmpclassescompact}"/>
 <delete dir="${tmpclassescompact}/META-INF"/>
@@ -54,9 +88,14 @@
 <target name="compactpreverify" depends="unjar">
 <!-- preverify the class files -->
 <delete dir="${classescompact}"/>
+<mkdir dir="${classescompact}"/>
 <exec
     executable="${wtk_home}/bin/preverify"  os="Linux">
     <arg line="-classpath ${wtk_home}/lib/midpapi.zip:${tmpclasses} -d ${classescompact} ${tmpclassescompact}"/>
+</exec>
+<exec
+    executable="${wtk_home}/bin/preverify"  os="Windows NT">
+    <arg line="-classpath ${wtk_home}/lib/midpapi.zip;${tmpclasses} -d ${classescompact} ${tmpclassescompact}"/>
 </exec>
 </target>
 
@@ -64,6 +103,11 @@
 <jar jarfile="${jars}/${project}.jar" basedir="${classescompact}" manifest="${jars}/MANIFEST.MF">
 <fileset dir="${resources}"/>
 </jar>
+</target>
+
+<target name="jad" depends="compactjar">
+  <taskdef name="jad" classname="JarSizeFix"/>
+  <jad jar="${jars}/${project}.jar" jad="${jars}/${project}.jad"/>
 </target>
 
 <target name="clean">
