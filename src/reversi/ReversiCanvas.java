@@ -18,6 +18,7 @@ import java.util.TimerTask;
 public class ReversiCanvas extends Canvas {
 
     public String []playerNames;
+    private static final int SIZE_LIMIT = 8;
     
     public ReversiCanvas(J2MEReversi boss, Display display) {
         this.boss = boss;
@@ -57,9 +58,20 @@ public class ReversiCanvas extends Canvas {
 
     protected void drawBoard(Graphics g) {
         g.setColor(0x000000);
-        for( int i=0; i<=J2MEReversi.SIZE; ++i ) {
-            g.drawLine(0, i*sizey, J2MEReversi.SIZE*sizex, i*sizey);
-            g.drawLine(i*sizex, 0, i*sizex, J2MEReversi.SIZE*sizey);
+        if( sizex < SIZE_LIMIT || sizey < SIZE_LIMIT ) {
+            int x,y;
+            for( int i=0; i<J2MEReversi.SIZE; ++i ) {
+                for( int j=0; j<J2MEReversi.SIZE; ++j ) {
+                    x = i * sizex + sizex/2;
+                    y = j * sizey + sizey/2;
+                    g.drawLine(x,y,x,y);
+                }
+            }
+        } else {
+            for( int i=0; i<=J2MEReversi.SIZE; ++i ) {
+                g.drawLine(0, i*sizey, J2MEReversi.SIZE*sizex, i*sizey);
+                g.drawLine(i*sizex, 0, i*sizex, J2MEReversi.SIZE*sizey);
+            }
         }
     }
 
