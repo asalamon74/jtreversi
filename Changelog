@@ -2,6 +2,8 @@
 
 -Supporting non-doublebuffered devices
 -Background color for color display
+-Better display for non-square screens (e.g. Nokia 9210)
+-Better AI
 -Splash screen
 
 0.73.00 2002-NOV-14
