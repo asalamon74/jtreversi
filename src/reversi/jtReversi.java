@@ -65,10 +65,10 @@ public class jtReversi extends MIDlet implements CommandListener, ItemStateListe
     protected void startGame() {
         display.setCurrent(canvas);
         canvas.setMessage("Good Luck");
-        actPlayer = 0;
-        turnNum = 1;
         gameEnded = false;
         if( !gameLoaded ) {
+            actPlayer = 0;
+            turnNum = 1;
             table = new ReversiTable();
         }
         canvas.updatePossibleMoves();
@@ -76,9 +76,18 @@ public class jtReversi extends MIDlet implements CommandListener, ItemStateListe
 
     public void initMidlet() {
         display = Display.getDisplay(this);
+        loadRecordStore();
         exitCommand = new Command("Exit", Command.EXIT, 99);
         optionsCommand = new Command("Options", Command.SCREEN, 5);
-        mainMenu = new List( "jtReversi", List.IMPLICIT, mainMenuItems, null);
+        
+        String []effectiveMainMenuItems = mainMenuItems;
+        if( gameLoaded ) {
+            effectiveMainMenuItems = new String[mainMenuItems.length+1];
+            System.arraycopy(mainMenuItems, 0, 
+                effectiveMainMenuItems, 1, mainMenuItems.length);
+            effectiveMainMenuItems[0] = "Continue";
+        }            
+        mainMenu = new List( "jtReversi", List.IMPLICIT, effectiveMainMenuItems, null);
         mainMenu.setCommandListener(this);
         optionsMenu = new List( "Options", List.IMPLICIT, optionItems, null);
         optionsMenu.setCommandListener(this);
@@ -95,7 +104,6 @@ public class jtReversi extends MIDlet implements CommandListener, ItemStateListe
         skillForm.setCommandListener(this);
         skillForm.setItemStateListener(this);
 	skill = 1; // default skill is 1
-        loadRecordStore();
 
         canvas = new ReversiCanvas(this, display);
         canvas.addCommand(exitCommand);
@@ -167,14 +175,22 @@ public class jtReversi extends MIDlet implements CommandListener, ItemStateListe
         } else if( d.equals(mainMenu) ) {
             if( c == List.SELECT_COMMAND ) {
                 int pos = mainMenu.getSelectedIndex();
+                if( gameLoaded ) {
+                    --pos;
+                }
                 switch( pos ) {
+                case -1:
+                    startGame();
+                    break;
                 case 0:
+                    gameLoaded = false;
                     isHuman[0] = true;
                     isHuman[1] = false;
                     twoplayer = false;
                     startGame();
                     break;
                 case 1:
+                    gameLoaded = false;
                     isHuman[0] = true;
                     isHuman[1] = true;
                     twoplayer = true;

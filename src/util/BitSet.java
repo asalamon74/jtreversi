@@ -43,17 +43,8 @@ public class BitSet  {
                 }
                 bits[i] |= octet << j;
             }
-            System.out.println("bits["+i+"]:"+bits[i]);
             ++i;
         }
-//         long lastLong = 0;
-//         while( retIndex < byteArray.length ) {
-//             lastLong <<= 8;
-//             lastLong += byteArray[retIndex++];
-//         } 
-//         lastLong <<= 8 *  (8 - byteArray.length % 8);
-//         bits[i] = lastLong;
-//         System.out.println("bits["+i+"]:"+bits[i]);
     }
 
     /**
@@ -146,14 +137,9 @@ public class BitSet  {
     public void toByteArray(byte []byteArray, int offset) {
         int arrayIndex = offset;
         for( int i=0; i<bits.length; ++i ) {
-            byteArray[arrayIndex++] = (byte)(bits[i] >> 56);
-            byteArray[arrayIndex++] = (byte)(bits[i] >> 48);
-            byteArray[arrayIndex++] = (byte)(bits[i] >> 40);
-            byteArray[arrayIndex++] = (byte)(bits[i] >> 32);
-            byteArray[arrayIndex++] = (byte)(bits[i] >> 24);
-            byteArray[arrayIndex++] = (byte)(bits[i] >> 16);
-            byteArray[arrayIndex++] = (byte)(bits[i] >> 8 );
-            byteArray[arrayIndex++] = (byte)(bits[i]      );
+            for( int j=56; j>=0; j -= 8 ) {
+                byteArray[arrayIndex++] = (byte)(bits[i] >> j);
+            }
         }        
     }
 
