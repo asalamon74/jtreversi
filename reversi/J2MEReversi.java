@@ -1,5 +1,6 @@
+package reversi;
+
 /*
- * test1.java
  *
  * Created on July 25, 2002, 8:52 PM
  */
