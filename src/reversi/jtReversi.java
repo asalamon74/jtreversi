@@ -102,6 +102,9 @@ public class jtReversi extends MIDlet implements CommandListener {
     }
 
     public void startApp() {
+        Minimax.clearPrecalculatedMoves();
+        mtt = null;
+        Minimax.cancel(false);
         if( display == null ) {
             initMidlet();
         } else {
@@ -230,10 +233,10 @@ public class jtReversi extends MIDlet implements CommandListener {
         }        
         ReversiMove move=(ReversiMove)Minimax.precalculatedBestMove(prevMove);
         if( move == null ) {
-            System.out.println("no precalculated move");
+            //            System.out.println("no precalculated move");
             move = (ReversiMove)Minimax.minimax(actSkill, table, actPlayer, rgame, true, 0, true, true, null, true);
         } else {
-            System.out.println("Precalculated move");
+            //            System.out.println("Precalculated move");
         }
         //        System.out.println(move.getPoint());
         //        System.out.println("evalNum:"+rgame.getEvalNum());
@@ -244,10 +247,11 @@ public class jtReversi extends MIDlet implements CommandListener {
     }
 
     protected void processMove(ReversiMove move) {
-        System.out.println("move:"+move);
+        //        System.out.println("move:"+move);
         ReversiTable newTable = new ReversiTable();
         boolean goodMove = rgame.turn( table, actPlayer, move, newTable );
         if( !goodMove ) {
+            //            System.out.println("invalid move:"+move);
             canvas.setMessage("Invalid Move",2000);
         } else {
             boolean nonPass = false;
@@ -304,10 +308,11 @@ public class jtReversi extends MIDlet implements CommandListener {
     }
 
     void nextTurn(int row, int col) {
+        //        System.out.println("nextTurn"+mtt);
         if( mtt != null ) {
             mtt.cancel();
             while( mtt.ended == false ) {
-                System.out.println("wait nt");
+                //                System.out.println("wait nt");
                 synchronized(this) {
                     try {
                         wait(50);
@@ -330,8 +335,6 @@ public class jtReversi extends MIDlet implements CommandListener {
             processMove(computerMove);
             canvas.repaint();
             canvas.serviceRepaints();        
-            //            System.out.println("--------------");
-            //            Minimax.foreMinimax(skill, table, (byte)(1-actPlayer), rgame, true, 0, true, true);
             mtt = new MinimaxTimerTask();
             timer.schedule(mtt, 0);            
         }
@@ -402,15 +405,15 @@ public class jtReversi extends MIDlet implements CommandListener {
         public boolean ended;
 
         public boolean cancel() {
-            Minimax.cancel();
+            Minimax.cancel(true);
             return true;
         }
         
         public void run() {
             ended = false;
-            System.out.println("start");
+            //            System.out.println("start");
             Minimax.foreMinimax(skill, table, (byte)(1-actPlayer), rgame, true, 0, true, true);
-            System.out.println("end");
+            //            System.out.println("end");
             ended = true;
         }
     }

@@ -23,7 +23,6 @@ public class ReversiEvaluationFunction implements EvaluationFunction {
     protected int numSecondPlayer;
     protected int point;
     protected int evalNum = 0;
-    protected static final int HUGE = 1000000;
 
     public void setTable(Table table, byte player,boolean fullProcess) {
         if( !(table instanceof ReversiTable) ) {
@@ -62,9 +61,9 @@ public class ReversiEvaluationFunction implements EvaluationFunction {
         point = numFirstPlayer - numSecondPlayer;
         if( isGameEnded() ) {
             if( point > 0 ) {
-                point += HUGE;
+                point += Minimax.MAX_POINT;
             } else if( point < 0 ) {
-                point -= HUGE;
+                point -= Minimax.MAX_POINT;
             }
         }
         if( player == 1 ) {

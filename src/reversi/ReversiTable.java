@@ -45,8 +45,8 @@ public class ReversiTable implements Table  {
         this.passNum = rtable.passNum;
     }
 
-    public Table copyFrom(Table table) {
-        ReversiTable rtable = new ReversiTable((ReversiTable)table);
+    public Table copyFrom() {
+        ReversiTable rtable = new ReversiTable(this);
         return rtable;
     }
 

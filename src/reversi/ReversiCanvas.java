@@ -117,6 +117,10 @@ public class ReversiCanvas extends Canvas {
 
     protected void drawPossibleMoves(Graphics g, ReversiTable t) {
         ReversiMove []moves = (ReversiMove [])boss.possibleMoves(); // t is not used 
+        if( moves == null ) {
+            // end of the game
+            return;
+        }
         int row,col;
         int x,y;
         for( int i=0; i<moves.length; ++i ) {

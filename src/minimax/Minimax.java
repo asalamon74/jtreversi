@@ -17,6 +17,8 @@ import reversi.ReversiMove;
  */
 public class Minimax  {
 
+    public static final int MAX_POINT = 1000000;
+
     public static Move minimax(int depth, Table state, byte player, TwoPlayerGame tpg, boolean alphabeta, int alpha, boolean order, boolean kill, Move killerMove, boolean root) {
         if( cancelled ) {
             cancelled = false;
@@ -36,7 +38,7 @@ public class Minimax  {
         Move kMove;
         boolean cut=false;
         int actPoint;
-        int maxPoint = -1000000; /* -Integer.MIN_VALUE ?? */
+        int maxPoint = -MAX_POINT; /* -Integer.MIN_VALUE ?? */
         int bestNum=0;
  
         Move pMoves[] = tpg.possibleMoves(state, player);
@@ -48,7 +50,7 @@ public class Minimax  {
         }
         int []bestMoves = new int[pMoves.length];
 
-        Table newState = state.copyFrom(state);
+        Table newState = state.copyFrom();
         if( depth > 2 && order && pMoves.length > 1) {
             int points[] = new int[pMoves.length];
 	    for (int oindex=0;oindex<pMoves.length;++oindex) {
@@ -136,27 +138,23 @@ public class Minimax  {
         if( pMoves == null ) {
             return;
         }
-        Table newState = state.copyFrom(state);
+        Table newState = state.copyFrom();
         Move bestMove;
         for( int i=0; i<pMoves.length; ++i ) {
-            tpg.turn(state, player, pMoves[i], newState);
+            tpg.turn(state, (byte)(1-player), pMoves[i], newState);
             bestMove = minimax(depth, newState, player, tpg, alphabeta, alpha, order, kill, null, true);
             if( bestMove == null ) {
                 return;
             }
-            System.out.println("m:"+pMoves[i]+" bm:"+bestMove);
+            //            System.out.println("m:"+pMoves[i]+" bm:"+bestMove);
             precalculatedMoves.addElement( pMoves[i] );
             precalculatedMoves.addElement( bestMove );
         }
     }
     
     public static Move precalculatedBestMove(Move move) {
-        //        System.out.println("move:"+move);
-        //        System.out.println("size:"+precalculatedMoves.size());
         for( int i=0; i<precalculatedMoves.size(); i += 2) {
-            //            System.out.println("pmove:"+(ReversiMove)precalculatedMoves.elementAt(i));
             if( ((ReversiMove)move).equals(precalculatedMoves.elementAt(i)) ) {
-                //                System.out.println("found");
                 return (Move)precalculatedMoves.elementAt(i+1);
             }
         }
@@ -167,9 +165,13 @@ public class Minimax  {
         return Math.abs(rand.nextInt()) % max;
     }
 
-    public static void cancel() {
-        System.out.println("cancel");
-        cancelled = true;
+    public static void cancel(boolean cancel) {
+        //        System.out.println("cancel"+cancel);
+        cancelled = cancel;
+    }
+
+    public static void clearPrecalculatedMoves() {
+        precalculatedMoves.removeAllElements();
     }
 
     protected static Random rand = new Random();
