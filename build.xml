@@ -1,0 +1,104 @@
+<project name="j2me_reversi" default="jar" basedir=".">
+
+<!-- set global properties for this build -->
+<property file=".ant.properties"/>
+
+<target name="init">
+<!-- Create the time stamp -->
+<tstamp/>
+<!-- Create the build directory structure used by compile -->
+<delete dir="${tmpclasses}"/>
+<mkdir dir="${tmpclasses}"/>
+<delete dir="${classes}"/>
+<mkdir dir="${classes}"/>
+</target>
+
+<target name="compile" depends="init">
+<!-- Compile the java code from ${src} into ${build} -->
+<javac 
+    srcdir="${src}" 
+    destdir="${tmpclasses}" 
+    bootclasspath="${wtk_home}/lib/midpapi.zip"
+    classpath="${tmpclasses}"/>
+</target>
+
+<target name="preverify" depends="compile">
+<!-- preverify the class files -->
+<exec
+    executable="${wtk_home}/bin/preverify">
+    <arg line="-classpath ${wtk_home}/lib/midpapi.zip:${tmpclasses} -d ${classes} ${tmpclasses}"/>
+</exec>
+</target>
+
+<target name="obfuscator" depends="jar">
+<java 
+    classname="RetroGuard" 
+    classpath="${wtk_home}/lib/midpapi.zip:${retroguard_home}/retroguard.jar"
+    fork="yes">
+    <arg line="${jars}/${project}.jar ${jars}/${project}_new.jar ${project}.rgs"/>
+</java>
+</target>
+
+<!-- decompress jar to preverify again -->
+<target name="unjar" depends="obfuscator">
+<delete dir="${tmpclasses}"/>
+<unjar src="${jars}/${project}_new.jar" dest="${tmpclasses}"/>
+<delete dir="${tmpclasses}/META-INF"/>
+<delete file="${jars}/${project}_new.jar"/>
+</target>
+
+<target name="compactpreverify" depends="unjar">
+<!-- preverify the class files -->
+<delete dir="${classes}"/>
+<exec
+    executable="${wtk_home}/bin/preverify">
+    <arg line="-classpath ${wtk_home}/lib/midpapi.zip:${tmpclasses} -d ${classes} ${tmpclasses}"/>
+</exec>
+</target>
+
+<target name="jar" depends="preverify">
+<jar jarfile="${jars}/${project}.jar" basedir="${classes}" manifest="${jars}/MANIFEST.MF">
+<fileset dir="${resources}"/>
+</jar>
+</target>
+
+<target name="compactjar" depends="compactpreverify">
+<jar jarfile="${jars}/${project}.jar" basedir="${classes}" manifest="${jars}/MANIFEST.MF">
+<fileset dir="${resources}"/>
+</jar>
+</target>
+
+<target name="clean">
+<delete dir="${classes}"/>
+<delete dir="${tmpclasses}"/>
+<delete dir="${apidir}"/>
+<delete file="${jars}/${project}.jar" verbose="yes"/>
+</target>
+
+<target name="doc">
+<mkdir dir="${apidir}"/>
+<javadoc   packagenames="${javadoc.packagenames}"
+           sourcepath="${src}"
+           destdir="${apidir}"
+           author="true"
+           version="true"
+           use="true"
+           classpath="${wtk_home}/lib/midpapi.zip"/>
+</target>
+
+<target name="run">
+<exec executable="${wtk_home}/bin/emulator">
+    <arg line="-Xdescriptor:${jars}/${project}.jad -Xdevice:${device}"/>
+</exec>
+</target>
+
+<target name="microrun">
+<java
+    classname="com.barteo.emulator.app.Main" 
+    classpath="${microemulator_home}/target/me-app.jar:${jars}/${project}.jar"
+    fork="yes">
+    <arg value="${main}"/>
+</java>
+</target>
+
+</project>

@@ -34,12 +34,27 @@ If you really want to compile, you'll need the followings:
 
 -Java 2 JDK (tested with IBM's Java 2 JDK 1.3 for Linux)
 -J2ME wireless toolkit (tested with version 1.0.4)
+-Jakarta-Ant (tested with version 1.4.1)
 
-1. Go to the bin directory
-2. Change the path of JAVA_HOME and WTK_HOME.
-3. ./build.sh (Windows users have to use build.bat instead of build.sh)
-4. Change the jar file size in the jad file (j2me_reversi.jad) [This
+0. set JAVA_HOME environment variable
+1. Change the path of WTK_HOME in .ant.properties file.
+2. ant jar
+3. Change the jar file size in the jad file (j2me_reversi.jad) [This
 is not necessary for me, but the program may not work without this]
+
+How to compile with obfuscator?
+-------------------------------
+
+If you use obfuscator, the size of the jar file will be smaller. Currently
+the build process can use only one obfuscator: RetroGuard-1.1
+
+0. set JAVA_HOME environment variable
+1. Change the path of RETROGUARD_HOME in .ant.properties file. 
+2. ant compactjar
+3. Change the jar file size in the jad file (j2me_reversi.jad) [This
+is not necessary for me, but the program may not work without this]
+
+NOTE: RetroGuard-1.1 is not working for me with J2SDK 1.4.1 for Linux
 
 How to run?
 -----------
@@ -51,6 +66,26 @@ J2ME wireless toolkit (tested with version 1.0.4)
 1. Go to the bin directory
 2. Change the path of WTK_HOME.
 3. ./run.sh (Windows users have to use run.bat instead of run.sh)
+
+How to run with Ant?
+--------------------
+
+If you have ant installed you can run the program using ant, instead of
+the run.sh (run.bat) scripts.
+
+0. set JAVA_HOME environment variable
+1. Change the path of WTK_HOME in .ant.properties file.
+2. ant run
+
+With Ant you are also able to test the program with microemulator 
+(http://microemulator.sourceforge.net): 
+
+0. set JAVA_HOME environment variable
+1. Change the path of MICROEMULATOR_HOME in .ant.properties file.
+2. ant microrun
+
+Note: There is a color bug in microemulator 0.3.0, please use newer 
+(e.g. CVS) version.
 
 Since I have no MIDP/CLDC device, I don't know how to use the program on
 such a device. If you have one, please test it, and inform me.
