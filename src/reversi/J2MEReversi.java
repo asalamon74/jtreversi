@@ -211,7 +211,18 @@ public class J2MEReversi extends MIDlet implements CommandListener {
     private class SkillCommandListener implements CommandListener {
 
         public void commandAction(Command c, Displayable d) {
-            if( c == List.SELECT_COMMAND ) {
+
+            if( c == exitCommand ) {
+                Alert alert = new Alert("Level");
+                alert.setTimeout(1000);
+                alert.setString("Level Not Changed\nLevel:"+skill);
+                if( !gameEnded ) {
+                    display.setCurrent(canvas);
+                } else {
+                    display.setCurrent(mainMenu);
+                }                
+                display.setCurrent(alert);                
+            } else if( c == List.SELECT_COMMAND ) {
                 skill = skillList.getSelectedIndex()+1;
                 Alert alert = new Alert("Level");
                 alert.setTimeout(1000);
@@ -220,8 +231,7 @@ public class J2MEReversi extends MIDlet implements CommandListener {
                     display.setCurrent(canvas);
                 } else {
                     display.setCurrent(mainMenu);
-                }
-                
+                }                
                 display.setCurrent(alert);
             }
         }
