@@ -80,17 +80,6 @@ public class J2MEReversi extends MIDlet implements CommandListener {
         turnNum = 1;
         gameEnded = false;
         table = new ReversiTable(SIZE);
-//         int flip = 3;
-//         for( int i=0; i<SIZE; ++i) {
-//             for( int j=0; j<SIZE-1; ++j ) {
-//                 byte value = (byte)(1 + i % 2);
-//                 if( value == 1 && flip > 0 ) {
-//                     value = 2;
-//                     --flip;
-//                 }
-//                 table.setItem(i,j,value );
-//             }
-//         }
     }
 
     public void startApp() {
@@ -141,14 +130,11 @@ public class J2MEReversi extends MIDlet implements CommandListener {
 
 
     protected ReversiMove computerTurn() {
-        //canvas.startWait("thinking");
         canvas.setMessage("Thinking");
         canvas.repaint();
         canvas.serviceRepaints();
         ReversiMove move = (ReversiMove)minimax.minimax(skill, table, actPlayer, rgame, true, 0, true, true, null);
         canvas.stopWait();
-        //canvas.setMessage(null);
-        //        System.out.println("eval: "+ReversiGame.getEvalNum());
         rgame.resetEvalNum();
         return move;
     
