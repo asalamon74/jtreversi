@@ -250,11 +250,14 @@ public class ReversiCanvas extends Canvas {
         }
     }
     public void keyPressed(int keyCode) {
+        int oldselx = selx;
+        int oldsely = sely;
         switch( getGameAction(keyCode) ) {
         case Canvas.UP: 
             message = null;
             sely = (sely + 8 -1) % 8;
-            repaint();
+            repaint(selx*sizex-1, oldsely*sizey-1,sizex+2, sizey+2);
+            repaint(selx*sizex, sely*sizey,sizex, sizey);
             break;
         case Canvas.DOWN: 
             message = null;
