@@ -1,8 +1,5 @@
 #!/bin/sh
-#set PROJBINDIR=../apps/demos/bin
+export WTK_HOME=/usr/local/java/WTK104
 
-#cd ../../../bin
+$WTK_HOME/bin/emulator -Xdescriptor:j2me_reversi.jad -Xdevice:DefaultColorPhone
 
-/usr/local/java/WTK104/bin/emulator -Xdescriptor:j2me_reversi.jad -Xdevice:DefaultColorPhone
-
-#./emulator -classpath ${PROJBINDIR}/j2mereversi.jar -Xdescriptor:${PROJBINDIR}/j2me_reversi.jad -Xdevice:DefaultColorPhone
