@@ -1,7 +1,7 @@
 package minimax;
 
 import java.util.Random;
-import java.util.Hashtable;
+import java.util.Vector;
 import java.util.Enumeration;
 
 import reversi.ReversiMove;
@@ -124,7 +124,7 @@ public class Minimax  {
     }
 
     public void foreMinimax(int depth, Table state, byte player, TwoPlayerGame tpg, boolean alphabeta, int alpha, boolean order, boolean kill) {
-        precalculatedMoves.clear();
+        precalculatedMoves.removeAllElements();
         Move pMoves[] = tpg.possibleMoves(state, (byte)(1-player));
         if( pMoves == null ) {
             return;
@@ -135,21 +135,19 @@ public class Minimax  {
             tpg.turn(state, player, pMoves[i], newState);
             bestMove = minimax(depth, newState, player, tpg, alphabeta, alpha, order, kill, null, true);
             System.out.println("m:"+pMoves[i]+" bm:"+bestMove);
-            precalculatedMoves.put( pMoves[i], bestMove);
-            System.out.println(""+precalculatedMoves.get( pMoves[i] ));
+            precalculatedMoves.addElement( pMoves[i] );
+            precalculatedMoves.addElement( bestMove );
         }
     }
     
     public Move precalculatedBestMove(Move move) {
         System.out.println("size:"+precalculatedMoves.size());
-        for (Enumeration e = precalculatedMoves.keys() ; e.hasMoreElements() ;) {
-            ReversiMove rm = (ReversiMove)e.nextElement();
-            System.out.println(""+rm+" "+rm.equals(move));
-            System.out.println(""+(move instanceof ReversiMove));
+        for( int i=0; i<precalculatedMoves.size(); i += 2) {
+            if( ((ReversiMove)precalculatedMoves.elementAt(i)).equals(move) ) {
+                return (Move)precalculatedMoves.elementAt(i+1);
+            }
         }
- 
-        System.out.println("bestMove:"+move+"  "+precalculatedMoves.get(move));
-        return (Move)precalculatedMoves.get(move);
+        return null;
     }
 
     protected int random(int max) {
@@ -158,6 +156,6 @@ public class Minimax  {
     }
 
     protected Random rand = new Random();
-    protected Hashtable precalculatedMoves = new Hashtable();
+    protected Vector precalculatedMoves = new Vector();
     
 } // Minimax

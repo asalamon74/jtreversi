@@ -159,7 +159,7 @@ public class jtReversi extends MIDlet implements CommandListener {
         if( turnNum > 55 ) {
             ++actSkill;
         }        
-        ReversiMove move = (ReversiMove)minimax.precalculatedBestMove(prevMove);
+        ReversiMove move=(ReversiMove)minimax.precalculatedBestMove(prevMove);
         if( move == null ) {
             System.out.println("no precalculated move");
             move = (ReversiMove)minimax.minimax(actSkill, table, actPlayer, rgame, true, 0, true, true, null, true);
