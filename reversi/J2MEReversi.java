@@ -109,9 +109,9 @@ public class J2MEReversi extends MIDlet implements CommandListener {
                     String endMessage="";
                     if( (point < 0 && actPlayer == 0) || 
                         (point > 0 && actPlayer == 1)) {
-                        endMessage = "You win";
-                    } else {
                         endMessage = "Computer win";
+                    } else {
+                        endMessage = "You win";
                     }
                     canvas.setMessage(endMessage);
                     //          canvas.setMessage("End Point:"+point);

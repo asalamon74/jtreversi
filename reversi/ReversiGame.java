@@ -47,9 +47,9 @@ public class ReversiGame implements TwoPlayerGame {
             numSecondPlayer == 0 ||
             ((ReversiTable)t).getPassNum() == 2) {
             if( point < 0 ) {
-                point += 10000;
-            } else {
                 point -= 10000;
+            } else {
+                point += 10000;
             }
         }
         if( player == 1 ) {
