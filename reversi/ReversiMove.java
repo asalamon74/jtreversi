@@ -58,6 +58,11 @@ public class ReversiMove implements Move {
     public void setPoint(int  v) {
         this.point = v;
     }
-    
+
+    public boolean equals(Object o) {
+        return (o instanceof ReversiMove &&
+                row == ((ReversiMove)o).row &&
+                row == ((ReversiMove)o).col);
+    }
     
 } // ReversiMove

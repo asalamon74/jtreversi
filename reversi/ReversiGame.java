@@ -36,7 +36,18 @@ public class ReversiGame implements TwoPlayerGame {
         this.pointCalculatedNum = v;
     }
 
+    protected static int evalNum = 0;
+
+    public static void clearEvalNum() {
+        evalNum = 0;
+    }
+
+    public static int getEvalNum() {
+        return evalNum;
+    }
+
     public int point(Table t, byte player) {
+        ++evalNum;
         if( !(t instanceof ReversiTable) ) {
             return 0;
         }

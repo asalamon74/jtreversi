@@ -6,6 +6,9 @@
 -Using Ant build tool
 -Optional use of obfuscator (retroguard-1.1)
 -Using heuristic point calculation
+-AI: Killer Move
+-AI: Move Order
+-AI: Turned on Alpha-Beta cut
 
 0.62.00 2002-SEP-28
 

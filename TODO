@@ -2,10 +2,6 @@
 
 * AI
 
-** Implement killer move
-
-** Implement move order
-
 ** Use heuristic only in the middle game
 
 * Test it with real device

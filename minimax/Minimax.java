@@ -19,7 +19,7 @@ public class Minimax  {
         this.maxsize = maxsize;
     }
 
-    public Move minimax(int depth, Table state, byte player, TwoPlayerGame tpg, boolean alphabeta, int alpha, boolean order, Move killerMove) {
+    public Move minimax(int depth, Table state, byte player, TwoPlayerGame tpg, boolean alphabeta, int alpha, boolean order, boolean kill, Move killerMove) {
         Move bestMove;
 
         if( depth == 0 ) {            
@@ -39,27 +39,57 @@ public class Minimax  {
  
         Move pMoves[] = tpg.possibleMoves(state, player);
 
-        if( depth > 1 && order ) {
-            // TODO: order
+        Table newState = state.copyFrom(state);
+        if( depth > 2 && order ) {
+            int points[] = new int[pMoves.length];
+	    for (int oindex=0;oindex<pMoves.length;++oindex) {
+                tpg.turn(state, player, pMoves[oindex], newState);
+                points[oindex] = tpg.point(newState, player);
+	    }
+            int oindex3=0;
+	    for (int oindex1=0;oindex1<pMoves.length-1;++oindex1) {
+		// maxsearch 
+		for (int oindex2=oindex1;oindex2<pMoves.length;++oindex2) {
+                    if (oindex2==oindex1 || points[oindex2] > points[oindex3]) {
+                        oindex3 = oindex2;
+		    }
+                }
+		if (oindex3 != oindex1) {
+                    Move swapMove= pMoves[oindex3];
+                    pMoves[oindex3] = pMoves[oindex1];
+                    pMoves[oindex1] = swapMove;
+		}
+	    }            
         }
         
-        if( killerMove != null && pMoves.length > 1 ) {
-            // TODO: find the killer move
+        if( kill && killerMove != null && pMoves.length > 1 ) {
+            //            System.out.println("killermove move");
+	    int kindex=0;
+	    while (kindex < pMoves.length && 
+                   !pMoves[kindex].equals(killerMove) ) {
+			++kindex;
+            }
+		
+            //            System.out.println("kindex:"+kindex+"/"+pMoves.length);
+            if (kindex < pMoves.length && kindex != 0) {
+                // we have a killermove, but it's not the first one
+                Move swapMove= pMoves[0];
+                pMoves[0] = pMoves[kindex];
+                pMoves[kindex] = swapMove;
+            }
         }
         actMove = null;
-        Table newState = state.copyFrom(state);
         for( int i=0; !cut && i<pMoves.length; ++i ) {
             boolean success = tpg.turn(state, player, pMoves[i], newState);
             if( depth == 1 ) {
                 actPoint = tpg.point(newState, player);
             } else {
-                if( killerMove != null && i != 0 ) {
-                    //                    kMove = (Move)actMove.clone();
+                if( kill && i != 0 ) {
                     kMove = actMove;
                 } else {
                     kMove = null;
                 }
-		actMove = minimax(depth-1, newState, (byte)(1-player), tpg,  alphabeta, -maxPoint, order , kMove);
+		actMove = minimax(depth-1, newState, (byte)(1-player), tpg,  alphabeta, -maxPoint, order , kill, kMove);
                 actPoint = -actMove.getPoint();
             }
             if( i == 0 || actPoint > maxPoint ) {

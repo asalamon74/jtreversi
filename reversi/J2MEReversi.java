@@ -37,7 +37,9 @@ public class J2MEReversi extends MIDlet implements CommandListener {
     private static final String[] skillItems = {
         "Level 1", 
         "Level 2", 
-        "Level 3"};
+        "Level 3",
+        "Level 4",
+        "Level 5"};
 
 
     public J2MEReversi() {
@@ -96,11 +98,6 @@ public class J2MEReversi extends MIDlet implements CommandListener {
         } else if( c == optionsCommand ) {
             display.setCurrent(optionsMenu);
         }       
-//         else if( c == aboutCommand ) {
-//             showAbout();
-//         } else if( c == optionsCommand ) {
-//             display.setCurrent(skillList);
-//         }
     }
 
     protected void showAbout() {
@@ -112,9 +109,9 @@ public class J2MEReversi extends MIDlet implements CommandListener {
 
 
     protected ReversiMove computerTurn() {
-        ReversiMove move = (ReversiMove)minimax.minimax(skill, table, actPlayer, rgame, false, 0, false, null);
-        //        System.out.println("computer point: "+move.getPoint());        
-        //        System.out.println("computer move: "+move);        
+        ReversiMove move = (ReversiMove)minimax.minimax(skill, table, actPlayer, rgame, true, 0, true, true, null);
+        //        System.out.println("eval: "+ReversiGame.getEvalNum());
+        ReversiGame.clearEvalNum();
         return move;
     
     }
