@@ -20,7 +20,6 @@
 <!-- Create the time stamp -->
 <tstamp/>
 <!-- Create the build directory structure used by compile -->
-<mkdir dir="${tmpclasses}"/>
 <mkdir dir="${classes}"/>
 <mkdir dir="${tmpclassescompact}"/>
 </target>
@@ -29,30 +28,19 @@
 <!-- Compile the java code from ${src} into ${build} -->
 <javac 
     srcdir="${src}" 
-    destdir="${tmpclasses}" 
+    destdir="${classes}" 
     bootclasspath="${wtk_home}/lib/midpapi.zip"
-    classpath="${tmpclasses}"/>
+    classpath="${classes}"/>
 </target>
 
-<target name="preverify" depends="compile">
-<!-- preverify the class files -->
-<exec
-    os="Linux"
-    executable="${wtk_home}/bin/preverify">
-    <arg line="-classpath ${wtk_home}/lib/midpapi.zip:${tmpclasses} -d ${classes} ${tmpclasses}"/>
-</exec>
-<exec
-    os="Windows NT"
-    executable="${wtk_home}/bin/preverify">
-    <arg line="-classpath ${wtk_home}/lib/midpapi.zip;${tmpclasses} -d ${classes} ${tmpclasses}"/>
-</exec>
-
-</target>
-
-<target name="jar" depends="preverify">
+<target name="jar" depends="compile">
 <jar jarfile="${jars}/${project}.jar" basedir="${classes}" manifest="${jars}/MANIFEST.MF">
 <fileset dir="${resources}"/>
 </jar>
+</target>
+
+<target name="obfuscate_null" depends="jar">
+<copy file="${jars}/${project}.jar" tofile="${jars}/${project}_new.jar"/>
 </target>
 
 <target name="obfuscate_retroguard" depends="jar">
@@ -90,15 +78,16 @@
 <mkdir dir="${classescompact}"/>
 <exec
     executable="${wtk_home}/bin/preverify"  os="Linux">
-    <arg line="-classpath ${wtk_home}/lib/midpapi.zip:${tmpclasses} -d ${classescompact} ${tmpclassescompact}"/>
+    <arg line="-classpath ${wtk_home}/lib/midpapi.zip:${tmpclassescompact} -d ${classescompact} ${tmpclassescompact}"/>
 </exec>
 <exec
     executable="${wtk_home}/bin/preverify"  os="Windows NT">
-    <arg line="-classpath ${wtk_home}/lib/midpapi.zip;${tmpclasses} -d ${classescompact} ${tmpclassescompact}"/>
+    <arg line="-classpath ${wtk_home}/lib/midpapi.zip;${classes} -d ${classescompact} ${tmpclassescompact}"/>
 </exec>
 </target>
 
 <target name="compactjar" depends="compactpreverify">
+<delete file="${jars}/${project}.jar"/>
 <jar jarfile="${jars}/${project}.jar" basedir="${classescompact}" manifest="${jars}/MANIFEST.MF">
 <fileset dir="${resources}"/>
 </jar>
@@ -111,7 +100,6 @@
 
 <target name="clean">
 <delete dir="${classes}"/>
-<delete dir="${tmpclasses}"/>
 <delete dir="${classescompact}"/>
 <delete dir="${tmpclassescompact}"/>
 <delete dir="${apidir}"/>
