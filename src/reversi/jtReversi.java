@@ -93,9 +93,9 @@ public class jtReversi extends MIDlet implements CommandListener {
         canvas.addCommand(exitCommand);
         canvas.addCommand(optionsCommand);
         canvas.setCommandListener(this);
-        rgame = new ReversiGame();
-        rgame.setEvaluationFunction(
-            new ReversiHeuristicEvaluation(heurMatrix,10,18,true));
+        rgame = new ReversiGame(heurMatrix,10,18,true);
+//         rgame.setEvaluationFunction(
+//             new ReversiHeuristicEvaluation(heurMatrix,10,18,true));
         try {
             logoImage  = Image.createImage(aboutImageName);
         } catch (IOException e) {

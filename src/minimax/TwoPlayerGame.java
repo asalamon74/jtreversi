@@ -1,37 +1,33 @@
 package minimax;
 
+/**
+ * Abstact class for describing a two-player game.
+ * Rules + Evaluation.
+ *
+ */
 public abstract class TwoPlayerGame {
 
-    protected EvaluationFunction evaluationFunction;
-
-    public abstract void setEvaluationFunction(EvaluationFunction func);
-
     public int point(Table t, byte player) {
-        evaluationFunction.setTable(t, player, true);
-        return evaluationFunction.getPoint();
+        setTable(t, player, true);
+        return getPoint();
     }
 
     public void process(Table t, byte player) {
-        evaluationFunction.setTable(t, player, false);
-    }
-
-    public void resetEvalNum() {
-        evaluationFunction.resetEvalNum();
-    }
-
-    public int getEvalNum() {
-        return evaluationFunction.getEvalNum();
-    }
-
-    public boolean isGameEnded() {
-        return evaluationFunction.isGameEnded();
-    }
-
-    public int getGameResult() {
-        return evaluationFunction.getGameResult();
+        setTable(t, player, false);
     }
 
     public abstract boolean turn(Table t, byte player, Move move, Table newTable);
     public abstract Move[] possibleMoves(Table t, byte player);
     public abstract boolean hasPossibleMove(Table t, byte player);
+
+    // evaluation
+    public static final int WIN  = 1;
+    public static final int DRAW = 2;
+    public static final int LOSS = 3;
+    protected abstract void setTable(Table table, byte player,boolean fullProcess);
+    public abstract int getPoint();
+    public abstract boolean isGameEnded();
+    public abstract int getGameResult();
+    public abstract int getEvalNum();
+    public abstract void resetEvalNum();
 }
