@@ -21,7 +21,7 @@ public class J2MEReversi extends MIDlet implements CommandListener {
     private ReversiGame rgame = new ReversiGame();
     private Minimax minimax = new Minimax(100);
     private boolean gameEnded;
-    private int skill = 3;
+    private int skill = 1;
 
     public J2MEReversi() {
         display = Display.getDisplay(this);
