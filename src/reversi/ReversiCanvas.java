@@ -253,7 +253,7 @@ public class ReversiCanvas extends Canvas {
     }
 
     public void startWait(String message) {
-        this.message = message;
+        this.message = message + "  ";
         repaint();
         System.out.println("start");
         new Timer().schedule(new PleaseWaitTimerTask(), 500, 500);

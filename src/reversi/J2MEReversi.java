@@ -141,13 +141,13 @@ public class J2MEReversi extends MIDlet implements CommandListener {
 
 
     protected ReversiMove computerTurn() {
-        //        canvas.startWait("thinking");
+        //canvas.startWait("thinking");
         canvas.setMessage("Thinking");
         canvas.repaint();
         canvas.serviceRepaints();
         ReversiMove move = (ReversiMove)minimax.minimax(skill, table, actPlayer, rgame, true, 0, true, true, null);
-        //        canvas.stopWait();
-        canvas.setMessage(null);
+        canvas.stopWait();
+        //canvas.setMessage(null);
         //        System.out.println("eval: "+ReversiGame.getEvalNum());
         rgame.resetEvalNum();
         return move;
