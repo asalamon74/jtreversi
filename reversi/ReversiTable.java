@@ -15,36 +15,32 @@ import minimax.*;
 public class ReversiTable implements Table  {
 
     protected int size;
-    protected short[][] matrix;
+    protected short[] matrix;
     
     public ReversiTable(int size) {
         this.size = size;
-        matrix = new short[size][size];
+        matrix = new short[size*size];
         passNum = 0;
         int middle = (size - 1)/2;
-        matrix[middle][middle] = 2;
-        matrix[middle+1][middle+1] = 2;
-        matrix[middle][middle+1] = 1;
-        matrix[middle+1][middle] = 1;
+        setItem(middle,middle, (short)2);
+        setItem(middle+1,middle+1, (short)2);
+        setItem(middle,middle+1, (short)1);
+        setItem(middle+1,middle, (short)1);
     }
 
     // no clone
     public ReversiTable(ReversiTable table) {
         this.size = table.size;
-        matrix = new short[size][size];
-        for( int i=0; i<size; ++i ) {
-            for( int j=0; j<size; ++j ) {
-                matrix[i][j] = table.getItem(i,j);
-            }
-        }
+        matrix = new short[size*size];
+        System.arraycopy(table.matrix, 0, matrix, 0, size*size);
         this.passNum = table.passNum;
     }
     public short getItem(int row, int col) {
-        return matrix[row][col];
+        return matrix[row*size+col];
     }
 
     public void setItem(int row, int col, short value) {
-        matrix[row][col] = value;
+        matrix[row*size+col] = value;
     }
 
 
@@ -53,7 +49,7 @@ public class ReversiTable implements Table  {
     }
 
     public void flip(int row, int col) {
-        matrix[row][col] = (short)(3 - matrix[row][col]);
+        setItem(row,col,(short)(3 - getItem(row,col)));
     }
 
     protected int passNum;
@@ -78,7 +74,7 @@ public class ReversiTable implements Table  {
         String ret = "";
         for( int i=0; i<size; ++i ) {
             for( int j=0; j<size; ++j ) {
-                ret += matrix[j][i];
+                ret += getItem(j,i);
             }
             ret += "\n";
         }
