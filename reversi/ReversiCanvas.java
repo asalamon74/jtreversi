@@ -20,7 +20,7 @@ public class ReversiCanvas extends Canvas {
         width = getWidth();
         height = getHeight();
         sizex = width / J2MEReversi.SIZE;
-        sizey = width / J2MEReversi.SIZE;
+        sizey = height / J2MEReversi.SIZE;
         selx = 0;
         sely = 0;
     }
@@ -42,9 +42,9 @@ public class ReversiCanvas extends Canvas {
 
     protected void drawBoard(Graphics g) {
         g.setColor(0x000000);
-        for( int i=0; i<J2MEReversi.SIZE; ++i ) {
-            g.drawLine(0, i*sizey, width, i*sizey);
-            g.drawLine(i*sizex, 0, i*sizex, height);
+        for( int i=0; i<=J2MEReversi.SIZE; ++i ) {
+            g.drawLine(0, i*sizey, J2MEReversi.SIZE*sizex, i*sizey);
+            g.drawLine(i*sizex, 0, i*sizex, J2MEReversi.SIZE*sizey);
         }
     }
 
