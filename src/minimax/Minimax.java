@@ -18,6 +18,11 @@ import reversi.ReversiMove;
 public class Minimax  {
 
     public static Move minimax(int depth, Table state, byte player, TwoPlayerGame tpg, boolean alphabeta, int alpha, boolean order, boolean kill, Move killerMove, boolean root) {
+        if( cancelled ) {
+            cancelled = false;
+            return null;
+        }
+
         Move bestMove;
 
         if( depth == 0 ) {            
@@ -95,6 +100,9 @@ public class Minimax  {
                     kMove = null;
                 }
 		actMove = minimax(depth-1, newState, (byte)(1-player), tpg,  alphabeta, -maxPoint, order , kill, kMove, false);
+                if( actMove == null ) {
+                    return null;
+                }
                 actPoint = -actMove.getPoint();
             }
             if( i == 0 || actPoint > maxPoint ) {
@@ -122,6 +130,7 @@ public class Minimax  {
     }
 
     public static void foreMinimax(int depth, Table state, byte player, TwoPlayerGame tpg, boolean alphabeta, int alpha, boolean order, boolean kill) {
+        cancelled = false;
         precalculatedMoves.removeAllElements();
         Move pMoves[] = tpg.possibleMoves(state, (byte)(1-player));
         if( pMoves == null ) {
@@ -132,6 +141,9 @@ public class Minimax  {
         for( int i=0; i<pMoves.length; ++i ) {
             tpg.turn(state, player, pMoves[i], newState);
             bestMove = minimax(depth, newState, player, tpg, alphabeta, alpha, order, kill, null, true);
+            if( bestMove == null ) {
+                return;
+            }
             System.out.println("m:"+pMoves[i]+" bm:"+bestMove);
             precalculatedMoves.addElement( pMoves[i] );
             precalculatedMoves.addElement( bestMove );
@@ -155,7 +167,13 @@ public class Minimax  {
         return Math.abs(rand.nextInt()) % max;
     }
 
+    public static void cancel() {
+        System.out.println("cancel");
+        cancelled = true;
+    }
+
     protected static Random rand = new Random();
     protected static Vector precalculatedMoves = new Vector();
+    protected static boolean cancelled;
     
 } // Minimax
