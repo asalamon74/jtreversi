@@ -135,8 +135,11 @@ public class J2MEReversi extends MIDlet implements CommandListener {
                     } else {
                         endMessage = "You win";
                     }
+                    int firstNum = rgame.firstPlayerPoint(table);
+                    int secondNum = rgame.secondPlayerPoint(table);
+                    endMessage += "\n"+canvas.playerNames[0]+": "+firstNum+"\n"+
+                        canvas.playerNames[1]+": "+secondNum;
                     canvas.setMessage(endMessage);
-                    //          canvas.setMessage("End Point:"+point);
                     gameEnded = true;
                 } else {
                     actPlayer = (byte)(1 - actPlayer);

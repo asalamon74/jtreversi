@@ -16,11 +16,22 @@ import java.util.TimerTask;
  */
 
 public class ReversiCanvas extends Canvas {
+
+    public String []playerNames;
     
     public ReversiCanvas(J2MEReversi boss, Display display) {
         this.boss = boss;
         this.display = display;
         colored = display.isColor() && display.numColors() > 127;
+        playerNames = new String[2];
+        if( colored ) {
+            playerNames[0] = "Red";
+            playerNames[1] = "Blue";
+        } else {
+            playerNames[0] = "Black";
+            playerNames[1] = "White";
+        }            
+
         width = getWidth();
         height = getHeight();
         sizex = width / J2MEReversi.SIZE;
@@ -93,18 +104,63 @@ public class ReversiCanvas extends Canvas {
         g.drawRect( selx*sizex+1, sely*sizey+1,sizex-2, sizey-2);
     }
 
+    protected int lineBreaks(String message) {
+        int breaks = 0;
+        int index = 0;
+        while( (index = message.indexOf('\n', index)) != -1 ) {
+            ++breaks;
+            ++index;
+        }
+        return breaks;
+    }
+
+    protected int maxSubWidth(Graphics g, String message) {
+        int startIndex;
+        int endIndex = -1;
+        int maxWidth = 0;
+        int messageWidth;
+        int breaks = lineBreaks(message);
+        while( endIndex < message.length() ) {
+            startIndex = endIndex+1;
+            endIndex = message.indexOf('\n', startIndex);
+            if( endIndex == -1 ) {
+                endIndex = message.length();
+            }
+            String submessage = message.substring(startIndex, endIndex);
+            messageWidth = g.getFont().stringWidth(submessage);
+            if( maxWidth < messageWidth ) {
+                maxWidth = messageWidth;
+            }
+        }
+        return maxWidth;
+    }
+
     protected void drawMessage(Graphics g) {
+        // TODO: automagically break line if too long
+        int startIndex;
+        int endIndex = -1;
+        int subIndex = 0;
         if( message != null ) {
-            int messageWidth = g.getFont().stringWidth(message)+10;
+            int breaks = lineBreaks(message);
             int messageHeight = g.getFont().getHeight();
+            int maxWidth = maxSubWidth(g, message)+10;
+            int cornerX = (width - maxWidth)/2;
+            int cornerY = (height - (breaks+1) * messageHeight)/2;
             g.setColor(0xeeeeee);
-            int cornerX = (width - messageWidth)/2;
-            int cornerY = (height - messageHeight)/2;
-            // TODO: break line if too long
-            g.fillRect(cornerX, cornerY, messageWidth, messageHeight);
+            g.fillRect(cornerX, cornerY, maxWidth, (breaks+1) * messageHeight);
             g.setColor(0x000000);
-            g.drawRect(cornerX, cornerY, messageWidth, messageHeight);
-            g.drawString(message, cornerX+5, cornerY, g.TOP|g.LEFT);                
+            g.drawRect(cornerX, cornerY, maxWidth, (breaks+1) * messageHeight);
+            while( endIndex < message.length() ) {
+                startIndex = endIndex+1;
+                endIndex = message.indexOf('\n', startIndex);
+                if( endIndex == -1 ) {
+                    endIndex = message.length();
+                }
+                String submessage = message.substring(startIndex, endIndex);
+                int messageWidth = g.getFont().stringWidth(submessage)+10;
+                g.drawString(submessage, cornerX+5, cornerY, g.TOP|g.LEFT);
+                cornerY += messageHeight;
+            }
         }
     }
     public void keyPressed(int keyCode) {

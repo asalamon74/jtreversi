@@ -69,6 +69,16 @@ public class ReversiGame implements TwoPlayerGame {
         return point;
     }
 
+    public int firstPlayerPoint(ReversiTable table) {
+        simplePointCalculate(table);
+        return numFirstPlayer;
+    }
+
+    public int secondPlayerPoint(ReversiTable table) {
+        simplePointCalculate(table);
+        return numSecondPlayer;
+    }
+
     protected int simplePointCalculate(ReversiTable table) {
         numFirstPlayer = 0;
         numSecondPlayer = 0;
