@@ -15,41 +15,41 @@ import minimax.*;
 public class ReversiTable implements Table  {
 
     protected int size;
-    protected short[] matrix;
+    protected byte[] matrix;
     
     public ReversiTable(int size) {
         this.size = size;
-        matrix = new short[size*size];
+        matrix = new byte[size*size];
         passNum = 0;
         int middle = (size - 1)/2;
-        setItem(middle,middle, (short)2);
-        setItem(middle+1,middle+1, (short)2);
-        setItem(middle,middle+1, (short)1);
-        setItem(middle+1,middle, (short)1);
+        setItem(middle,middle, (byte)2);
+        setItem(middle+1,middle+1, (byte)2);
+        setItem(middle,middle+1, (byte)1);
+        setItem(middle+1,middle, (byte)1);
     }
 
     // no clone
     public ReversiTable(ReversiTable table) {
         this.size = table.size;
-        matrix = new short[size*size];
+        matrix = new byte[size*size];
         System.arraycopy(table.matrix, 0, matrix, 0, size*size);
         this.passNum = table.passNum;
     }
-    public short getItem(int row, int col) {
+    public byte getItem(int row, int col) {
         return matrix[row*size+col];
     }
 
-    public void setItem(int row, int col, short value) {
+    public void setItem(int row, int col, byte value) {
         matrix[row*size+col] = value;
     }
 
 
-    public static short getPlayerItem(short player) {
-        return (short)(player+1);
+    public static byte getPlayerItem(byte player) {
+        return (byte)(player+1);
     }
 
     public void flip(int row, int col) {
-        setItem(row,col,(short)(3 - getItem(row,col)));
+        setItem(row,col,(byte)(3 - getItem(row,col)));
     }
 
     protected int passNum;

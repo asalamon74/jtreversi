@@ -19,7 +19,7 @@ public class Minimax  {
         this.maxsize = maxsize;
     }
 
-    public Move minimax(int depth, Table state, short player, TwoPlayerGame tpg, boolean alphabeta, int alpha, boolean order, Move killerMove) {
+    public Move minimax(int depth, Table state, byte player, TwoPlayerGame tpg, boolean alphabeta, int alpha, boolean order, Move killerMove) {
         Move newMove;
         Move actMove;
         Move kMove;
@@ -57,7 +57,7 @@ public class Minimax  {
                 } else {
                     kMove = null;
                 }
-		actMove = minimax(depth-1, newState, (short)(1-player), tpg,  alphabeta, -maxPoint, order , kMove);
+		actMove = minimax(depth-1, newState, (byte)(1-player), tpg,  alphabeta, -maxPoint, order , kMove);
                 actPoint = -actMove.getPoint();
             }
             if( i == 0 || actPoint > maxPoint ) {
