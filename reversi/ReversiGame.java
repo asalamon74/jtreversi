@@ -61,8 +61,8 @@ public class ReversiGame implements TwoPlayerGame {
     protected int simplePointCalculate(ReversiTable table) {
         numFirstPlayer = 0;
         numSecondPlayer = 0;
-        for( int i=0; i<ReversiCanvas.SIZE; ++i ) {
-            for( int j=0; j<ReversiCanvas.SIZE; ++j ) {
+        for( int i=0; i<J2MEReversi.SIZE; ++i ) {
+            for( int j=0; j<J2MEReversi.SIZE; ++j ) {
                 int item = table.getItem(i,j);
                 switch( item ) {
                 case 1: 
@@ -137,8 +137,8 @@ public class ReversiGame implements TwoPlayerGame {
         }
 
         ReversiTable newTable;
-        for( int row=0; row<ReversiCanvas.SIZE; ++row ) {
-            for( int col=0; col<ReversiCanvas.SIZE; ++col ) {
+        for( int row=0; row<J2MEReversi.SIZE; ++row ) {
+            for( int col=0; col<J2MEReversi.SIZE; ++col ) {
                 ReversiMove move = new ReversiMove(row, col);
                 newTable = (ReversiTable)turn(table, player, move);
                 if( newTable != null ) {
@@ -149,7 +149,7 @@ public class ReversiGame implements TwoPlayerGame {
 
         if( moves.size() == 0 ) {
             // need to pass
-            moves.addElement(new ReversiMove(ReversiCanvas.SIZE, ReversiCanvas.SIZE));
+            moves.addElement(new ReversiMove(J2MEReversi.SIZE, J2MEReversi.SIZE));
         }
         Move[] retMoves = new ReversiMove[moves.size()];
         for( int m=0; m<moves.size(); ++m ) {

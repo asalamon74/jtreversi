@@ -17,7 +17,9 @@ import javax.microedition.lcdui.*;
  * @version
  */
 public class J2MEReversi extends MIDlet implements CommandListener {
-    
+
+    public static final int SIZE = 8;
+        
     private Command exitCommand; // The exit command
     private Display display;    // The display for this MIDlet
     private ReversiCanvas canvas;
@@ -50,7 +52,7 @@ public class J2MEReversi extends MIDlet implements CommandListener {
         display.setCurrent(canvas);
         actPlayer = 0;
         turnNum = 1;
-        table = new ReversiTable(ReversiCanvas.SIZE);
+        table = new ReversiTable(SIZE);
     }
     
     /**

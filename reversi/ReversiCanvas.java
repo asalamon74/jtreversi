@@ -14,15 +14,13 @@ import javax.microedition.lcdui.*;
 
 public class ReversiCanvas extends Canvas {
     
-    public static final int SIZE = 8;
-    
     public ReversiCanvas(J2MEReversi boss, Display display) {
         this.boss = boss;
         this.display = display;
         width = getWidth();
         height = getHeight();
-        sizex = width / SIZE;
-        sizey = width / SIZE;
+        sizex = width / J2MEReversi.SIZE;
+        sizey = width / J2MEReversi.SIZE;
         selx = 0;
         sely = 0;
     }
@@ -43,15 +41,15 @@ public class ReversiCanvas extends Canvas {
 
     protected void drawBoard(Graphics g) {
         g.setColor(0x000000);
-        for( int i=0; i<SIZE; ++i ) {
+        for( int i=0; i<J2MEReversi.SIZE; ++i ) {
             g.drawLine(0, i*sizey, width, i*sizey);
             g.drawLine(i*sizex, 0, i*sizex, height);
         }
     }
 
     protected void drawTable(Graphics g, ReversiTable t) {
-        for( int i=0; i<SIZE; ++i ) {
-            for( int j=0; j<SIZE; ++j ) {
+        for( int i=0; i<J2MEReversi.SIZE; ++i ) {
+            for( int j=0; j<J2MEReversi.SIZE; ++j ) {
                 if( t.getItem(i,j) != 0 ) {
                     drawPiece(g, i, j, t.getItem(i,j));
                 }
@@ -82,19 +80,19 @@ public class ReversiCanvas extends Canvas {
     public void keyPressed(int keyCode) {
         switch( getGameAction(keyCode) ) {
         case Canvas.UP: 
-            sely = (sely + SIZE -1) % SIZE;
+            sely = (sely + J2MEReversi.SIZE -1) % J2MEReversi.SIZE;
             repaint();
             break;
         case Canvas.DOWN: 
-            sely = (sely + 1) % SIZE;
+            sely = (sely + 1) % J2MEReversi.SIZE;
             repaint();
             break;
         case Canvas.LEFT: 
-            selx = (selx + SIZE -1) % SIZE;
+            selx = (selx + J2MEReversi.SIZE -1) % J2MEReversi.SIZE;
             repaint();
             break;
         case Canvas.RIGHT: 
-            selx = (selx + 1) % SIZE;
+            selx = (selx + 1) % J2MEReversi.SIZE;
             repaint();
             break;
         case Canvas.FIRE: 
