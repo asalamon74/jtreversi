@@ -2,4 +2,4 @@ MIDlet-1: Reversi, reversi.png, reversi.J2MEReversi
 MIDlet-Description: Reversi game
 MIDlet-Name: J2MEReversi
 MIDlet-Vendor: Sala
-MIDlet-Version: 0.61.00
+MIDlet-Version: 0.62.00
