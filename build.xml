@@ -7,9 +7,7 @@
 <!-- Create the time stamp -->
 <tstamp/>
 <!-- Create the build directory structure used by compile -->
-<delete dir="${tmpclasses}"/>
 <mkdir dir="${tmpclasses}"/>
-<delete dir="${classes}"/>
 <mkdir dir="${classes}"/>
 </target>
 
@@ -30,6 +28,12 @@
 </exec>
 </target>
 
+<target name="jar" depends="preverify">
+<jar jarfile="${jars}/${project}.jar" basedir="${classes}" manifest="${jars}/MANIFEST.MF">
+<fileset dir="${resources}"/>
+</jar>
+</target>
+
 <target name="obfuscator" depends="jar">
 <java 
     classname="RetroGuard" 
@@ -41,29 +45,23 @@
 
 <!-- decompress jar to preverify again -->
 <target name="unjar" depends="obfuscator">
-<delete dir="${tmpclasses}"/>
-<unjar src="${jars}/${project}_new.jar" dest="${tmpclasses}"/>
-<delete dir="${tmpclasses}/META-INF"/>
+<delete dir="${tmpclassescompact}"/>
+<unjar src="${jars}/${project}_new.jar" dest="${tmpclassescompact}"/>
+<delete dir="${tmpclassescompact}/META-INF"/>
 <delete file="${jars}/${project}_new.jar"/>
 </target>
 
 <target name="compactpreverify" depends="unjar">
 <!-- preverify the class files -->
-<delete dir="${classes}"/>
+<delete dir="${classescompact}"/>
 <exec
     executable="${wtk_home}/bin/preverify">
-    <arg line="-classpath ${wtk_home}/lib/midpapi.zip:${tmpclasses} -d ${classes} ${tmpclasses}"/>
+    <arg line="-classpath ${wtk_home}/lib/midpapi.zip:${tmpclasses} -d ${classescompact} ${tmpclassescompact}"/>
 </exec>
 </target>
 
-<target name="jar" depends="preverify">
-<jar jarfile="${jars}/${project}.jar" basedir="${classes}" manifest="${jars}/MANIFEST.MF">
-<fileset dir="${resources}"/>
-</jar>
-</target>
-
 <target name="compactjar" depends="compactpreverify">
-<jar jarfile="${jars}/${project}.jar" basedir="${classes}" manifest="${jars}/MANIFEST.MF">
+<jar jarfile="${jars}/${project}.jar" basedir="${classescompact}" manifest="${jars}/MANIFEST.MF">
 <fileset dir="${resources}"/>
 </jar>
 </target>
@@ -71,6 +69,8 @@
 <target name="clean">
 <delete dir="${classes}"/>
 <delete dir="${tmpclasses}"/>
+<delete dir="${classescompact}"/>
+<delete dir="${tmpclassescompact}"/>
 <delete dir="${apidir}"/>
 <delete file="${jars}/${project}.jar" verbose="yes"/>
 </target>
