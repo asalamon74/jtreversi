@@ -148,8 +148,7 @@ public class Minimax  {
     }
 
     protected static int random(int max) {
-        int r = Math.abs(rand.nextInt());
-        return r % max;
+        return Math.abs(rand.nextInt()) % max;
     }
 
     protected static Random rand = new Random();
