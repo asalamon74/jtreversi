@@ -96,6 +96,8 @@ public class J2MEReversi extends MIDlet implements CommandListener {
     public void startApp() {
         if( display == null ) {
             initMidlet();
+        } else {
+            display.setCurrent( mainMenu );
         }
     }
     
