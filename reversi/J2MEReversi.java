@@ -66,6 +66,17 @@ public class J2MEReversi extends MIDlet implements CommandListener {
         turnNum = 1;
         gameEnded = false;
         table = new ReversiTable(SIZE);
+        int flip = 3;
+        for( int i=0; i<SIZE; ++i) {
+            for( int j=0; j<SIZE-1; ++j ) {
+                byte value = (byte)(1 + i % 2);
+                if( value == 1 && flip > 0 ) {
+                    value = 2;
+                    --flip;
+                }
+                table.setItem(i,j,value );
+            }
+        }
     }
 
     public void startApp() {
