@@ -64,6 +64,7 @@ public class jtReversi extends MIDlet implements CommandListener {
         turnNum = 1;
         gameEnded = false;
         table = new ReversiTable();
+        canvas.updatePossibleMoves();
     }
 
     public void initMidlet() {
@@ -148,19 +149,18 @@ public class jtReversi extends MIDlet implements CommandListener {
                 } else {
                     display.setCurrent(alert,mainMenu);
                 }                
-                //                display.setCurrent(alert);                
             } else if( c == List.SELECT_COMMAND ) {
                 skillList.set(skill-1, skillList.getString(skill-1), unselectedImage);
                 skill = skillList.getSelectedIndex()+1;
                 Alert alert = new Alert("Level");
                 alert.setTimeout(1000);
                 alert.setString("Level Changed\nNew Level:"+skill);
+                canvas.updateSkillInfo();
                 if( !gameEnded ) {
                     display.setCurrent(alert,canvas);
                 } else {
                     display.setCurrent(alert,mainMenu);
                 }                
-                //                display.setCurrent(alert);
             }
         } else if( d.equals(mainMenu) ) {
             if( c == List.SELECT_COMMAND ) {
@@ -332,11 +332,13 @@ public class jtReversi extends MIDlet implements CommandListener {
         }
         ReversiMove move = new ReversiMove(row, col);
         processMove(move);
+        canvas.updatePossibleMoves();
         canvas.repaint();
         canvas.serviceRepaints();        
         while( !gameEnded && !isHuman[actPlayer] ) {
             ReversiMove computerMove = computerTurn(move);
             processMove(computerMove);
+            canvas.updatePossibleMoves();
             canvas.repaint();
             canvas.serviceRepaints();        
             if( isHuman[actPlayer] ) {

@@ -20,6 +20,7 @@ public class ReversiCanvas extends Canvas {
     public String []playerNames;
     private static final int SIZE_LIMIT = 8;
     private Image offscreen = null;
+    private Graphics offGraphics = null;
     private static int ASPECT_LIMIT = 15; // 1.5
     private boolean vertInfo;
     
@@ -54,18 +55,20 @@ public class ReversiCanvas extends Canvas {
         small = sizex < SIZE_LIMIT || sizey < SIZE_LIMIT;
         selx = 0;
         sely = 0;
-        //        if( !isDoubleBuffered() ) { 
+        updateSkillInfo();
+        //                if( !isDoubleBuffered() ) { 
         // there are phones which claims to have a doubleBuffered Canvas
         // although they don't have
             offscreen = Image.createImage(width+vertWidth, height);
-        //        }
+            offGraphics = offscreen.getGraphics();
+            //                }
     }
 
     protected void paint(Graphics g) {
         Graphics saved = g;
 
         if( offscreen != null ) {
-            g = offscreen.getGraphics();
+            g = offGraphics;
         }
         g.setColor(0xffffff);
         g.fillRect(g.getClipX(), g.getClipY(), g.getClipWidth(), g.getClipHeight());
@@ -108,6 +111,8 @@ public class ReversiCanvas extends Canvas {
     }
 
     protected void drawTable(Graphics g, ReversiTable t) {
+        int old0 = pnums[0];
+        int old1 = pnums[1];
         pnums[0] = 0;
         pnums[1] = 0;
         int item;
@@ -120,19 +125,24 @@ public class ReversiCanvas extends Canvas {
                 }
             }
         }
+        if( old0 != pnums[0] ) {
+            infoLines[0] = ""+pnums[0];
+        }
+        if( old1 != pnums[1] ) {
+            infoLines[1] = ""+pnums[1];
+        }
     }
 
     protected void drawPossibleMoves(Graphics g, ReversiTable t) {
-        ReversiMove []moves = (ReversiMove [])boss.possibleMoves(); // t is not used 
-        if( moves == null ) {
+        if( possibleMoves == null ) {
             // end of the game
             return;
         }
         int row,col;
         int x,y;
-        for( int i=0; i<moves.length; ++i ) {
-            row = moves[i].row;
-            col = moves[i].col;
+        for( int i=0; i<possibleMoves.length; ++i ) {
+            row = possibleMoves[i].row;
+            col = possibleMoves[i].col;
             x = row * sizex + sizex/2;
             y = col * sizey + sizey/2;
             g.fillRect(x,y,2,2);
@@ -265,8 +275,8 @@ public class ReversiCanvas extends Canvas {
         drawPiece(g, 9, 7, 0);
         // numbers
         g.setColor(0x000000);
-        g.drawString(""+pnums[0], width+vertWidth, sizey, g.TOP| g.RIGHT);
-        g.drawString(""+pnums[1], width+vertWidth, 7 * sizey, g.BOTTOM| g.RIGHT);
+        g.drawString(infoLines[0], width+vertWidth, sizey+2, g.TOP| g.RIGHT);
+        g.drawString(infoLines[1], width+vertWidth, 7 * sizey, g.BOTTOM| g.RIGHT);
         // active player
         g.fillRect(width+sizex/2, sizey/2 + boss.getActPlayer()*7*sizey, 2, 2);
 //         // selection box
@@ -276,7 +286,7 @@ public class ReversiCanvas extends Canvas {
 //             drawSelectionBox(g, 9, 7);
 //         }
         // skill
-        g.drawString("S"+boss.skill, width+vertWidth, height/2, g.BASELINE| g.RIGHT);
+        g.drawString(infoLines[2], width+vertWidth, height/2, g.BASELINE| g.RIGHT);
     }
 
     public void keyPressed(int keyCode) {
@@ -340,6 +350,14 @@ public class ReversiCanvas extends Canvas {
         this.message = null;
     }
 
+    public void updateSkillInfo() {
+        infoLines[2] = "L"+boss.skill;
+    }
+
+    public void updatePossibleMoves() {
+        possibleMoves = (ReversiMove [])boss.possibleMoves(); // t is not used 
+    }
+
     public class DiscardMessageTimerTask extends TimerTask {
         public void run() {
             message = null;
@@ -376,5 +394,6 @@ public class ReversiCanvas extends Canvas {
     int sizex, sizey;
     int selx, sely;
     int pnums[] = new int[2];
-    
+    String infoLines[] = new String[3];
+    ReversiMove []possibleMoves;    
 } // ReversiCanvas
