@@ -1,10 +1,11 @@
-0.72.00 2002-NOV-??
+0.72.00 2002-NOV-07
 
 -End game statistics
 -Supporting proguard-1.4 obfuscator
 -Ant: automatic jad file calculate
+-Ant: fixes for Windows
 -Detecting draw
--Minimax code cleanup
+-Minimax code changes
 
 0.71.00 2002-OCT-22
 

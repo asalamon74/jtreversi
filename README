@@ -50,6 +50,7 @@ the build process can use two obfuscators: ProGuard-1.4 and RetroGuard-1.1
 3. ant
 
 NOTE: RetroGuard-1.1 is not working for me with J2SDK 1.4.1 for Linux
+NOTE2: ProGuard creates smaller jar file for this project.
 
 How to run?
 -----------
