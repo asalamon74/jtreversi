@@ -1,113 +1,52 @@
-<project name="jtReversi" default="jad" basedir=".">
+<?xml version="1.0"?>
 
-<!-- set global properties for this build -->
-<property file=".ant.properties"/>
+<project name="jtReversi" default="build" basedir=".">
 
-<!-- Builds the JarSizeFix Ant task and installs it
-       in the Ant lib directory. -->
-<target name="tools">
-  <mkdir dir="build/tools_classes"/>
-    <javac destdir="build/tools_classes" 
-        srcdir="build/tools"
-        target="1.1"/>
-    <jar jarfile="${ant_home}/lib/wd-tools.jar">
-      <fileset dir="build/tools_classes"/>
-    </jar>
-    <delete dir="build/tools_classes"/>
-</target>
 
-<target name="init">
-<!-- Create the time stamp -->
-<tstamp/>
-<!-- Create the build directory structure used by compile -->
-<mkdir dir="${classes}"/>
-<mkdir dir="${tmpclassescompact}"/>
-</target>
+    <property file=".ant.properties"/>
 
-<target name="compile" depends="init">
-<!-- Compile the java code from ${src} into ${build} -->
-<javac 
-    srcdir="${src}" 
-    destdir="${classes}" 
-    bootclasspath="${wtk_home}/lib/midpapi.zip"
-    classpath="${classes}"/>
-</target>
+    <!-- Define some additional properties for this project. Not required. -->
 
-<target name="jar" depends="compile">
-<jar jarfile="${jars}/${project}.jar" basedir="${classes}" manifest="${jars}/MANIFEST.MF">
-<fileset dir="${resources}"/>
-</jar>
-</target>
+    <!-- Define the tasks. -->	
+    <taskdef name="wtkbuild" classname="de.pleumann.antenna.WtkBuild"/>
+    <taskdef name="wtkpackage" classname="de.pleumann.antenna.WtkPackage"/>
+    <taskdef name="wtkrun" classname="de.pleumann.antenna.WtkRun"/>
 
-<target name="obfuscate_null" depends="jar">
-<copy file="${jars}/${project}.jar" tofile="${jars}/${project}_new.jar"/>
-</target>
+    <target name="clean">
+        <delete failonerror="false" dir="${classes}" />
+        <delete failonerror="false" dir="${apidir}" />
+        <delete failonerror="false" file="${jars}/${project}.jar" />
+    </target>
+	
+    <target name="init">
+        <!-- Make directory for classes -->
+        <mkdir dir="${classes}"/>
+    </target>
 
-<target name="obfuscate_retroguard" depends="jar">
-<java 
-    classname="RetroGuard" 
-    classpath="${wtk_home}/lib/midpapi.zip:${retroguard_home}/retroguard.jar"
-    fork="yes">
-    <arg line="${jars}/${project}.jar ${jars}/${project}_new.jar ${project}.rgs"/>
-</java>
-</target>
+    <target name="build" depends="init">
+        
+        <!-- Compile everything, but don't preverify (yet). -->
+        <wtkbuild srcdir="${src}"
+                  destdir="${classes}"
+                  preverify="false"/>
 
-<target name="obfuscate_proguard" depends="jar">
-    <java 
-         classpath="${proguard_jar}"
-	 classname="proguard.ProGuard"
-         fork="yes">
-      <arg line="-libraryjars ${wtk_home}/lib/midpapi.zip"/>
-      <arg line="-injars ${jars}/${project}.jar"/>
-      <arg line="-outjar ${jars}/${project}_new.jar"/>
-      <arg line="-printmapping map.txt"/>
-      <arg line="-defaultpackage ${mainpackage}"/>
-      <arg line="-keep 'public class * extends javax.microedition.midlet.MIDlet'"/>
-    </java>
-  </target>
+        <!-- Package everything. Most of the necessary information is
+             contained in the JAD file. Also preverify the result this
+             time. To obfuscate everything, set the corresponding
+             parameter to "true" (requires RetroGuard).  -->
 
-<!-- decompress jar to preverify again -->
-<target name="unjar" depends="obfuscate_proguard">
-<delete dir="${tmpclassescompact}"/>
-<unjar src="${jars}/${project}_new.jar" dest="${tmpclassescompact}"/>
-<delete dir="${tmpclassescompact}/META-INF"/>
-<delete file="${jars}/${project}_new.jar"/>
-</target>
+        <wtkpackage jarfile="${jars}/${project}.jar"
+                    jadfile="${jars}/${project}.jad"
+                    obfuscate="true"
+                    preverify="true">
 
-<target name="preverify" depends="unjar">
-<!-- preverify the class files -->
-<delete dir="${classescompact}"/>
-<mkdir dir="${classescompact}"/>
-<exec
-    executable="${wtk_home}/bin/preverify"  os="Linux">
-    <arg line="-classpath ${wtk_home}/lib/midpapi.zip:${tmpclassescompact} -d ${classescompact} ${tmpclassescompact}"/>
-</exec>
-<exec
-    executable="${wtk_home}/bin/preverify"  os="Windows NT">
-    <arg line="-classpath ${wtk_home}/lib/midpapi.zip;${classes} -d ${classescompact} ${tmpclassescompact}"/>
-</exec>
-</target>
-
-<target name="compactjar" depends="preverify">
-<delete file="${jars}/${project}.jar"/>
-<jar jarfile="${jars}/${project}.jar" basedir="${classescompact}" manifest="${jars}/MANIFEST.MF">
-<fileset dir="${resources}"/>
-</jar>
-</target>
-
-<target name="jad" depends="compactjar">
-  <taskdef name="jad" classname="JarSizeFix"/>
-  <jad jar="${jars}/${project}.jar" jad="${jars}/${project}.jad"/>
-</target>
-
-<target name="clean">
-<delete dir="${classes}"/>
-<delete dir="${classescompact}"/>
-<delete dir="${tmpclassescompact}"/>
-<delete dir="${apidir}"/>
-<delete file="${jars}/${project}.jar"/>
-<delete file="${jars}/${project}_new.jar"/>
-</target>
+            <!-- Package our newly compiled classes and the
+                 resources from the WTK's demo application. -->
+            <fileset dir="${classes}"/>
+            <fileset dir="${resources}"/>    			
+        </wtkpackage>
+    		
+    </target>
 
 <target name="doc">
 <mkdir dir="${apidir}"/>
@@ -121,21 +60,23 @@
 </target>
 
 <target name="run">
-<exec executable="${wtk_home}/bin/emulator">
-    <arg line="-Xdescriptor:${jars}/${project}.jad -Xdevice:${device}"/>
-</exec>
+    <wtkrun jadfile="${jars}/${project}.jad" device="${device}"
+    wait="true" />
+</target>
+
+<target name="i85run">
+    <wtkrun jadfile="${jars}/${project}.jad" device="Motorola_i85s"
+    wait="true" />
 </target>
 
 <target name="grayrun">
-<exec executable="${wtk_home}/bin/emulator">
-    <arg line="-Xdescriptor:${jars}/${project}.jad -Xdevice:DefaultGrayPhone"/>
-</exec>
+    <wtkrun jadfile="${jars}/${project}.jad" device="DefaultGrayPhone"
+    wait="true"/>
 </target>
 
 <target name="minrun">
-<exec executable="${wtk_home}/bin/emulator">
-    <arg line="-Xdescriptor:${jars}/${project}.jad -Xdevice:MinimumPhone"/>
-</exec>
+    <wtkrun jadfile="${jars}/${project}.jad" device="MinimumPhone"
+    wait="true" />
 </target>
 
 <target name="microrun">

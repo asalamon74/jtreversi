@@ -30,22 +30,23 @@ If you really want to compile, you'll need the followings:
 
 -Java 2 JDK (tested with IBM's Java 2 JDK 1.3 for Linux)
 -J2ME wireless toolkit (tested with version 1.0.4)
--Jakarta-Ant (tested with version 1.4.1)
+-Jakarta-Ant (at least version 1.5)
+-antenna (version 0.9.5)
 
 0. set JAVA_HOME environment variable
-1. Change the path of WTK_HOME in .ant.properties file.
+1. Change the path of wtk.home in .ant.properties file.
 2. ant
 
 How to compile with obfuscator?
 -------------------------------
 
 If you use obfuscator, the size of the jar file will be smaller. Currently
-the build process can use two obfuscators: ProGuard-1.4 and RetroGuard-1.1
+the build process (antenna) can use two obfuscators: ProGuard (tested with 
+versions 1.4, 1.5) and RetroGuard-1.1.
 
 0. set JAVA_HOME environment variable
-1. Change the path of RETROGUARD_HOME or PROGUARD_JAR in .ant.properties file. 
-2. Change the obfuscate_null to obfucate_proguard or obfuscate_retroguard in line 
-   <target name="unjar" depends="obfuscate_null"> in build.xml
+1. Copy (or symlink) proguard.jar or retroguard.jar into WTK's bin directory.
+2. Change the obfuscate="false" to obfucate="true" in build.xml
 3. ant
 
 NOTE: RetroGuard-1.1 is not working for me with J2SDK 1.4.1 for Linux
@@ -69,8 +70,8 @@ If you have ant installed you can run the program using ant, instead of
 the run.sh (run.bat) scripts.
 
 0. set JAVA_HOME environment variable
-1. Change the path of WTK_HOME in .ant.properties file.
-2. ant run
+1. Change the path of wtk.home in .ant.properties file.
+2. ant run 
 
 With Ant you are also able to test the program with microemulator 
 (http://microemulator.sourceforge.net): 
