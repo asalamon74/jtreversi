@@ -101,7 +101,7 @@ public class ReversiGame extends TwoPlayerGame {
             return null;
         }
 
-        ReversiTable newTable = new ReversiTable(8);
+        ReversiTable newTable = new ReversiTable();
         ReversiMove move = new ReversiMove(0,0); 
         for( int row=0; row<8; ++row ) {
             for( int col=0; col<8; ++col ) {

@@ -65,7 +65,7 @@
   </target>
 
 <!-- decompress jar to preverify again -->
-<target name="unjar" depends="obfuscate_null">
+<target name="unjar" depends="obfuscate_proguard">
 <delete dir="${tmpclassescompact}"/>
 <unjar src="${jars}/${project}_new.jar" dest="${tmpclassescompact}"/>
 <delete dir="${tmpclassescompact}/META-INF"/>
