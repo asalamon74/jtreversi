@@ -26,5 +26,9 @@ public class ReversiMove implements Move {
         return row >=0 && row < J2MEReversi.SIZE 
             && col >=0 && col < J2MEReversi.SIZE;
     }
+
+    public String toString() {
+        return "ReversiMove("+row+", "+col+")";
+    }
     
 } // ReversiMove

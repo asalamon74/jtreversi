@@ -23,12 +23,13 @@ public class J2MEReversi extends MIDlet implements CommandListener {
     private Command exitCommand; // The exit command
     private Display display;    // The display for this MIDlet
     private ReversiCanvas canvas;
-    private boolean []isHuman = {true, true};
+    private boolean []isHuman = {true, false};
     private int actPlayer;
     private int turnNum;
     public  ReversiTable table;
     private ReversiGame rgame = new ReversiGame();
-    
+    private Minimax minimax = new Minimax(100);
+
     public J2MEReversi() {
         System.out.println("constructor");
         display = Display.getDisplay(this);
@@ -81,26 +82,48 @@ public class J2MEReversi extends MIDlet implements CommandListener {
         }
     }
 
-    public void nextTurn(int row, int col) {
-        ReversiMove move = new ReversiMove(row, col);
+    protected ReversiMove computerTurn() {
+        ReversiMove move = new ReversiMove(0,0);
+        int point = minimax.minimax(1, table, actPlayer, rgame, move, false, 0, false, null);
+        System.out.println("computer point: "+point);        
+        System.out.println("computer move: "+move);        
+        return move;
+    
+    }
+
+    protected void processMove(ReversiMove move) {
         ReversiTable newTable = (ReversiTable)rgame.turn( table, actPlayer, move );
         if( newTable == null ) {
             System.out.println("Invalid Move");
         } else {
-            int point = rgame.point(newTable, actPlayer);
-            System.out.println("point:"+point);
-            if( point > 9000 || point < -9000 ) {
-                System.out.println("end");
-            }
-            table = newTable;
-            actPlayer = 1 - actPlayer;
-            ++turnNum;
-            ReversiMove[] nextMoves = (ReversiMove[])rgame.possibleMoves(table, actPlayer);
-            if( nextMoves.length == 0 ) {
-                table.setPassNum(table.getPassNum()+1);
-                ++turnNum;
+            boolean nonPass = false;
+            while( !nonPass ) {
+                int point = rgame.point(newTable, actPlayer);
+                System.out.println("point:"+point);
+                if( point > 9000 || point < -9000 ) {
+                    System.out.println("end");
+                }
+                table = newTable;
                 actPlayer = 1 - actPlayer;
-            } 
+                ++turnNum;
+                ReversiMove[] nextMoves = (ReversiMove[])rgame.possibleMoves(table, actPlayer);
+                if( nextMoves.length == 0 ) {
+                    table.setPassNum(table.getPassNum()+1);
+                    ++turnNum;
+                    actPlayer = 1 - actPlayer;
+                } else {
+                    nonPass = true;
+                }
+            }
+        }
+    }
+
+    public void nextTurn(int row, int col) {
+        ReversiMove move = new ReversiMove(row, col);
+        processMove(move);
+        if( !isHuman[actPlayer] ) {
+            move = computerTurn();
+            processMove(move);
         }
     }
     
