@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+
+<project name="jtReversi" default="build" basedir=".">
+
+
+    <property file=".ant.properties"/>
+
+    <!-- Define some additional properties for this project. Not required. -->
+
+    <!-- Define the tasks. -->
+	
+    <taskdef name="wtkjad" classname="de.pleumann.antenna.WtkJad"/>
+    <taskdef name="wtkbuild" classname="de.pleumann.antenna.WtkBuild"/>
+    <taskdef name="wtkpackage" classname="de.pleumann.antenna.WtkPackage"/>
+    <taskdef name="wtkmakeprc" classname="de.pleumann.antenna.WtkMakePrc"/>
+    <taskdef name="wtkrun" classname="de.pleumann.antenna.WtkRun"/>
+    <taskdef name="wtkpreverify" classname="de.pleumann.antenna.WtkPreverify"/>
+    <taskdef name="wtkobfuscate" classname="de.pleumann.antenna.WtkObfuscate"/>
+	
+	<target name="clean">
+	    <delete failonerror="false" dir="classes"/>
+	    <delete failonerror="false">
+	        <fileset dir=".">
+	            <exclude name="build.xml"/>
+	        </fileset>
+	    </delete>
+	</target>
+	
+    <target name="build">
+
+        <!-- Copy a JAD file from the WTK's demo applications.
+             Caution: Ant only copies this the first time. Also
+             make a directory to compile into. -->
+             
+        <mkdir dir="classes"/>
+
+        <!-- Compile everything, but don't preverify (yet). -->
+
+        <wtkbuild srcdir="${src}"
+                  destdir="classes"
+                  preverify="false"/>
+
+        <!-- Package everything. Most of the necessary information is
+             contained in the JAD file. Also preverify the result this
+             time. To obfuscate everything, set the corresponding
+             parameter to "true" (requires RetroGuard). The version
+             parameter increments the MIDlet-Version by one. -->
+
+        <wtkpackage jarfile="${jars}/${project}.jar"
+                    jadfile="${jars}/${project}.jad"
+                    obfuscate="true"
+                    preverify="true"
+                    autoversion="true">
+
+            <!-- Package our newly compiled classes and the
+                 resources from the WTK's demo application. -->
+
+            <fileset dir="classes"/>
+            <fileset dir="${resources}"/>
+    			
+        </wtkpackage>
+    		
+    </target>
+
+<target name="run">
+    <wtkrun jadfile="${jars}/${project}.jad" device="Motorola_i85s"/>
+</target>
+
+</project>
