@@ -35,6 +35,18 @@ public abstract class TwoPlayerGame {
     public abstract boolean turn(Table t, byte player, Move move, Table newTable);
 
     /**
+     * Calculates a turn of the gamm. Also calculates the steps of a single move.
+     *
+     * @param t Table before the turn.
+     * @param player Next player.
+     * @param move Move to be processed.
+     * @param newTable Table after the turn.
+     * @return Array of tables, which represents the steps of the single move.
+     */
+    public abstract Table[] animatedTurn(Table table, byte player, Move move, Table newt);
+
+
+    /**
      * List of possible moves.
      *
      * @param t Table to be checked.
