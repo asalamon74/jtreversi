@@ -2,4 +2,4 @@ MIDlet-1: Reversi, /icons/reversi.png, reversi.jtReversi
 MIDlet-Description: Reversi game
 MIDlet-Name: jtReversi
 MIDlet-Vendor: Jataka
-MIDlet-Version: 0.73.00
+MIDlet-Version: 0.80.00

@@ -1,7 +1,7 @@
 MIDlet-1: Reversi, /icons/reversi.png, reversi.jtReversi
 MIDlet-Description: Reversi game
-MIDlet-Jar-Size: 23762
+MIDlet-Jar-Size: 28160
 MIDlet-Jar-URL: jtReversi.jar
 MIDlet-Name: jtReversi
 MIDlet-Vendor: Jataka
-MIDlet-Version: 0.73.00
+MIDlet-Version: 0.80.00

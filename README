@@ -10,8 +10,7 @@ games.
 This version of the game runs on devices compliant with the Mobile
 Information Device Profile (MIDP), for instance cellular phones.
 
-Note: Since I don't have a MIDP device, it's tested only with an
-emulator. 
+Note: The program has been tested only a limited number of real MIDP devices.
 
 Why?
 ----
@@ -80,11 +79,7 @@ With Ant you are also able to test the program with microemulator
 1. Change the path of MICROEMULATOR_HOME in .ant.properties file.
 2. ant microrun
 
-Note: There is a color bug in microemulator 0.3.0, please use newer 
-(e.g. CVS) version.
-
-Since I have no MIDP/CLDC device, I don't know how to use the program on
-such a device. If you have one, please test it, and inform me.
+Note: Please use at least version 0.3.1.
 
 Licensing
 ---------
