@@ -127,6 +127,11 @@ public class ReversiGame implements TwoPlayerGame {
         return null;
     }
 
+    public boolean hasPossibleMove(Table table, short player) {
+        //TODO: enhance
+        return possibleMoves(table, player) != null;
+    }
+
     public Move[] possibleMoves(Table table, short player) {
         if( !(table instanceof ReversiTable) ) {
             return null;

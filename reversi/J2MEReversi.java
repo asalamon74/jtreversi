@@ -108,8 +108,7 @@ public class J2MEReversi extends MIDlet implements CommandListener {
                 table = newTable;
                 actPlayer = (short)(1 - actPlayer);
                 ++turnNum;
-                ReversiMove[] nextMoves = (ReversiMove[])rgame.possibleMoves(table, actPlayer);
-                if( nextMoves.length == 0 ) {
+                if( !rgame.hasPossibleMove(table, actPlayer) ) {
                     table.setPassNum(table.getPassNum()+1);
                     ++turnNum;
                     actPlayer = (short)(1 - actPlayer);
