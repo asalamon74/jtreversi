@@ -5,12 +5,12 @@ What is it?
 
 This is a simple board game. It is also known as othello. If you don't
 know the rules, just browse the web, you can find hundreds of reversi
-games. Later I'll include here a small description.
+games. A short description is included in the game.
 
 This version of the game runs on devices compliant with the Mobile
 Information Device Profile (MIDP), for instance cellular phones.
 
-Note: The program has been tested only a limited number of real MIDP devices.
+Note: The program has been tested with several real MIDP devices.
 
 Why?
 ----
@@ -28,7 +28,7 @@ you don't need to compile it.
 
 If you really want to compile, you'll need the followings:
 
--Java 2 JDK (tested with IBM's Java 2 JDK 1.3 for Linux)
+-Java 2 JDK (tested with Sun's Java 2 JDK 1.4.1 for Linux)
 -J2ME wireless toolkit (tested with version 1.0.4)
 -Jakarta-Ant (at least version 1.5)
 -antenna (version 0.9.5 or newer)
@@ -42,7 +42,7 @@ How to compile with obfuscator?
 
 If you use obfuscator, the size of the jar file will be smaller. Currently
 the build process (antenna) can use two obfuscators: ProGuard (tested with 
-versions 1.4, 1.5) and RetroGuard-1.1.
+versions 1.4, 1.5, 1.6) and RetroGuard-1.1.
 
 0. set JAVA_HOME environment variable
 1. Copy (or symlink) proguard.jar or retroguard.jar into WTK's bin directory.
