@@ -140,6 +140,9 @@ public class ReversiCanvas extends Canvas {
         }
         int row,col;
         int x,y;
+        if( !colored ) {
+            g.setColor(DARK_BOX_COLOR);
+        }
         for( int i=0; i<possibleMoves.length; ++i ) {
             row = possibleMoves[i].row;
             col = possibleMoves[i].col;
@@ -278,13 +281,7 @@ public class ReversiCanvas extends Canvas {
         g.drawString(infoLines[0], width+vertWidth, sizey+2, g.TOP| g.RIGHT);
         g.drawString(infoLines[1], width+vertWidth, 7 * sizey, g.BOTTOM| g.RIGHT);
         // active player
-        g.fillRect(width+sizex/2, sizey/2 + boss.getActPlayer()*7*sizey, 2, 2);
-//         // selection box
-//         if( boss.getActPlayer() == 0 ) {
-//             drawSelectionBox(g, 9, 0);
-//         } else {
-//             drawSelectionBox(g, 9, 7);
-//         }
+        g.fillRect(9*sizex-sizex/2, sizey/2 + boss.getActPlayer()*7*sizey, 2, 2);
         // skill
         g.drawString(infoLines[2], width+vertWidth, height/2, g.BASELINE| g.RIGHT);
     }
@@ -295,13 +292,8 @@ public class ReversiCanvas extends Canvas {
         switch( getGameAction(keyCode) ) {
         case Canvas.UP: 
             sely = (sely + 8 -1) % 8;
-            if( message != null ) {
-                message = null;
-                repaint();
-            } else {
-                repaint(selx*sizex-1, oldsely*sizey-1,sizex+2, sizey+2);
-                repaint(selx*sizex, sely*sizey,sizex, sizey);
-            }
+            message = null;
+            repaint();
             break;
         case Canvas.DOWN: 
             sely = (sely + 1) % 8;

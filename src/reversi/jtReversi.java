@@ -213,7 +213,7 @@ public class jtReversi extends MIDlet implements CommandListener {
     }
 
     protected void showAbout() {
-        Alert alert = new Alert("About jtReversi 0.82");
+        Alert alert = new Alert("About jtReversi 0.83");
         alert.setTimeout(Alert.FOREVER);
         alert.setString("Simple board game\nby\nJataka Ltd.");
         alert.setType(AlertType.INFO);
