@@ -34,7 +34,8 @@ public class J2MEReversi extends MIDlet implements CommandListener {
         "Start 1P", 
         "Start 2P", 
         "Skill", 
-        "About"};
+        "About",
+        "Exit game"};
 
     private static final String[] optionItems = {
         "Continue", 
@@ -273,6 +274,10 @@ public class J2MEReversi extends MIDlet implements CommandListener {
                     break;                    
                 case 3:
                     showAbout();
+                    break;
+                case 4:
+                    destroyApp(false);
+                    notifyDestroyed();
                     break;
                 }
             }
