@@ -24,7 +24,6 @@ public class jtReversi extends MIDlet implements CommandListener {
     private int turnNum;
     public  ReversiTable table;
     private ReversiGame rgame;
-    //    private Minimax minimax = new Minimax();
     private boolean gameEnded = true;
     private int skill = 1;
     private Image logoImage;
@@ -57,9 +56,6 @@ public class jtReversi extends MIDlet implements CommandListener {
         "About"};
 
     private static final String[] skillItems = new String[4];
-
-    public jtReversi() {
-    }
 
     protected void startGame() {
         display.setCurrent(canvas);
@@ -345,6 +341,9 @@ public class jtReversi extends MIDlet implements CommandListener {
         return actPlayer;
     }
 
+    public Move[] possibleMoves() {
+        return rgame.possibleMoves(table, actPlayer);
+    }
 
     public class SplashScreen extends Canvas {
         private Display     display;

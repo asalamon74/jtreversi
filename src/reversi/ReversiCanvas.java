@@ -20,7 +20,7 @@ public class ReversiCanvas extends Canvas {
     public String []playerNames;
     private static final int SIZE_LIMIT = 8;
     private Image offscreen = null;
-    private static int ASPECT_LIMIT = 15; // 1.4
+    private static int ASPECT_LIMIT = 15; // 1.5
     
     public ReversiCanvas(jtReversi boss, Display display) {
         this.boss = boss;
@@ -74,6 +74,7 @@ public class ReversiCanvas extends Canvas {
         drawTable(g, boss.table);
         drawSelectionBox(g);
         drawMessage(g);
+        drawPossibleMoves(g, boss.table);
         if( g != saved ) {
             saved.drawImage( offscreen, 0, 0, Graphics.LEFT | Graphics.TOP );
         }
@@ -88,9 +89,9 @@ public class ReversiCanvas extends Canvas {
         if( small ) {
             int x,y;
             for( int i=0; i<8; ++i ) {
+                x = i * sizex + sizex/2;                
                 for( int j=0; j<8; ++j ) {
                     if( boss.table.getItem(i,j)  == 0 ) {
-                        x = i * sizex + sizex/2;
                         y = j * sizey + sizey/2;
                         g.drawLine(x,y,x,y);
                     }
@@ -111,6 +112,19 @@ public class ReversiCanvas extends Canvas {
                     drawPiece(g, i, j, t.getItem(i,j));
                 }
             }
+        }
+    }
+
+    protected void drawPossibleMoves(Graphics g, ReversiTable t) {
+        ReversiMove []moves = (ReversiMove [])boss.possibleMoves(); // t is not used 
+        int row,col;
+        int x,y;
+        for( int i=0; i<moves.length; ++i ) {
+            row = moves[i].row;
+            col = moves[i].col;
+            x = row * sizey + sizey/2;
+            y = col * sizex + sizex/2;
+            g.fillArc(x,y,2,2,0,360);
         }
     }
 
