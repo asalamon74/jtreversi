@@ -59,6 +59,8 @@ public class ReversiGame implements TwoPlayerGame {
     }
 
     protected int simplePointCalculate(ReversiTable table) {
+        numFirstPlayer = 0;
+        numSecondPlayer = 0;
         for( int i=0; i<ReversiCanvas.SIZE; ++i ) {
             for( int j=0; j<ReversiCanvas.SIZE; ++j ) {
                 int item = table.getItem(i,j);

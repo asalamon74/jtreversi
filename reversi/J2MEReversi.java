@@ -85,9 +85,20 @@ public class J2MEReversi extends MIDlet implements CommandListener {
         if( newTable == null ) {
             System.out.println("Invalid Move");
         } else {
+            int point = rgame.point(newTable, actPlayer);
+            System.out.println("point:"+point);
+            if( point > 9000 || point < -9000 ) {
+                System.out.println("end");
+            }
             table = newTable;
             actPlayer = 1 - actPlayer;
             ++turnNum;
+            ReversiMove[] nextMoves = (ReversiMove[])rgame.possibleMoves(table, actPlayer);
+            if( nextMoves.length == 0 ) {
+                table.setPassNum(table.getPassNum()+1);
+                ++turnNum;
+                actPlayer = 1 - actPlayer;
+            } 
         }
     }
     
