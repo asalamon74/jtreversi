@@ -18,7 +18,7 @@ public class Minimax  {
         this.maxsize = maxsize;
     }
 
-    public int minimax(int depth, Table state, int player, TwoPlayerGame tpg, Move bestMove, boolean alphabeta, int alpha, boolean order, Move killerMove) {
+    public Move minimax(int depth, Table state, int player, TwoPlayerGame tpg, boolean alphabeta, int alpha, boolean order, Move killerMove) {
         Move newMove;
         Move actMove;
         Move kMove;
@@ -27,9 +27,12 @@ public class Minimax  {
         int maxPoint = -10000; /* -Integer.MIN_VALUE ?? */
         int bestNum=0;
         int []bestMoves = new int[MAX_TURN];
+        Move bestMove;
 
         if( depth == 0 ) {            
-            return tpg.point(state, player);
+            bestMove = state.getEmptyMove();
+            bestMove.setPoint(tpg.point(state, player));
+            return bestMove;
         }
 
         Move pMoves[] = tpg.possibleMoves(state, player);
@@ -42,8 +45,11 @@ public class Minimax  {
             // TODO: find the killer move
         }
         actMove = null;
+        System.out.println("table:"+state);
         for( int i=0; !cut && i<pMoves.length; ++i ) {
+            System.out.println("pmove:"+pMoves[i]);
             Table newState = tpg.turn(state, player, pMoves[i]);
+            System.out.println("newTable:\n"+newState);
             if( depth == 1 ) {
                 actPoint = tpg.point(newState, player);
             } else {
@@ -53,10 +59,13 @@ public class Minimax  {
                 } else {
                     kMove = null;
                 }
-		actPoint = -minimax(depth-1, newState, 1-player, tpg, actMove, alphabeta, -maxPoint, order , kMove);
+		actMove = minimax(depth-1, newState, 1-player, tpg,  alphabeta, -maxPoint, order , kMove);
+                actPoint = -actMove.getPoint();
             }
+            System.out.println("actPoint:"+actPoint);
             if( i == 0 || actPoint > maxPoint ) {
                 // better move
+                System.out.println("better move");
                 maxPoint = actPoint;
 		if (alphabeta && alpha < maxPoint) {
                     cut = true;
@@ -75,11 +84,10 @@ public class Minimax  {
         } else {
             bestIndex = bestMoves[0];
         }
-        if( bestMove != null ) {
-            bestMove = pMoves[bestIndex];
-        }
-
-        return maxPoint;
+        bestMove = pMoves[bestIndex];
+        bestMove.setPoint(maxPoint);
+        System.out.println("bestMove:"+bestMove);
+        return bestMove;
     }
 
     protected int maxsize;

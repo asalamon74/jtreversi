@@ -30,6 +30,7 @@ public class J2MEReversi extends MIDlet implements CommandListener {
     public  ReversiTable table;
     private ReversiGame rgame = new ReversiGame();
     private Minimax minimax = new Minimax(100);
+    private boolean gameEnded;
 
     public J2MEReversi() {
         System.out.println("constructor");
@@ -84,9 +85,8 @@ public class J2MEReversi extends MIDlet implements CommandListener {
     }
 
     protected ReversiMove computerTurn() {
-        ReversiMove move = new ReversiMove(0,0);
-        int point = minimax.minimax(1, table, actPlayer, rgame, move, false, 0, false, null);
-        System.out.println("computer point: "+point);        
+        ReversiMove move = (ReversiMove)minimax.minimax(1, table, actPlayer, rgame, false, 0, false, null);
+        System.out.println("computer point: "+move.getPoint());        
         System.out.println("computer move: "+move);        
         return move;
     
@@ -103,6 +103,7 @@ public class J2MEReversi extends MIDlet implements CommandListener {
                 System.out.println("point:"+point);
                 if( point > 9000 || point < -9000 ) {
                     System.out.println("end");
+                    gameEnded = true;
                 }
                 table = newTable;
                 actPlayer = 1 - actPlayer;
@@ -122,7 +123,8 @@ public class J2MEReversi extends MIDlet implements CommandListener {
     public void nextTurn(int row, int col) {
         ReversiMove move = new ReversiMove(row, col);
         processMove(move);
-        if( !isHuman[actPlayer] ) {
+        canvas.repaint();        
+        if( !gameEnded && !isHuman[actPlayer] ) {
             move = computerTurn();
             processMove(move);
         }

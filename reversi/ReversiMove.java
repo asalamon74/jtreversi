@@ -30,5 +30,24 @@ public class ReversiMove implements Move {
     public String toString() {
         return "ReversiMove("+row+", "+col+")";
     }
+
+    int point;
+    
+    /**
+     * Get the value of point.
+     * @return Value of point.
+     */
+    public int getPoint() {
+         return point; 
+    }
+    
+    /**
+     * Set the value of point.
+     * @param v  Value to assign to point.
+     */
+    public void setPoint(int  v) {
+        this.point = v;
+    }
+    
     
 } // ReversiMove

@@ -93,6 +93,7 @@ public class ReversiGame implements TwoPlayerGame {
             return newTable;
         }
 
+        newTable.setPassNum(0);
         if( newTable.getItem(row, col) != 0 ) {
             return null;
         }

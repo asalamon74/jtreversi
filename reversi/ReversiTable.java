@@ -73,6 +73,20 @@ public class ReversiTable implements Table  {
     public void setPassNum(int  v) {
         this.passNum = v;
     }
-    
-    
+
+    public String toString() {
+        String ret = "";
+        for( int i=0; i<size; ++i ) {
+            for( int j=0; j<size; ++j ) {
+                ret += matrix[j][i];
+            }
+            ret += "\n";
+        }
+        return ret;
+    }
+
+    public Move getEmptyMove() {
+        return new ReversiMove(0,0);
+    }
+
 } // ReversiTable
