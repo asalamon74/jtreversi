@@ -86,7 +86,7 @@ public class J2MEReversi extends MIDlet implements CommandListener {
     }
 
     protected ReversiMove computerTurn() {
-        ReversiMove move = (ReversiMove)minimax.minimax(2, table, actPlayer, rgame, false, 0, false, null);
+        ReversiMove move = (ReversiMove)minimax.minimax(3, table, actPlayer, rgame, false, 0, false, null);
         System.out.println("computer point: "+move.getPoint());        
         System.out.println("computer move: "+move);        
         return move;
