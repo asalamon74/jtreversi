@@ -28,8 +28,8 @@ public class ReversiCanvas extends Canvas {
             playerNames[0] = "Red";
             playerNames[1] = "Blue";
         } else {
-            playerNames[0] = "Black";
-            playerNames[1] = "White";
+            playerNames[0] = "White";
+            playerNames[1] = "Black";
         }            
 
         width = getWidth();
