@@ -18,6 +18,7 @@ public class jtReversi extends MIDlet implements CommandListener {
     private List optionsMenu;
     private Display display;    // The display for this MIDlet
     private ReversiCanvas canvas;
+    private Form aboutForm;
     private boolean []isHuman = {true, false};
     private boolean twoplayer;
     private byte actPlayer;
@@ -94,14 +95,20 @@ public class jtReversi extends MIDlet implements CommandListener {
         canvas.addCommand(optionsCommand);
         canvas.setCommandListener(this);
         rgame = new ReversiGame(heurMatrix,10,18,true);
-//         rgame.setEvaluationFunction(
-//             new ReversiHeuristicEvaluation(heurMatrix,10,18,true));
         try {
             logoImage  = Image.createImage(aboutImageName);
         } catch (IOException e) {
             System.out.println("Invalid logo"+e);
         }
-        new SplashScreen( display, mainMenu );
+        aboutForm = new Form("About jtReversi 0.84");
+	aboutForm.append(logoImage);
+	aboutForm.append("\n");
+	aboutForm.append("www.jataka.hu\n");
+	aboutForm.append("Simple board game by Jataka Ltd.\n");
+	aboutForm.append("Contact: mail@jataka.hu\n");
+        aboutForm.addCommand(exitCommand);
+        aboutForm.setCommandListener(this);
+        new SplashScreen( display, mainMenu );        
     }
 
     public void startApp() {
@@ -209,16 +216,15 @@ public class jtReversi extends MIDlet implements CommandListener {
                     break;
                 }
             }
+        } else if( d.equals(aboutForm) ) {
+            //            if( c == exitCommand ) {
+            display.setCurrent(mainMenu);
+            //            }
         }
     }
 
     protected void showAbout() {
-        Alert alert = new Alert("About jtReversi 0.84");
-        alert.setTimeout(Alert.FOREVER);
-        alert.setString("Simple board game\nby\nJataka Ltd.");
-        alert.setType(AlertType.INFO);
-        alert.setImage(logoImage);
-        display.setCurrent(alert);
+        display.setCurrent(aboutForm);
     }
 
     protected int getActSkill() {
@@ -406,7 +412,7 @@ public class jtReversi extends MIDlet implements CommandListener {
             String str = "jtReversi";
             g.drawString(str, getWidth()/2, logoImage.getHeight(), g.TOP|g.HCENTER);
             g.setFont(f);
-            str = "(c) 2002";
+            str = "(c) 2003";
             g.drawString(str, getWidth(), getHeight(), g.RIGHT|g.BOTTOM);
         }
 
@@ -454,6 +460,4 @@ public class jtReversi extends MIDlet implements CommandListener {
             ended = true;
         }
     }
-
-
 }

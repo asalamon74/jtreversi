@@ -1,10 +1,15 @@
-0.84.00 2002-FEB-28
+0.85.00 2003-MAR-
+
+-Better About form
+
+
+0.84.00 2003-FEB-28
 
 -merged minimax classes (smaller jar)
 -display fixes for Siemens phones
 -ant all target
 
-0.83.00 2002-FEB-04
+0.83.00 2003-FEB-04
 
 -showing the color change of the discs one by one
 -showing computers last disc
