@@ -1,4 +1,4 @@
-MIDlet-1: Reversi, reversi.png, reversi.J2MEReversi
+MIDlet-1: Reversi, /icons/reversi.png, reversi.J2MEReversi
 MIDlet-Description: Reversi game
 MIDlet-Name: J2MEReversi
 MIDlet-Vendor: Sala

@@ -3,10 +3,12 @@ package reversi;
 import minimax.*;
 import javax.microedition.midlet.*;
 import javax.microedition.lcdui.*;
+import java.io.IOException;
 
 public class J2MEReversi extends MIDlet implements CommandListener {
 
     public static final int SIZE = 8;
+    private static final String aboutImageName = "/icons/jataka_logo_c_small.png";
         
     private Command exitCommand; // The exit command
     private Command optionsCommand;
@@ -117,6 +119,13 @@ public class J2MEReversi extends MIDlet implements CommandListener {
         Alert alert = new Alert("About J2ME_Reversi");
         alert.setTimeout(Alert.FOREVER);
         alert.setString("Simple board game\nby\nAndras Salamon\n(Jataka Ltd.)");
+        alert.setType(AlertType.INFO);
+        try {
+            Image image = Image.createImage(aboutImageName);
+            alert.setImage(image);
+        } catch (IOException e) {
+            System.out.println("Invalid about logo"+e);
+        }
         display.setCurrent(alert);
     }
 
