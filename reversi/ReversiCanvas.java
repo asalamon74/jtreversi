@@ -27,7 +27,7 @@ public class ReversiCanvas extends Canvas {
         int h = g.getClipHeight();
 
         // Draw the frame 
-        g.setColor(0xffffff);
+        g.setColor(0xff0000);
         g.fillRect(x, y, w, h);    
     }
 

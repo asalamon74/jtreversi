@@ -41,7 +41,8 @@ public class J2MEReversi extends MIDlet implements CommandListener {
         t.addCommand(exitCommand);
         t.setCommandListener(this);
         
-        display.setCurrent(t);
+        //        display.setCurrent(t);
+        display.setCurrent(canvas);
     }
     
     /**
