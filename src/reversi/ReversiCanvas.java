@@ -22,7 +22,7 @@ public class ReversiCanvas extends Canvas {
     private Image offscreen = null;
     private static int ASPECT_LIMIT = 15; // 1.4
     
-    public ReversiCanvas(J2MEReversi boss, Display display) {
+    public ReversiCanvas(jtReversi boss, Display display) {
         this.boss = boss;
         this.display = display;
         colored = display.isColor() && display.numColors() > 127;
@@ -305,7 +305,7 @@ public class ReversiCanvas extends Canvas {
         }
     }
 
-    protected J2MEReversi boss;
+    protected jtReversi boss;
     protected Display display;
     protected String message;
     protected boolean colored;

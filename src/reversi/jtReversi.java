@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class J2MEReversi extends MIDlet implements CommandListener {
+public class jtReversi extends MIDlet implements CommandListener {
 
     private static final String aboutImageName = "/icons/jataka_logo_c_small.png";
 
@@ -77,7 +77,7 @@ public class J2MEReversi extends MIDlet implements CommandListener {
 
     private static final String[] skillItems = new String[4];
 
-    public J2MEReversi() {
+    public jtReversi() {
     }
 
     protected void startGame() {
@@ -96,7 +96,7 @@ public class J2MEReversi extends MIDlet implements CommandListener {
         display = Display.getDisplay(this);
         exitCommand = new Command("Exit", Command.EXIT, 99);
         optionsCommand = new Command("Options", Command.SCREEN, 5);
-        mainMenu = new List( "J2MEReversi", List.IMPLICIT, mainMenuItems, null);
+        mainMenu = new List( "jtReversi", List.IMPLICIT, mainMenuItems, null);
         mainMenu.setCommandListener(new MainCommandListener());
         optionsMenu = new List( "Options", List.IMPLICIT, optionItems, null);
         optionsMenu.setCommandListener(new OptionsCommandListener());
