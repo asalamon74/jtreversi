@@ -1,6 +1,9 @@
 #jtReversi (a.k.a. J2ME_Reversi)
 
-##What is it?
+This is an obsolete project. Code moved from j2mereversi.sf.net
+
+What is it?
+-----------
 
 This is a simple board game. It is also known as othello. If you don't
 know the rules, just browse the web, you can find hundreds of reversi
@@ -90,5 +93,5 @@ GPL (See COPYING)
 Authors
 ------
 
-Andras Salamon / Jataka Ltd. (asalamon@users.sourceforge.net)
-Richard Szabo / Jataka Ltd. (richard_szabo@users.sourceforge.net)
+-Andras Salamon / Jataka Ltd. (asalamon@users.sourceforge.net)
+-Richard Szabo / Jataka Ltd. (richard_szabo@users.sourceforge.net)
