@@ -1,6 +1,7 @@
 #jtReversi (a.k.a. J2ME_Reversi)
 
-This is an obsolete project. Code moved from http://j2mereversi.sf.net / https://sourceforge.net/projects/j2mereversi/
+This is an obsolete project. Code moved from http://j2mereversi.sf.net 
+( https://sourceforge.net/projects/j2mereversi/ )
 
 What is it?
 -----------
@@ -17,10 +18,11 @@ Note: The program has been tested with several real MIDP devices.
 Why?
 ----
 
-I wanted to learn J2ME, so I implemented this small game. First time
-(years ago) I've implemented reversi using Turbo Pascal, later I
+I wanted to learn J2ME, so I implemented this small game back in 2002. 
+
+Before that I've implemented reversi using Turbo Pascal, later I
 converted it to C (it was an artificial intelligence project for my
-University). Now I converted it to Java (J2ME).
+University) and later I converted it to Java (J2ME).
 
 How to compile?
 ---------------
@@ -93,5 +95,5 @@ GPL (See COPYING)
 Authors
 ------
 
-- Andras Salamon / Jataka Ltd. (asalamon@users.sourceforge.net)
-- Richard Szabo / Jataka Ltd. (richard_szabo@users.sourceforge.net)
+- Andras Salamon
+- Richard Szabo
