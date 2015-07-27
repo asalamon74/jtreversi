@@ -30,10 +30,10 @@ you don't need to compile it.
 
 If you really want to compile, you'll need the followings obsolete tools:
 
--Java 2 JDK (tested with Sun's Java 2 JDK 1.4.1 for Linux)
--J2ME wireless toolkit (tested with version 1.0.4)
--Jakarta-Ant (at least version 1.5)
--antenna (version 0.9.5 or newer)
+- Java 2 JDK (tested with Sun's Java 2 JDK 1.4.1 for Linux)
+- J2ME wireless toolkit (tested with version 1.0.4)
+- Jakarta-Ant (at least version 1.5)
+- antenna (version 0.9.5 or newer)
 
 0. set JAVA_HOME environment variable
 1. Change the path of wtk.home in .ant.properties file.
@@ -76,7 +76,7 @@ the run.sh (run.bat) scripts.
 2. ant run 
 
 With Ant you are also able to test the program with microemulator 
-(http://microemulator.sourceforge.net): 
+ https://sourceforge.net/projects/microemulator/ : 
 
 0. set JAVA_HOME environment variable
 1. Change the path of MICROEMULATOR_HOME in .ant.properties file.
