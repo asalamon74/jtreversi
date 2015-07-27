@@ -1,6 +1,6 @@
 #jtReversi (a.k.a. J2ME_Reversi)
 
-This is an obsolete project. Code moved from http://j2mereversi.sf.net
+This is an obsolete project. Code moved from http://j2mereversi.sf.net / https://sourceforge.net/projects/j2mereversi/
 
 What is it?
 -----------
@@ -28,7 +28,7 @@ How to compile?
 The game is precompiled, so if you want only to play with the game,
 you don't need to compile it. 
 
-If you really want to compile, you'll need the followings:
+If you really want to compile, you'll need the followings obsolete tools:
 
 -Java 2 JDK (tested with Sun's Java 2 JDK 1.4.1 for Linux)
 -J2ME wireless toolkit (tested with version 1.0.4)
@@ -93,5 +93,5 @@ GPL (See COPYING)
 Authors
 ------
 
--Andras Salamon / Jataka Ltd. (asalamon@users.sourceforge.net)
--Richard Szabo / Jataka Ltd. (richard_szabo@users.sourceforge.net)
+- Andras Salamon / Jataka Ltd. (asalamon@users.sourceforge.net)
+- Richard Szabo / Jataka Ltd. (richard_szabo@users.sourceforge.net)
