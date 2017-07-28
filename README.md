@@ -1,7 +1,6 @@
 # jtReversi (a.k.a. J2ME_Reversi)
 
-This is an obsolete project. Code moved from http://j2mereversi.sf.net 
-( https://sourceforge.net/projects/j2mereversi/ )
+This is an obsolete project. Code moved from [http://j2mereversi.sf.net]( https://sourceforge.net/projects/j2mereversi/ )
 
 What is it?
 -----------
