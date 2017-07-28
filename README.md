@@ -1,4 +1,4 @@
-#jtReversi (a.k.a. J2ME_Reversi)
+# jtReversi (a.k.a. J2ME_Reversi)
 
 This is an obsolete project. Code moved from http://j2mereversi.sf.net 
 ( https://sourceforge.net/projects/j2mereversi/ )
@@ -95,5 +95,5 @@ GPL (See COPYING)
 Authors
 ------
 
-- Andras Salamon
-- Richard Szabo
+- [András Salamon](https://github.com/asalamon74)
+- [Richárd Szabó](https://github.com/richardszabo)
