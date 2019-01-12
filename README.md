@@ -2,6 +2,10 @@
 
 This is an obsolete project. Code moved from [http://j2mereversi.sf.net]( https://sourceforge.net/projects/j2mereversi/ )
 
+![screenshot_00](https://user-images.githubusercontent.com/13440318/51070234-603e7480-163e-11e9-9895-600585356a32.png)
+![screenshot_01](https://user-images.githubusercontent.com/13440318/51070240-72b8ae00-163e-11e9-8b5e-50ba1efe2335.png)
+![screenshot_04](https://user-images.githubusercontent.com/13440318/51070243-73514480-163e-11e9-95e5-5b3173c077c6.png)
+
 What is it?
 -----------
 
@@ -37,7 +41,7 @@ If you really want to compile, you'll need the followings obsolete tools:
 - antenna (version 0.9.5 or newer)
 
 0. set JAVA_HOME environment variable
-1. Change the path of wtk.home in .ant.properties file.
+1. Change the path of `wtk.home` in `.ant.properties` file.
 2. ant
 
 How to compile with obfuscator?
@@ -47,13 +51,14 @@ If you use obfuscator, the size of the jar file will be smaller. Currently
 the build process (antenna) can use two obfuscators: ProGuard (tested with 
 versions 1.4, 1.5, 1.6) and RetroGuard-1.1.
 
-0. set JAVA_HOME environment variable
-1. Copy (or symlink) proguard.jar or retroguard.jar into WTK's bin directory.
-2. Change the obfuscate="false" to obfucate="true" in build.xml
-3. ant
+0. set `JAVA_HOME` environment variable
+1. Copy (or symlink) `proguard.jar` or `retroguard.jar` into WTK's bin directory.
+2. Change the `obfuscate="false"` to `obfucate="true"` in `build.xml`
+3. `ant`
 
-NOTE: RetroGuard-1.1 is not working for me with J2SDK 1.4.1 for Linux
-NOTE2: ProGuard creates smaller jar file for this project.
+_NOTE:_ RetroGuard-1.1 is not working for me with J2SDK 1.4.1 for Linux
+
+_NOTE2:_ ProGuard creates smaller jar file for this project.
 
 How to run?
 -----------
@@ -64,7 +69,7 @@ J2ME wireless toolkit (tested with version 1.0.4)
 
 1. Go to the bin directory
 2. Change the path of WTK_HOME.
-3. ./run.sh (Windows users have to use run.bat instead of run.sh)
+3. `./run.sh` (Windows users have to use run.bat instead of run.sh)
 
 How to run with Ant?
 --------------------
@@ -72,24 +77,24 @@ How to run with Ant?
 If you have ant installed you can run the program using ant, instead of
 the run.sh (run.bat) scripts.
 
-0. set JAVA_HOME environment variable
-1. Change the path of wtk.home in .ant.properties file.
-2. ant run 
+0. set `JAVA_HOME` environment variable
+1. Change the path of `wtk.home` in `.ant.properties` file.
+2. `ant run` 
 
 With Ant you are also able to test the program with microemulator 
  https://sourceforge.net/projects/microemulator/ : 
 
-0. set JAVA_HOME environment variable
-1. Change the path of MICROEMULATOR_HOME in .ant.properties file.
-2. ant microrun
+0. set `JAVA_HOME` environment variable
+1. Change the path of MICROEMULATOR_HOME in `.ant.properties` file.
+2. `ant microrun`
 
 Note: Please use at least version 0.3.1 of microemulator. Parts of the
-program may not work even with the current CVS version.
+program may not work even with the current version.
 
 Licensing
 ---------
 
-GPL (See COPYING)
+[GPL](COPYING)
 
 Authors
 ------
